@@ -1,11 +1,19 @@
 ﻿using System;
 using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
+using Swiftshop.Models;
 
 namespace Swiftshop.Database;
 
 public partial class SwiftshopDbContext : DbContext
 {
+    public virtual DbSet<User> Users { get; set; }
+    public virtual DbSet<Item> Items { get; set; }
+    public virtual DbSet<Category> Categories { get; set; }
+    public virtual DbSet<Subcategory> Subcategories { get; set; }
+    public virtual DbSet<ShoppingList> ShoppingLists { get; set; }
+    public virtual DbSet<ShoppingListContent> ShoppingListContents { get; set; }
+
     public SwiftshopDbContext()
     {
     }
@@ -15,87 +23,50 @@ public partial class SwiftshopDbContext : DbContext
     {
     }
 
-    public virtual DbSet<Content> Contents { get; set; }
-
-    public virtual DbSet<Item> Items { get; set; }
-
-    public virtual DbSet<ShoppingList> ShoppingLists { get; set; }
-
-    public virtual DbSet<User> Users { get; set; }
-
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         => optionsBuilder.UseSqlServer("Server=(localdb)\\MSSQLLocalDB;Database=SwiftshopDB;Trusted_Connection=True;MultipleActiveResultSets=True");
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        modelBuilder.Entity<Content>(entity =>
+        modelBuilder.Entity<User>(entity =>
         {
-            entity
-                .HasNoKey()
-                .ToTable("Content");
-
-            entity.Property(e => e.ItemId).HasColumnName("item_id");
-            entity.Property(e => e.ListId).HasColumnName("list_id");
-            entity.Property(e => e.Quantity).HasColumnName("quantity");
-
-            entity.HasOne(d => d.Item).WithMany()
-                .HasForeignKey(d => d.ItemId)
-                .HasConstraintName("FK_Item");
-
-            entity.HasOne(d => d.List).WithMany()
-                .HasForeignKey(d => d.ListId)
-                .HasConstraintName("FK_ShoppingList");
+            entity.HasKey(e => e.Id).HasName("PK_User");
+            entity.HasIndex(a => a.Email).IsUnique();
         });
 
-        modelBuilder.Entity<Item>(entity =>
+        modelBuilder.Entity<Item>(entity => {
+            entity.HasKey(e => e.Id).HasName("PK_Item");
+        });
+
+        modelBuilder.Entity<Category>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__Item__3213E83FE4B637D1");
+            entity.HasKey(e => e.Id).HasName("PK_Category");
+        });
 
-            entity.ToTable("Item");
+        modelBuilder.Entity<Subcategory>(entity =>
+        {
+            entity.HasKey(e => e.Id).HasName("PK_Subcategory");
 
-            entity.Property(e => e.Id)
-                .ValueGeneratedNever()
-                .HasColumnName("id");
-            entity.Property(e => e.Name)
-                .IsUnicode(false)
-                .HasColumnName("name");
+            entity.HasOne(a => a.Category)
+            .WithMany(b => b.Subcategories)
+            .HasForeignKey(c => c.categoryId)
+            .HasConstraintName("FK_SubcategoryToCategory");
         });
 
         modelBuilder.Entity<ShoppingList>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__Shopping__3213E83FCA11AF41");
+            entity.HasKey(e => e.Id).HasName("PK_ShoppingList");
 
-            entity.ToTable("ShoppingList");
+            entity.HasOne(a => a.User)
+            .WithMany(b => b.ShoppingLists)
+            .HasForeignKey(c => c.userId)
+            .HasConstraintName("FK_ShoppingListToUser");
 
-            entity.Property(e => e.Id)
-                .ValueGeneratedNever()
-                .HasColumnName("id");
-            entity.Property(e => e.ListContent).HasColumnName("list_content");
-            entity.Property(e => e.ListUser).HasColumnName("list_user");
-
-            entity.HasOne(d => d.ListUserNavigation).WithMany(p => p.ShoppingLists)
-                .HasForeignKey(d => d.ListUser)
-                .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK_User");
         });
 
-        modelBuilder.Entity<User>(entity =>
+        modelBuilder.Entity<ShoppingListContent>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__User__3214EC07506CF3B6");
-
-            entity.ToTable("User");
-
-            entity.Property(e => e.Id).ValueGeneratedNever();
-            entity.Property(e => e.Email).HasColumnName("email");
-            entity.Property(e => e.Name)
-                .IsUnicode(false)
-                .HasColumnName("name");
-            entity.Property(e => e.Password)
-                .IsUnicode(false)
-                .HasColumnName("password");
-            entity.Property(e => e.Surname)
-                .IsUnicode(false)
-                .HasColumnName("surname");
+            entity.HasKey(a => new { a.listId, a.itemId }).HasName("CK_ListContent");
         });
 
         OnModelCreatingPartial(modelBuilder);

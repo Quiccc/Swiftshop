@@ -1,11 +1,11 @@
-﻿using System.ComponentModel.DataAnnotations;
-
-namespace Swiftshop.Models
+﻿namespace Swiftshop.Models
 {
     public partial class Item
     {
-        [Key]
         public int Id { get; set; }
         public string Name { get; set; }
+        public virtual ICollection<ShoppingListContent> listContents { get; set; }
+        public int subcategoryId { get; set; }
+        public Subcategory Subcategory { get; set; }
     }
 }
