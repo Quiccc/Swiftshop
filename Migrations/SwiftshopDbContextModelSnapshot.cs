@@ -16,7 +16,7 @@ namespace Swiftshop.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "7.0.4")
+                .HasAnnotation("ProductVersion", "7.0.10")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
@@ -31,10 +31,13 @@ namespace Swiftshop.Migrations
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(450)");
 
                     b.HasKey("Id")
                         .HasName("PK_Category");
+
+                    b.HasIndex("Name")
+                        .IsUnique();
 
                     b.ToTable("Categories");
                 });
@@ -49,15 +52,18 @@ namespace Swiftshop.Migrations
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(450)");
 
-                    b.Property<int>("subcategoryId")
+                    b.Property<int>("SubcategoryId")
                         .HasColumnType("int");
 
                     b.HasKey("Id")
                         .HasName("PK_Item");
 
-                    b.HasIndex("subcategoryId");
+                    b.HasIndex("Name")
+                        .IsUnique();
+
+                    b.HasIndex("SubcategoryId");
 
                     b.ToTable("Items");
                 });
@@ -74,32 +80,32 @@ namespace Swiftshop.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("userId")
+                    b.Property<int>("UserId")
                         .HasColumnType("int");
 
                     b.HasKey("Id")
                         .HasName("PK_ShoppingList");
 
-                    b.HasIndex("userId");
+                    b.HasIndex("UserId");
 
                     b.ToTable("ShoppingLists");
                 });
 
             modelBuilder.Entity("Swiftshop.Models.ShoppingListContent", b =>
                 {
-                    b.Property<int>("listId")
+                    b.Property<int>("ListId")
                         .HasColumnType("int");
 
-                    b.Property<int>("itemId")
+                    b.Property<int>("ItemId")
                         .HasColumnType("int");
 
                     b.Property<int>("Quantity")
                         .HasColumnType("int");
 
-                    b.HasKey("listId", "itemId")
+                    b.HasKey("ListId", "ItemId")
                         .HasName("CK_ListContent");
 
-                    b.HasIndex("itemId");
+                    b.HasIndex("ItemId");
 
                     b.ToTable("ShoppingListContents");
                 });
@@ -112,17 +118,20 @@ namespace Swiftshop.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
+                    b.Property<int>("CategoryId")
+                        .HasColumnType("int");
+
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("categoryId")
-                        .HasColumnType("int");
+                        .HasColumnType("nvarchar(450)");
 
                     b.HasKey("Id")
                         .HasName("PK_Subcategory");
 
-                    b.HasIndex("categoryId");
+                    b.HasIndex("CategoryId");
+
+                    b.HasIndex("Name")
+                        .IsUnique();
 
                     b.ToTable("Subcategories");
                 });
@@ -164,7 +173,7 @@ namespace Swiftshop.Migrations
                 {
                     b.HasOne("Swiftshop.Models.Subcategory", "Subcategory")
                         .WithMany()
-                        .HasForeignKey("subcategoryId")
+                        .HasForeignKey("SubcategoryId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -175,7 +184,7 @@ namespace Swiftshop.Migrations
                 {
                     b.HasOne("Swiftshop.Models.User", "User")
                         .WithMany("ShoppingLists")
-                        .HasForeignKey("userId")
+                        .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired()
                         .HasConstraintName("FK_ShoppingListToUser");
@@ -186,14 +195,14 @@ namespace Swiftshop.Migrations
             modelBuilder.Entity("Swiftshop.Models.ShoppingListContent", b =>
                 {
                     b.HasOne("Swiftshop.Models.Item", "Item")
-                        .WithMany("listContents")
-                        .HasForeignKey("itemId")
+                        .WithMany("ListContents")
+                        .HasForeignKey("ItemId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("Swiftshop.Models.ShoppingList", "List")
-                        .WithMany("listContents")
-                        .HasForeignKey("listId")
+                        .WithMany("ListContents")
+                        .HasForeignKey("ListId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -206,7 +215,7 @@ namespace Swiftshop.Migrations
                 {
                     b.HasOne("Swiftshop.Models.Category", "Category")
                         .WithMany("Subcategories")
-                        .HasForeignKey("categoryId")
+                        .HasForeignKey("CategoryId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired()
                         .HasConstraintName("FK_SubcategoryToCategory");
@@ -221,12 +230,12 @@ namespace Swiftshop.Migrations
 
             modelBuilder.Entity("Swiftshop.Models.Item", b =>
                 {
-                    b.Navigation("listContents");
+                    b.Navigation("ListContents");
                 });
 
             modelBuilder.Entity("Swiftshop.Models.ShoppingList", b =>
                 {
-                    b.Navigation("listContents");
+                    b.Navigation("ListContents");
                 });
 
             modelBuilder.Entity("Swiftshop.Models.User", b =>

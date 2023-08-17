@@ -1,10 +1,12 @@
 using Microsoft.EntityFrameworkCore;
+using Swiftshop.Database;
 using Swiftshop.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
+builder.Services.AddDbContext<SwiftshopDbContext>(opts => opts.UseSqlServer("DbConnection"));
 
 var app = builder.Build();
 

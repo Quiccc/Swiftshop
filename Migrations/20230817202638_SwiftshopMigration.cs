@@ -16,7 +16,7 @@ namespace Swiftshop.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                    Name = table.Column<string>(type: "nvarchar(450)", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -45,15 +45,15 @@ namespace Swiftshop.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    categoryId = table.Column<int>(type: "int", nullable: false)
+                    Name = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    CategoryId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Subcategory", x => x.Id);
                     table.ForeignKey(
                         name: "FK_SubcategoryToCategory",
-                        column: x => x.categoryId,
+                        column: x => x.CategoryId,
                         principalTable: "Categories",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
@@ -66,14 +66,14 @@ namespace Swiftshop.Migrations
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    userId = table.Column<int>(type: "int", nullable: false)
+                    UserId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_ShoppingList", x => x.Id);
                     table.ForeignKey(
                         name: "FK_ShoppingListToUser",
-                        column: x => x.userId,
+                        column: x => x.UserId,
                         principalTable: "Users",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
@@ -85,15 +85,15 @@ namespace Swiftshop.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    subcategoryId = table.Column<int>(type: "int", nullable: false)
+                    Name = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    SubcategoryId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Item", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Items_Subcategories_subcategoryId",
-                        column: x => x.subcategoryId,
+                        name: "FK_Items_Subcategories_SubcategoryId",
+                        column: x => x.SubcategoryId,
                         principalTable: "Subcategories",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
@@ -103,46 +103,64 @@ namespace Swiftshop.Migrations
                 name: "ShoppingListContents",
                 columns: table => new
                 {
-                    listId = table.Column<int>(type: "int", nullable: false),
-                    itemId = table.Column<int>(type: "int", nullable: false),
+                    ListId = table.Column<int>(type: "int", nullable: false),
+                    ItemId = table.Column<int>(type: "int", nullable: false),
                     Quantity = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("CK_ListContent", x => new { x.listId, x.itemId });
+                    table.PrimaryKey("CK_ListContent", x => new { x.ListId, x.ItemId });
                     table.ForeignKey(
-                        name: "FK_ShoppingListContents_Items_itemId",
-                        column: x => x.itemId,
+                        name: "FK_ShoppingListContents_Items_ItemId",
+                        column: x => x.ItemId,
                         principalTable: "Items",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_ShoppingListContents_ShoppingLists_listId",
-                        column: x => x.listId,
+                        name: "FK_ShoppingListContents_ShoppingLists_ListId",
+                        column: x => x.ListId,
                         principalTable: "ShoppingLists",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_Items_subcategoryId",
+                name: "IX_Categories_Name",
+                table: "Categories",
+                column: "Name",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Items_Name",
                 table: "Items",
-                column: "subcategoryId");
+                column: "Name",
+                unique: true);
 
             migrationBuilder.CreateIndex(
-                name: "IX_ShoppingListContents_itemId",
+                name: "IX_Items_SubcategoryId",
+                table: "Items",
+                column: "SubcategoryId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_ShoppingListContents_ItemId",
                 table: "ShoppingListContents",
-                column: "itemId");
+                column: "ItemId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_ShoppingLists_userId",
+                name: "IX_ShoppingLists_UserId",
                 table: "ShoppingLists",
-                column: "userId");
+                column: "UserId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Subcategories_categoryId",
+                name: "IX_Subcategories_CategoryId",
                 table: "Subcategories",
-                column: "categoryId");
+                column: "CategoryId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Subcategories_Name",
+                table: "Subcategories",
+                column: "Name",
+                unique: true);
 
             migrationBuilder.CreateIndex(
                 name: "IX_Users_Email",

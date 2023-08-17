@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using Swiftshop.Models;
 
 namespace Swiftshop.Database;
@@ -30,43 +28,65 @@ public partial class SwiftshopDbContext : DbContext
     {
         modelBuilder.Entity<User>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK_User");
-            entity.HasIndex(a => a.Email).IsUnique();
+            entity.HasKey(k => k.Id).HasName("PK_User");
+
+            entity.HasIndex(i => i.Email).IsUnique(true);
+
+            entity.Property(p => p.Name).IsRequired(true);
+            entity.Property(p => p.Surname).IsRequired(true);
+            entity.Property(p => p.Email).IsRequired(true);
+            entity.Property(p => p.Password).IsRequired(true);
         });
 
         modelBuilder.Entity<Item>(entity => {
-            entity.HasKey(e => e.Id).HasName("PK_Item");
+            entity.HasKey(k => k.Id).HasName("PK_Item");
+
+            entity.HasIndex(i => i.Name).IsUnique(true);
+            
+            entity.Property(p => p.Name).IsRequired(true);
+            entity.Property(p => p.SubcategoryId).IsRequired(true);
         });
 
         modelBuilder.Entity<Category>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK_Category");
+            entity.HasKey(k => k.Id).HasName("PK_Category");
+
+            entity.HasIndex(i => i.Name).IsUnique(true);
+
+            entity.Property(p => p.Name).IsRequired(true);
         });
 
         modelBuilder.Entity<Subcategory>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK_Subcategory");
+            entity.HasKey(k => k.Id).HasName("PK_Subcategory");
+
+            entity.HasIndex(i => i.Name).IsUnique(true);
+
+            entity.Property(p => p.Name).IsRequired(true);
+            entity.Property(p => p.CategoryId).IsRequired(true);
 
             entity.HasOne(a => a.Category)
             .WithMany(b => b.Subcategories)
-            .HasForeignKey(c => c.categoryId)
+            .HasForeignKey(c => c.CategoryId)
             .HasConstraintName("FK_SubcategoryToCategory");
         });
 
         modelBuilder.Entity<ShoppingList>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK_ShoppingList");
+            entity.HasKey(k => k.Id).HasName("PK_ShoppingList");
+
+            entity.Property(p => p.Name).IsRequired(true);
+            entity.Property(p => p.UserId).IsRequired(true);
 
             entity.HasOne(a => a.User)
             .WithMany(b => b.ShoppingLists)
-            .HasForeignKey(c => c.userId)
+            .HasForeignKey(c => c.UserId)
             .HasConstraintName("FK_ShoppingListToUser");
-
         });
 
         modelBuilder.Entity<ShoppingListContent>(entity =>
         {
-            entity.HasKey(a => new { a.listId, a.itemId }).HasName("CK_ListContent");
+            entity.HasKey(a => new { a.ListId, a.ItemId }).HasName("CK_ListContent");
         });
 
         OnModelCreatingPartial(modelBuilder);
