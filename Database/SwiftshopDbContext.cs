@@ -35,7 +35,7 @@ public partial class SwiftshopDbContext : DbContext
             entity.Property(p => p.Name).IsRequired(true);
             entity.Property(p => p.Surname).IsRequired(true);
             entity.Property(p => p.Email).IsRequired(true);
-            entity.Property(p => p.Password).IsRequired(true);
+            entity.Property(p => p.PasswordHash).IsRequired(true);
         });
 
         modelBuilder.Entity<Item>(entity => {
