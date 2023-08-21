@@ -13,9 +13,8 @@ namespace Swiftshop.Controllers
             _logger = logger;
         }
 
-        public IActionResult Index(string? jwt)
+        public IActionResult Index()
         {
-            Debug.WriteLine(jwt);
             return View();
         }
 
