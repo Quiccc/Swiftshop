@@ -1,3 +1,56 @@
-﻿@{
+﻿@model IEnumerable<Swiftshop.Models.ShoppingList>
+@{
     ViewData["Title"] = "Home Page";
 }
+
+<div class="home-page-container">
+    @*Landing Page Shopping List Card Component*@
+    <div class="d-flex justify-content-start" style="padding-top:10%">
+        @foreach (var item in Model)
+        {
+            <div class="card" style="width:18rem; margin-left:6.3%; background-color:burlywood">
+                <img src="/shopping_cart.png" class="card-img-top" style="padding:10%" alt="...">
+                <div class="card-body">
+                    <h5 class="card-title">@Html.DisplayFor(modelItem => item.Name)</h5>
+                    <button class="btn btn-light btn-lg"><i class="bi bi-bag-check"></i></button>
+                    <button class="btn btn-light btn-lg"><i class="bi bi-cart-dash-fill"></i></button>
+                    @{
+                        if (item.IsFavorited == false)
+                        {
+                            <a class="btn btn-light btn-lg" asp-controller="Home" asp-action="SwitchIsFavorite" asp-route-ListId="@item.Id" asp-route-OldStatus="@item.IsFavorited">
+                                <i class="bi bi-heart"></i>
+                            </a>
+                        }
+                        else
+                        {
+                            <a class="btn btn-light btn-lg" asp-controller="Home" asp-action="SwitchIsFavorite" asp-route-ListId="@item.Id" asp-route-OldStatus="@item.IsFavorited">
+                                <i class="bi bi-heart-fill"></i>
+                            </a>
+                        }
+                    }
+                </div>
+            </div>
+        }
+    </div>
+    <nav class="home-page-paginator">
+        <ul class="pagination justify-content-center">
+            <li class="page-item">
+                <a class="page-link" href="#" aria-label="Previous">
+                    <span aria-hidden="true">&laquo;</span>
+                </a>
+            </li>
+            @{
+                for (int i = 1; i <= ViewBag.PaginatorSize; i++)
+                {
+                    <li class="page-item"><a class="page-link" href=@Html.Raw("/?Page="+i)>@i</a></li>
+                }
+            }
+            <li class="page-item">
+                <a class="page-link" href="#" aria-label="Next">
+                    <span aria-hidden="true">&raquo;</span>
+                </a>
+            </li>
+        </ul>
+    </nav>
+</div>
+

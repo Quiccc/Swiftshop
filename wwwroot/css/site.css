@@ -48,3 +48,13 @@ body {
 .home-page-dropdown {
     padding: 1%
 }
+.home-page-paginator{
+    padding-top:3%;
+    padding-bottom:2%;
+}
+.home-page-container{
+    margin-top:5%;
+    padding-left:5%;
+    padding-right:5%;
+    background-color:#808080;
+}
