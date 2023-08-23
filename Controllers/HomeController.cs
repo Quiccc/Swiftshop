@@ -1,22 +1,30 @@
 ﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Components.Server.ProtectedBrowserStorage;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using Swiftshop.Database;
 using Swiftshop.Models;
 using System.Diagnostics;
+using System.Security.Claims;
 
 namespace Swiftshop.Controllers
 {
     public class HomeController : Controller
     {
-        private readonly ILogger<HomeController> _logger;
+        private readonly SwiftshopDbContext _context;
+        private readonly IHttpContextAccessor _contextAccessor;
 
-        public HomeController(ILogger<HomeController> logger)
+        public HomeController(SwiftshopDbContext context, IHttpContextAccessor httpContextAccessor)
         {
-            _logger = logger;
-        }
+            _context = context;
+            _contextAccessor = httpContextAccessor;
+        } 
 
         [Authorize]
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
+            var Email = _contextAccessor.HttpContext?.User.Identity?.Name;
+            var UserLists = await _context.Users.FirstAsync();
             return View();
         }
 

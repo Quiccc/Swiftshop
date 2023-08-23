@@ -3,17 +3,22 @@
 @inject SignInManager<User> SignInManager
 @inject UserManager<User> UserManager
 
-<ul class="navbar-nav">
 @if (SignInManager.IsSignedIn(User))
 {
-    <li class="nav-item">
-        <a id="manage" class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">Hello @UserManager.GetUserName(User)!</a>
-    </li>
-    <li class="nav-item">
-        <form id="logoutForm" class="form-inline" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })">
-            <button id="logout" type="submit" class="nav-link btn btn-link text-dark border-0">Logout</button>
-        </form>
-    </li>
+    var currentUser = UserManager.GetUserAsync(User).Result;
+    <div class="dropdown">
+        <button class="btn dropdown-toggle" style="background-color:#7a47b8; color:#efefef; font-family:'Comic Sans MS','Comic Sans',cursive" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+            @currentUser?.Name
+            </button> 
+            <ul class="dropdown-menu dropdown-menu-dark">
+            <li><a id="manage" class="dropdown-item" style="color:#efefef; font-family:'Comic Sans MS','Comic Sans',cursive;" asp-area="Identity" asp-page="/Account/Manage/Index">My Profile</a></li>
+            <li>
+                <form id="logoutForm" class="form-inline" style="color:#efefef; font-family:'Comic Sans MS','Comic Sans',cursive;" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Home")">
+                    <button id="logout" type="submit" class="dropdown-item">Logout</button>
+                </form>
+            </li>
+            </ul>
+        </div>
 }
 else
 {
@@ -24,4 +29,3 @@ else
         <a class="nav-link text-dark" id="login" asp-area="Identity" asp-page="/Account/Login">Login</a>
     </li>
 }
-</ul>

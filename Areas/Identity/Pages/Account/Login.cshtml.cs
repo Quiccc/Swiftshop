@@ -15,6 +15,9 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Extensions.Logging;
 using Swiftshop.Models;
+using System.Diagnostics;
+using Swiftshop.Database;
+using Microsoft.EntityFrameworkCore;
 
 namespace Swiftshop.Areas.Identity.Pages.Account
 {

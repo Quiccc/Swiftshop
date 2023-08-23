@@ -1,26 +1,50 @@
 html {
-  font-size: 14px;
+    background-color: #0c0c0c;
+    font-size: 14px;
 }
 
 @media (min-width: 768px) {
-  html {
-    font-size: 16px;
-  }
+    html {
+        background-color: #0c0c0c;
+        font-size: 16px;
+    }
 }
 
 .btn:focus, .btn:active:focus, .btn-link.nav-link:focus, .form-control:focus, .form-check-input:focus {
-  box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #258cfb;
+    box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #258cfb;
 }
 
 html {
-  position: relative;
-  min-height: 100%;
+    background-color: #0c0c0c;
+    position: relative;
+    min-height: 100%;
 }
 
 body {
-  margin-bottom: 60px;
+    background-color: #0c0c0c;
+    margin-bottom: 60px;
 }
 
-login-form{
+.login-page-logo {
+    padding-top: 25%;
+    padding-bottom: 5%;
+}
 
+.login-page-text {
+    font-family: 'Comic Sans MS','Comic Sans',cursive;
+    color: #efefef;
+}
+
+.login-page-text-inv {
+    font-family: 'Comic Sans MS','Comic Sans',cursive;
+    color: #0c0c0c;
+}
+
+.home-page-logo {
+    width: 35%;
+    padding-top: 3%;
+}
+
+.home-page-dropdown {
+    padding: 1%
 }
