@@ -12,8 +12,8 @@ using Swiftshop.Database;
 namespace Swiftshop.Migrations
 {
     [DbContext(typeof(SwiftshopDbContext))]
-    [Migration("20230823101726_ShoppingListUpdate")]
-    partial class ShoppingListUpdate
+    [Migration("20230824011647_31")]
+    partial class _31
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -24,6 +24,12 @@ namespace Swiftshop.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
+
+            modelBuilder.HasSequence<int>("ItemId");
+
+            modelBuilder.HasSequence<int>("ShoppingListId");
+
+            modelBuilder.HasSequence<int>("SubcategoryId");
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
                 {
@@ -50,6 +56,20 @@ namespace Swiftshop.Migrations
                         .HasFilter("[NormalizedName] IS NOT NULL");
 
                     b.ToTable("AspNetRoles", (string)null);
+
+                    b.HasData(
+                        new
+                        {
+                            Id = "Admin",
+                            Name = "Admin",
+                            NormalizedName = "ADMIN"
+                        },
+                        new
+                        {
+                            Id = "User",
+                            Name = "User",
+                            NormalizedName = "USER"
+                        });
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -139,6 +159,13 @@ namespace Swiftshop.Migrations
                     b.HasIndex("RoleId");
 
                     b.ToTable("AspNetUserRoles", (string)null);
+
+                    b.HasData(
+                        new
+                        {
+                            UserId = "SeededAdminUser",
+                            RoleId = "Admin"
+                        });
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<string>", b =>
@@ -165,6 +192,7 @@ namespace Swiftshop.Migrations
             modelBuilder.Entity("Swiftshop.Models.Category", b =>
                 {
                     b.Property<string>("Id")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("Name")
@@ -182,16 +210,18 @@ namespace Swiftshop.Migrations
 
             modelBuilder.Entity("Swiftshop.Models.Item", b =>
                 {
-                    b.Property<string>("Id")
-                        .HasColumnType("nvarchar(450)");
+                    b.Property<int?>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasDefaultValueSql("NEXT VALUE FOR ItemId");
 
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
-                    b.Property<string>("SubcategoryId")
+                    b.Property<int?>("SubcategoryId")
                         .IsRequired()
-                        .HasColumnType("nvarchar(450)");
+                        .HasColumnType("int");
 
                     b.HasKey("Id")
                         .HasName("PK_Item");
@@ -206,8 +236,10 @@ namespace Swiftshop.Migrations
 
             modelBuilder.Entity("Swiftshop.Models.ShoppingList", b =>
                 {
-                    b.Property<string>("Id")
-                        .HasColumnType("nvarchar(450)");
+                    b.Property<int?>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasDefaultValueSql("NEXT VALUE FOR ShoppingListId");
 
                     b.Property<DateTime?>("CreatedAt")
                         .HasColumnType("datetime2");
@@ -236,11 +268,11 @@ namespace Swiftshop.Migrations
 
             modelBuilder.Entity("Swiftshop.Models.ShoppingListContent", b =>
                 {
-                    b.Property<string>("ListId")
-                        .HasColumnType("nvarchar(450)");
+                    b.Property<int?>("ListId")
+                        .HasColumnType("int");
 
-                    b.Property<string>("ItemId")
-                        .HasColumnType("nvarchar(450)");
+                    b.Property<int?>("ItemId")
+                        .HasColumnType("int");
 
                     b.Property<int?>("Quantity")
                         .HasColumnType("int");
@@ -255,8 +287,10 @@ namespace Swiftshop.Migrations
 
             modelBuilder.Entity("Swiftshop.Models.Subcategory", b =>
                 {
-                    b.Property<string>("Id")
-                        .HasColumnType("nvarchar(450)");
+                    b.Property<int?>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasDefaultValueSql("NEXT VALUE FOR SubcategoryId");
 
                     b.Property<string>("CategoryId")
                         .IsRequired()
@@ -335,9 +369,6 @@ namespace Swiftshop.Migrations
                         .HasMaxLength(256)
                         .HasColumnType("nvarchar(256)");
 
-                    b.Property<string>("UserRole")
-                        .HasColumnType("nvarchar(max)");
-
                     b.HasKey("Id");
 
                     b.HasIndex("NormalizedEmail")
@@ -349,6 +380,27 @@ namespace Swiftshop.Migrations
                         .HasFilter("[NormalizedUserName] IS NOT NULL");
 
                     b.ToTable("AspNetUsers", (string)null);
+
+                    b.HasData(
+                        new
+                        {
+                            Id = "SeededAdminUser",
+                            AccessFailedCount = 1,
+                            ConcurrencyStamp = "f2099005-344e-4df6-bab6-63ead94562de",
+                            Email = "kaganaslan56@gmail.com",
+                            EmailConfirmed = false,
+                            LockoutEnabled = true,
+                            Name = "Kağan",
+                            NormalizedEmail = "KAGANASLAN56@GMAIL.COM",
+                            NormalizedUserName = "KAGANASLAN56@GMAIL.COM",
+                            PasswordHash = "AQAAAAIAAYagAAAAEGn4vXbD7k9PMobT7cou5IVGEZfN8UXtaSxmmpX+yvTAiwDUibY+WX2YIUviYaHzzw==",
+                            PhoneNumber = "123",
+                            PhoneNumberConfirmed = false,
+                            SecurityStamp = "II4GL3KQ55AN7XN5OTVETQLLSX7AF3H7",
+                            Surname = "ASLAN",
+                            TwoFactorEnabled = false,
+                            UserName = "kaganaslan56@gmail.com"
+                        });
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>

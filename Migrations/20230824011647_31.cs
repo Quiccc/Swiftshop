@@ -3,14 +3,25 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
+#pragma warning disable CA1814 // Prefer jagged arrays over multidimensional
+
 namespace Swiftshop.Migrations
 {
     /// <inheritdoc />
-    public partial class Identity : Migration
+    public partial class _31 : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.CreateSequence<int>(
+                name: "ItemId");
+
+            migrationBuilder.CreateSequence<int>(
+                name: "ShoppingListId");
+
+            migrationBuilder.CreateSequence<int>(
+                name: "SubcategoryId");
+
             migrationBuilder.CreateTable(
                 name: "AspNetRoles",
                 columns: table => new
@@ -32,7 +43,6 @@ namespace Swiftshop.Migrations
                     Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Surname = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    UserRole = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     UserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
                     NormalizedUserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
                     Email = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
@@ -175,9 +185,12 @@ namespace Swiftshop.Migrations
                 name: "ShoppingLists",
                 columns: table => new
                 {
-                    Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    Id = table.Column<int>(type: "int", nullable: false, defaultValueSql: "NEXT VALUE FOR ShoppingListId"),
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    UserId = table.Column<string>(type: "nvarchar(450)", nullable: false)
+                    IsActive = table.Column<bool>(type: "bit", nullable: true),
+                    IsFavorited = table.Column<bool>(type: "bit", nullable: true),
+                    UserId = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -194,7 +207,7 @@ namespace Swiftshop.Migrations
                 name: "Subcategories",
                 columns: table => new
                 {
-                    Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    Id = table.Column<int>(type: "int", nullable: false, defaultValueSql: "NEXT VALUE FOR SubcategoryId"),
                     Name = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     CategoryId = table.Column<string>(type: "nvarchar(450)", nullable: false)
                 },
@@ -213,9 +226,9 @@ namespace Swiftshop.Migrations
                 name: "Items",
                 columns: table => new
                 {
-                    Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    Id = table.Column<int>(type: "int", nullable: false, defaultValueSql: "NEXT VALUE FOR ItemId"),
                     Name = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    SubcategoryId = table.Column<string>(type: "nvarchar(450)", nullable: false)
+                    SubcategoryId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -232,8 +245,8 @@ namespace Swiftshop.Migrations
                 name: "ShoppingListContents",
                 columns: table => new
                 {
-                    ListId = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    ItemId = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    ListId = table.Column<int>(type: "int", nullable: false),
+                    ItemId = table.Column<int>(type: "int", nullable: false),
                     Quantity = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
@@ -252,6 +265,25 @@ namespace Swiftshop.Migrations
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
+
+            migrationBuilder.InsertData(
+                table: "AspNetRoles",
+                columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
+                values: new object[,]
+                {
+                    { "Admin", null, "Admin", "ADMIN" },
+                    { "User", null, "User", "USER" }
+                });
+
+            migrationBuilder.InsertData(
+                table: "AspNetUsers",
+                columns: new[] { "Id", "AccessFailedCount", "ConcurrencyStamp", "Email", "EmailConfirmed", "LockoutEnabled", "LockoutEnd", "Name", "NormalizedEmail", "NormalizedUserName", "PasswordHash", "PhoneNumber", "PhoneNumberConfirmed", "SecurityStamp", "Surname", "TwoFactorEnabled", "UserName" },
+                values: new object[] { "SeededAdminUser", 1, "f2099005-344e-4df6-bab6-63ead94562de", "kaganaslan56@gmail.com", false, true, null, "Kağan", "KAGANASLAN56@GMAIL.COM", "KAGANASLAN56@GMAIL.COM", "AQAAAAIAAYagAAAAEGn4vXbD7k9PMobT7cou5IVGEZfN8UXtaSxmmpX+yvTAiwDUibY+WX2YIUviYaHzzw==", "123", false, "II4GL3KQ55AN7XN5OTVETQLLSX7AF3H7", "ASLAN", false, "kaganaslan56@gmail.com" });
+
+            migrationBuilder.InsertData(
+                table: "AspNetUserRoles",
+                columns: new[] { "RoleId", "UserId" },
+                values: new object[] { "Admin", "SeededAdminUser" });
 
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetRoleClaims_RoleId",
@@ -369,6 +401,15 @@ namespace Swiftshop.Migrations
 
             migrationBuilder.DropTable(
                 name: "Categories");
+
+            migrationBuilder.DropSequence(
+                name: "ItemId");
+
+            migrationBuilder.DropSequence(
+                name: "ShoppingListId");
+
+            migrationBuilder.DropSequence(
+                name: "SubcategoryId");
         }
     }
 }

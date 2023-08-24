@@ -1,23 +1,20 @@
 ﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Components.Server.ProtectedBrowserStorage;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.ActionConstraints;
 using Microsoft.EntityFrameworkCore;
 using Swiftshop.Database;
 using Swiftshop.Models;
 using System.Diagnostics;
-using System.Security.Claims;
 
 namespace Swiftshop.Controllers
 {
-    public class HomeController : Controller
+    public class ShoppingListController : Controller
     {
         private readonly SwiftshopDbContext _context;
         private readonly IHttpContextAccessor _contextAccessor;
         private readonly UserManager<User> _userManager;
 
-        public HomeController(SwiftshopDbContext context, IHttpContextAccessor httpContextAccessor, UserManager<User> userManager)
+        public ShoppingListController(SwiftshopDbContext context, IHttpContextAccessor httpContextAccessor, UserManager<User> userManager)
         {
             _context = context;
             _contextAccessor = httpContextAccessor;
@@ -59,12 +56,11 @@ namespace Swiftshop.Controllers
 
         //Functionality for adding lists to favorites.
         [Authorize]
-        public async Task<IActionResult> SwitchIsFavorite(string ListId, bool OldStatus)
+        public async Task<IActionResult> SwitchIsFavorite(int ListId, bool OldStatus)
         {
-            Debug.WriteLine("WORKS WORKS WORKS " + ListId + " " + OldStatus);
             var ShoppingListContext = _context.ShoppingLists.First(sl => sl.Id == ListId).IsFavorited = !OldStatus;
             await _context.SaveChangesAsync();
-            return RedirectToAction("Index", "Home");
+            return RedirectToAction("Index", "ShoppingList");
         }
 
         [Authorize]

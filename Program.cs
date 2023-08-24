@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Swiftshop.Database;
 using Swiftshop.Models;
@@ -7,9 +8,13 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 builder.Services.AddHttpContextAccessor();
+
 builder.Services.AddDbContext<SwiftshopDbContext>(opts => opts.UseSqlServer("DbConnection"));
 
-builder.Services.AddDefaultIdentity<User>(options => options.SignIn.RequireConfirmedAccount = false).AddEntityFrameworkStores<SwiftshopDbContext>();
+builder.Services.AddDefaultIdentity<User>(options => options.SignIn.RequireConfirmedAccount = false)
+    .AddRoles<IdentityRole>()
+    .AddEntityFrameworkStores<SwiftshopDbContext>();
+    
 
 var app = builder.Build();
 
@@ -35,6 +40,6 @@ app.MapRazorPages();
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller}/{action}/{id?}",
-    new {controller = "Home", action = "Index"});
+    new {controller = "ShoppingList", action = "Index"});
 
 app.Run();

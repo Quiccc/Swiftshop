@@ -1,0 +1,42 @@
+﻿@model IEnumerable<Swiftshop.Models.Category>;
+
+<div style="margin-top:5%; margin-bottom:2%">
+    <h1>Create new category</h1>
+    <h5>Categories contain subcategories to enhance product searching.</h5>
+
+    <form asp-action="CreateCategory" style="margin-top:2%">
+        <input required type="text" name="NewName" />
+        <input type="submit" class="btn btn-md btn-light" value="Create" />
+    </form>
+</div>
+<table class="table table-striped-columns" style="color:white">
+    <thead>
+        <tr>
+            <th>Id</th>
+            <th>Category Name</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @{
+            foreach (var category in Model)
+            {
+                <tr>
+                    <td>@Html.DisplayFor(modelItem => category.Id)</td>
+                    <td>@Html.DisplayFor(modelItem => category.Name)</td>
+                    <td>
+                    <div class="d-flex justify-content-start">
+                            <form asp-action="EditCategory" asp-route-CategoryId="@category.Id">
+                                <div asp-asp-validation-summary="ModelOnly">
+                                    <input required type="text" name="NewName" />
+                                    <input type="submit" class="btn btn-md btn-light" value="Save" />
+                                </div>
+                            </form>
+                            <a class="btn btn-md btn-light" asp-action="DeleteCategory" asp-route-CategoryId="@category.Id" style="margin-left:.5%;"><i class="bi bi-trash"></i></a>
+                    </div>
+                    </td>
+                </tr>
+            }
+        }
+    </tbody>
+</table>

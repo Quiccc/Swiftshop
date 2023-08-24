@@ -9,16 +9,22 @@
     <div class="dropdown">
         <button class="btn dropdown-toggle" style="background-color:#7a47b8; color:#efefef; font-family:'Comic Sans MS','Comic Sans',cursive" type="button" data-bs-toggle="dropdown" aria-expanded="false">
             @currentUser?.Name
-            </button> 
-            <ul class="dropdown-menu dropdown-menu-dark">
+        </button>
+        <ul class="dropdown-menu dropdown-menu-dark">
             <li><a id="manage" class="dropdown-item" style="color:#efefef; font-family:'Comic Sans MS','Comic Sans',cursive;" asp-area="Identity" asp-page="/Account/Manage/Index">My Profile</a></li>
+            @{
+                if (await UserManager.IsInRoleAsync(currentUser, "Admin"))
+                {
+                    <li><a class="dropdown-item" style="color:#efefef; font-family:'Comic Sans MS','Comic Sans',cursive;" asp-controller="Admin" asp-action="Index">Admin</a></li>
+                }
+            }
             <li>
-                <form id="logoutForm" class="form-inline" style="color:#efefef; font-family:'Comic Sans MS','Comic Sans',cursive;" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Home")">
+                <form id="logoutForm" class="form-inline" style="color:#efefef; font-family:'Comic Sans MS','Comic Sans',cursive;" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "ShoppingList")">
                     <button id="logout" type="submit" class="dropdown-item">Logout</button>
                 </form>
             </li>
-            </ul>
-        </div>
+        </ul>
+    </div>
 }
 else
 {
