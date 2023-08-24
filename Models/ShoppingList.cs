@@ -1,8 +1,11 @@
-﻿namespace Swiftshop.Models
+﻿using System.ComponentModel.DataAnnotations.Schema;
+
+namespace Swiftshop.Models
 {
     public class ShoppingList
     {
-        public int? Id { get; set; }
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        public string? Id { get; set; }
         public string? Name { get; set; }
         public bool? IsActive { get; set; }
         public bool? IsFavorited { get; set; }

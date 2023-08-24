@@ -56,7 +56,7 @@ namespace Swiftshop.Controllers
 
         //Functionality for adding lists to favorites.
         [Authorize]
-        public async Task<IActionResult> SwitchIsFavorite(int ListId, bool OldStatus)
+        public async Task<IActionResult> SwitchIsFavorite(string ListId, bool OldStatus)
         {
             var ShoppingListContext = _context.ShoppingLists.First(sl => sl.Id == ListId).IsFavorited = !OldStatus;
             await _context.SaveChangesAsync();

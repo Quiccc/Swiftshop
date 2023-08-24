@@ -27,9 +27,6 @@ public class SwiftshopDbContext : IdentityDbContext<User>
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        modelBuilder.HasSequence<int>("SubcategoryId");
-        modelBuilder.HasSequence<int>("ItemId");
-        modelBuilder.HasSequence<int>("ShoppingListId");
 
         modelBuilder.Entity<Category>(entity =>
         {
@@ -43,9 +40,6 @@ public class SwiftshopDbContext : IdentityDbContext<User>
         modelBuilder.Entity<Subcategory>(entity =>
         {
             entity.HasKey(k => k.Id).HasName("PK_Subcategory");
-
-            entity.Property(id => id.Id)
-            .HasDefaultValueSql("NEXT VALUE FOR SubcategoryId");
 
             entity.HasIndex(i => i.Name).IsUnique(true);
 
@@ -62,9 +56,6 @@ public class SwiftshopDbContext : IdentityDbContext<User>
         {
             entity.HasKey(k => k.Id).HasName("PK_Item");
 
-            entity.Property(id => id.Id)
-            .HasDefaultValueSql("NEXT VALUE FOR ItemId");
-
             entity.HasIndex(i => i.Name).IsUnique(true);
 
             entity.Property(p => p.Name).IsRequired(true);
@@ -74,9 +65,6 @@ public class SwiftshopDbContext : IdentityDbContext<User>
         modelBuilder.Entity<ShoppingList>(entity =>
         {
             entity.HasKey(k => k.Id).HasName("PK_ShoppingList");
-
-            entity.Property(id => id.Id)
-            .HasDefaultValueSql("NEXT VALUE FOR ShoppingListId");
 
             entity.Property(p => p.Name).IsRequired(true);
             entity.Property(p => p.UserId).IsRequired(true);

@@ -22,12 +22,6 @@ namespace Swiftshop.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
-            modelBuilder.HasSequence<int>("ItemId");
-
-            modelBuilder.HasSequence<int>("ShoppingListId");
-
-            modelBuilder.HasSequence<int>("SubcategoryId");
-
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
                 {
                     b.Property<string>("Id")
@@ -207,18 +201,17 @@ namespace Swiftshop.Migrations
 
             modelBuilder.Entity("Swiftshop.Models.Item", b =>
                 {
-                    b.Property<int?>("Id")
+                    b.Property<string>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasDefaultValueSql("NEXT VALUE FOR ItemId");
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
-                    b.Property<int?>("SubcategoryId")
+                    b.Property<string>("SubcategoryId")
                         .IsRequired()
-                        .HasColumnType("int");
+                        .HasColumnType("nvarchar(450)");
 
                     b.HasKey("Id")
                         .HasName("PK_Item");
@@ -233,10 +226,9 @@ namespace Swiftshop.Migrations
 
             modelBuilder.Entity("Swiftshop.Models.ShoppingList", b =>
                 {
-                    b.Property<int?>("Id")
+                    b.Property<string>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasDefaultValueSql("NEXT VALUE FOR ShoppingListId");
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<DateTime?>("CreatedAt")
                         .HasColumnType("datetime2");
@@ -265,11 +257,11 @@ namespace Swiftshop.Migrations
 
             modelBuilder.Entity("Swiftshop.Models.ShoppingListContent", b =>
                 {
-                    b.Property<int?>("ListId")
-                        .HasColumnType("int");
+                    b.Property<string>("ListId")
+                        .HasColumnType("nvarchar(450)");
 
-                    b.Property<int?>("ItemId")
-                        .HasColumnType("int");
+                    b.Property<string>("ItemId")
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<int?>("Quantity")
                         .HasColumnType("int");
@@ -284,10 +276,9 @@ namespace Swiftshop.Migrations
 
             modelBuilder.Entity("Swiftshop.Models.Subcategory", b =>
                 {
-                    b.Property<int?>("Id")
+                    b.Property<string>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasDefaultValueSql("NEXT VALUE FOR SubcategoryId");
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("CategoryId")
                         .IsRequired()

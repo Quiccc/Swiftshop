@@ -25,46 +25,21 @@ namespace Swiftshop.Controllers
             return View(await context.ToListAsync());
         }
 
-        public async Task<IActionResult> DeleteCategory(string CategoryId)
+        public async Task<IActionResult> ManageSubcategories()
         {
-            var context = _context;
-            var DeletedCategory = await context.Categories.FirstAsync(c => c.Id == CategoryId);
+            var SubcategoryContext = _context.Subcategories;
+            var CategoryContext = _context.Categories.ToList();
 
-            context.Remove(DeletedCategory);
-            context.SaveChanges();
+            Dictionary<string, string> CategoryPairs = new();
 
-            return RedirectToAction("ManageCategories");
-        }
-
-        public async Task<IActionResult> EditCategory(string CategoryId, string NewName)
-        {
-            var context = _context;
-            var UpdatedCategory = await context.Categories.FirstAsync(c => c.Id == CategoryId);
-            UpdatedCategory.Name = NewName;
-
-            context.Categories.Update(UpdatedCategory);
-            context.SaveChanges();
-
-            return RedirectToAction("ManageCategories");
-        }
-
-        public async Task<IActionResult> CreateCategory(string NewName)
-        {
-            var context = _context;
-            Category NewCategory = new()
+            foreach(var category in CategoryContext)
             {
-                Name = NewName
-            };
+                CategoryPairs.Add(category.Id, category.Name);
+            }
 
-            await context.Categories.AddAsync(NewCategory);
-            context.SaveChanges();
+            ViewBag.CategoryPairs = CategoryPairs;
 
-            return RedirectToAction("ManageCategories");
-        }
-
-        public IActionResult ManageSubcategories()
-        {
-            return View();
+            return View(await SubcategoryContext.ToListAsync());
         }
 
         public IActionResult ManageProducts()

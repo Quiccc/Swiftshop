@@ -8,20 +8,11 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace Swiftshop.Migrations
 {
     /// <inheritdoc />
-    public partial class _31 : Migration
+    public partial class AdminPanel : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.CreateSequence<int>(
-                name: "ItemId");
-
-            migrationBuilder.CreateSequence<int>(
-                name: "ShoppingListId");
-
-            migrationBuilder.CreateSequence<int>(
-                name: "SubcategoryId");
-
             migrationBuilder.CreateTable(
                 name: "AspNetRoles",
                 columns: table => new
@@ -185,7 +176,7 @@ namespace Swiftshop.Migrations
                 name: "ShoppingLists",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false, defaultValueSql: "NEXT VALUE FOR ShoppingListId"),
+                    Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     IsActive = table.Column<bool>(type: "bit", nullable: true),
                     IsFavorited = table.Column<bool>(type: "bit", nullable: true),
@@ -207,7 +198,7 @@ namespace Swiftshop.Migrations
                 name: "Subcategories",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false, defaultValueSql: "NEXT VALUE FOR SubcategoryId"),
+                    Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     Name = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     CategoryId = table.Column<string>(type: "nvarchar(450)", nullable: false)
                 },
@@ -226,9 +217,9 @@ namespace Swiftshop.Migrations
                 name: "Items",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false, defaultValueSql: "NEXT VALUE FOR ItemId"),
+                    Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     Name = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    SubcategoryId = table.Column<int>(type: "int", nullable: false)
+                    SubcategoryId = table.Column<string>(type: "nvarchar(450)", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -245,8 +236,8 @@ namespace Swiftshop.Migrations
                 name: "ShoppingListContents",
                 columns: table => new
                 {
-                    ListId = table.Column<int>(type: "int", nullable: false),
-                    ItemId = table.Column<int>(type: "int", nullable: false),
+                    ListId = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    ItemId = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     Quantity = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
@@ -401,15 +392,6 @@ namespace Swiftshop.Migrations
 
             migrationBuilder.DropTable(
                 name: "Categories");
-
-            migrationBuilder.DropSequence(
-                name: "ItemId");
-
-            migrationBuilder.DropSequence(
-                name: "ShoppingListId");
-
-            migrationBuilder.DropSequence(
-                name: "SubcategoryId");
         }
     }
 }
