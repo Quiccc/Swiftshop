@@ -48,7 +48,8 @@ body {
 
 .manage-product-sidebar {
     margin-left: 30px;
+    margin-bottom: 50%;
     width: 10%;
-    height: 45rem;
+    height: 100vh;
     background-color: #212121;
 }

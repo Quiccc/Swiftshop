@@ -32,14 +32,7 @@ namespace Swiftshop.Controllers
             var SubcategoryContext = _context.Subcategories;
             var CategoryContext = _context.Categories.ToList();
 
-            Dictionary<string, string> CategoryPairs = new();
-
-            foreach (var category in CategoryContext)
-            {
-                CategoryPairs.Add(category.Id, category.Name);
-            }
-
-            ViewBag.CategoryPairs = CategoryPairs;
+            ViewBag.CategoryNames = CategoryContext.Select(c => c.Name).ToList();
 
             return View(await SubcategoryContext.ToListAsync());
         }
@@ -57,12 +50,16 @@ namespace Swiftshop.Controllers
                 ProductContext = await _context.Products.ToListAsync();
             }
 
-            var SubcategoryContext = _context.Subcategories.OrderBy(o => o.Name).ToList();
+            var SubcategoryContext = _context.Subcategories
+                .OrderBy(o => o.Name)
+                .ToList();
+
             var CategoryContext = _context.Categories
                 .OrderBy(c => c.Name)
                 .ToList();
 
             ViewBag.Categories = CategoryContext;
+            ViewBag.Subcategories = SubcategoryContext;
 
             return View(ProductContext);
         }
