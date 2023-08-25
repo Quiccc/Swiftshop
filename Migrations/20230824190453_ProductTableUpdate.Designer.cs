@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Swiftshop.Database;
 
@@ -11,9 +12,11 @@ using Swiftshop.Database;
 namespace Swiftshop.Migrations
 {
     [DbContext(typeof(SwiftshopDbContext))]
-    partial class SwiftshopDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230824190453_ProductTableUpdate")]
+    partial class ProductTableUpdate
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -214,8 +217,8 @@ namespace Swiftshop.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
-                    b.Property<string>("ProductImage")
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<byte[]>("ProductImage")
+                        .HasColumnType("varbinary(max)");
 
                     b.Property<string>("SubcategoryId")
                         .IsRequired()

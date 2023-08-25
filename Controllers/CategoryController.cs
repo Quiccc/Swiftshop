@@ -1,10 +1,12 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Swiftshop.Database;
 using Swiftshop.Models;
 
 namespace Swiftshop.Controllers
 {
+    [Authorize(Roles = "Admin")]
     public class CategoryController : Controller
     {
         private readonly SwiftshopDbContext _context;
@@ -34,7 +36,7 @@ namespace Swiftshop.Controllers
                 return RedirectToAction("ManageCategories", "Admin");
             }
 
-            var UpdatedCategory =  context.First(c => c.Id == CategoryId);
+            var UpdatedCategory = context.First(c => c.Id == CategoryId);
             UpdatedCategory.Name = NewName;
 
             _context.Categories.Update(UpdatedCategory);
@@ -46,15 +48,16 @@ namespace Swiftshop.Controllers
         public async Task<IActionResult> CreateCategory(string NewName)
         {
             var context = _context.Categories;
-            Category NewCategory = new()
-            {
-                Name = NewName
-            };
 
             if (context.Select(c => c.Name).ToList().Contains(NewName))
             {
                 return RedirectToAction("ManageCategories", "Admin");
             }
+
+            Category NewCategory = new()
+            {
+                Name = NewName
+            };
 
             await _context.Categories.AddAsync(NewCategory);
             _context.SaveChanges();

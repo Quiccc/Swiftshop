@@ -8,6 +8,7 @@ using System.Diagnostics;
 
 namespace Swiftshop.Controllers
 {
+    [Authorize(Roles = "Admin,User")]
     public class ShoppingListController : Controller
     {
         private readonly SwiftshopDbContext _context;
@@ -21,7 +22,6 @@ namespace Swiftshop.Controllers
             _userManager = userManager;
         }
 
-        [Authorize]
         public async Task<IActionResult> Index(int Page)
         {
             if (Page == 0) { return RedirectToAction("Index", new { Page = 1 }); }
@@ -55,18 +55,11 @@ namespace Swiftshop.Controllers
         }
 
         //Functionality for adding lists to favorites.
-        [Authorize]
         public async Task<IActionResult> SwitchIsFavorite(string ListId, bool OldStatus)
         {
             var ShoppingListContext = _context.ShoppingLists.First(sl => sl.Id == ListId).IsFavorited = !OldStatus;
             await _context.SaveChangesAsync();
             return RedirectToAction("Index", "ShoppingList");
-        }
-
-        [Authorize]
-        public IActionResult Privacy()
-        {
-            return View();
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]

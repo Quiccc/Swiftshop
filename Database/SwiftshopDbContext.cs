@@ -8,7 +8,7 @@ namespace Swiftshop.Database;
 
 public class SwiftshopDbContext : IdentityDbContext<User>
 {
-    public virtual DbSet<Item> Items { get; set; }
+    public virtual DbSet<Product> Products { get; set; }
     public virtual DbSet<Category> Categories { get; set; }
     public virtual DbSet<Subcategory> Subcategories { get; set; }
     public virtual DbSet<ShoppingList> ShoppingLists { get; set; }
@@ -52,9 +52,9 @@ public class SwiftshopDbContext : IdentityDbContext<User>
             .HasConstraintName("FK_SubcategoryToCategory");
         });
 
-        modelBuilder.Entity<Item>(entity =>
+        modelBuilder.Entity<Product>(entity =>
         {
-            entity.HasKey(k => k.Id).HasName("PK_Item");
+            entity.HasKey(k => k.Id).HasName("PK_Product");
 
             entity.HasIndex(i => i.Name).IsUnique(true);
 
@@ -85,25 +85,29 @@ public class SwiftshopDbContext : IdentityDbContext<User>
             new { Id = "User", Name = "User", NormalizedName = "USER" });
 
         modelBuilder.Entity<User>().HasData(
-            new { Id = "SeededAdminUser", 
-                Name = "Kağan", 
-                Surname = "ASLAN", 
-                UserName = "kaganaslan56@gmail.com", 
-                NormalizedUserName = "KAGANASLAN56@GMAIL.COM", 
-                Email = "kaganaslan56@gmail.com", 
-                NormalizedEmail = "KAGANASLAN56@GMAIL.COM", 
-                EmailConfirmed = false, 
-                PasswordHash = "AQAAAAIAAYagAAAAEGn4vXbD7k9PMobT7cou5IVGEZfN8UXtaSxmmpX+yvTAiwDUibY+WX2YIUviYaHzzw==", 
-                SecurityStamp = "II4GL3KQ55AN7XN5OTVETQLLSX7AF3H7", 
-                ConcurrencyStamp = "f2099005-344e-4df6-bab6-63ead94562de", 
-                PhoneNumber = "123", 
-                PhoneNumberConfirmed = false, 
-                TwoFactorEnabled = false, 
-                LockoutEnabled = true, 
-                AccessFailedCount = 1 });
+            new
+            {
+                Id = "SeededAdminUser",
+                Name = "Kağan",
+                Surname = "ASLAN",
+                UserName = "kaganaslan56@gmail.com",
+                NormalizedUserName = "KAGANASLAN56@GMAIL.COM",
+                Email = "kaganaslan56@gmail.com",
+                NormalizedEmail = "KAGANASLAN56@GMAIL.COM",
+                EmailConfirmed = false,
+                PasswordHash = "AQAAAAIAAYagAAAAEGn4vXbD7k9PMobT7cou5IVGEZfN8UXtaSxmmpX+yvTAiwDUibY+WX2YIUviYaHzzw==",
+                SecurityStamp = "II4GL3KQ55AN7XN5OTVETQLLSX7AF3H7",
+                ConcurrencyStamp = "f2099005-344e-4df6-bab6-63ead94562de",
+                PhoneNumber = "123",
+                PhoneNumberConfirmed = false,
+                TwoFactorEnabled = false,
+                LockoutEnabled = true,
+                AccessFailedCount = 1
+            });
 
         modelBuilder.Entity<IdentityUserRole<string>>().HasData(
-            new {RoleId = "Admin", UserId="SeededAdminUser"});
+            new { RoleId = "Admin", UserId = "SeededAdminUser" },
+            new { RoleId = "User", UserId = "SeededAdminUser" });
 
         base.OnModelCreating(modelBuilder);
     }

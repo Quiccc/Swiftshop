@@ -1,12 +1,14 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 using Swiftshop.Database;
 using Swiftshop.Models;
+using System.Diagnostics;
 
 namespace Swiftshop.Controllers
 {
-    [Authorize]
+    [Authorize(Roles = "Admin")]
     public class AdminController : Controller
     {
         private readonly SwiftshopDbContext _context;
@@ -32,7 +34,7 @@ namespace Swiftshop.Controllers
 
             Dictionary<string, string> CategoryPairs = new();
 
-            foreach(var category in CategoryContext)
+            foreach (var category in CategoryContext)
             {
                 CategoryPairs.Add(category.Id, category.Name);
             }
@@ -42,9 +44,27 @@ namespace Swiftshop.Controllers
             return View(await SubcategoryContext.ToListAsync());
         }
 
-        public IActionResult ManageProducts()
+        public async Task<IActionResult> ManageProducts(string SubcategoryId)
         {
-            return View();
+            List<Product> ProductContext;
+            if (SubcategoryId != null)
+            {
+                ProductContext = await _context.Products
+                .Where(p => p.SubcategoryId == SubcategoryId).ToListAsync();
+            }
+            else
+            {
+                ProductContext = await _context.Products.ToListAsync();
+            }
+
+            var SubcategoryContext = _context.Subcategories.OrderBy(o => o.Name).ToList();
+            var CategoryContext = _context.Categories
+                .OrderBy(c => c.Name)
+                .ToList();
+
+            ViewBag.Categories = CategoryContext;
+
+            return View(ProductContext);
         }
     }
 }
