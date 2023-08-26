@@ -1,71 +1,52 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using Swiftshop.Database;
 using Swiftshop.Models;
 using System.Diagnostics;
 
 namespace Swiftshop.Controllers
 {
-    [Authorize(Roles = "Admin,User")]
     public class ShoppingListController : Controller
     {
         private readonly SwiftshopDbContext _context;
         private readonly IHttpContextAccessor _contextAccessor;
         private readonly UserManager<User> _userManager;
 
-        public ShoppingListController(SwiftshopDbContext context, IHttpContextAccessor httpContextAccessor, UserManager<User> userManager)
+        public ShoppingListController(SwiftshopDbContext context, IHttpContextAccessor contextAccessor, UserManager<User> userManager)
         {
             _context = context;
-            _contextAccessor = httpContextAccessor;
+            _contextAccessor = contextAccessor;
             _userManager = userManager;
         }
 
-        public async Task<IActionResult> Index(int Page)
+        public async Task<IActionResult> CreateShoppingList(string NewName)
         {
-            if (Page == 0) { return RedirectToAction("Index", new { Page = 1 }); }
+            var ShoppingListContext = _context.ShoppingLists;
 
-            int PaginatorSize;
-            var Email = _contextAccessor.HttpContext?.User.Identity?.Name;
-            //ID of the authenticated user.
-            var CurrentUserId = _userManager.FindByEmailAsync(Email).Result?.Id;
+            var CurrentUser = await _userManager.FindByEmailAsync(_contextAccessor.HttpContext.User.Identity.Name);
 
-            //Fetch all user list in descending order.
-            var UserLists = await _context.ShoppingLists
-                .Where(sl => sl.UserId == CurrentUserId)
-                .OrderBy(sl => sl.CreatedAt)
-                .ToListAsync();
+            var ActiveListsOfUser = _context.ShoppingLists
+                .Where(al => al.UserId == CurrentUser.Id && al.IsActive == true)
+                .Select(al => al.Name)
+                .ToList();
 
-            //Calculating the paginator length for paginator component.
-            PaginatorSize = UserLists.Count / 3;
-            if (UserLists.Count % 3 != 0) { PaginatorSize++; }
-            ViewBag.PaginatorSize = PaginatorSize;
-
-            //Fetching up to 4 Shopping Lists per page.
-            List<ShoppingList>? PageLists = new();
-            for (int i = (Page - 1) * 3; i < Page * 3; i++)
+            if (ActiveListsOfUser.Contains(NewName))
             {
-                if (UserLists.Count <= i) { break; } // Null Exception Preventation.
-
-                PageLists.Add(UserLists.ElementAt(i));
+                return RedirectToAction("Index", "LandingPage", new { Page = 1 });
             }
 
-            return View(PageLists);
-        }
+            ShoppingList NewList = new()
+            {
+                Name = NewName,
+                UserId = CurrentUser.Id,
+                User = CurrentUser
+            };
 
-        //Functionality for adding lists to favorites.
-        public async Task<IActionResult> SwitchIsFavorite(string ListId, bool OldStatus)
-        {
-            var ShoppingListContext = _context.ShoppingLists.First(sl => sl.Id == ListId).IsFavorited = !OldStatus;
+            await _context.AddAsync(NewList);
             await _context.SaveChangesAsync();
-            return RedirectToAction("Index", "ShoppingList");
-        }
 
-        [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
-        public IActionResult Error()
-        {
-            return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+            return RedirectToAction("Index", "LandingPage", new { Page = 1 });
         }
     }
 }

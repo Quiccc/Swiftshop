@@ -13,6 +13,7 @@ public class SwiftshopDbContext : IdentityDbContext<User>
     public virtual DbSet<Subcategory> Subcategories { get; set; }
     public virtual DbSet<ShoppingList> ShoppingLists { get; set; }
     public virtual DbSet<ShoppingListContent> ShoppingListContents { get; set; }
+    public virtual DbSet<ShoppingListHistory> ShoppingListHistories { get; set; }
 
 
     public SwiftshopDbContext(DbContextOptions<SwiftshopDbContext> options)
@@ -75,9 +76,22 @@ public class SwiftshopDbContext : IdentityDbContext<User>
             .HasConstraintName("FK_ShoppingListToUser");
         });
 
+        modelBuilder.Entity<ShoppingListHistory>(entity =>
+        {
+            entity.HasKey(k => k.Id).HasName("PK_ShoppingListHistory");
+
+            entity.Property(p => p.Name).IsRequired(true);
+            entity.Property(p => p.UserId).IsRequired(true);
+
+            entity.HasOne(a => a.User)
+            .WithMany(b => b.ShoppingListHistories)
+            .HasForeignKey(c => c.UserId)
+            .HasConstraintName("FK_ShoppingListHistoryToUser");
+        });
+
         modelBuilder.Entity<ShoppingListContent>(entity =>
         {
-            entity.HasKey(a => new { a.ListId, a.ItemId }).HasName("CK_ListContent");
+            entity.HasKey(a => new { a.ListId, a.ProductId }).HasName("CK_ListContent");
         });
 
         modelBuilder.Entity<IdentityRole>().HasData(

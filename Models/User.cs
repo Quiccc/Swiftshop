@@ -7,5 +7,6 @@ namespace Swiftshop.Models
         public string? Name { get; set; }
         public string? Surname { get; set; }
         public virtual ICollection<ShoppingList>? ShoppingLists { get; set;}
+        public virtual ICollection<ShoppingListHistory>? ShoppingListHistories { get; set; }
     }
 }

@@ -1,0 +1,74 @@
+﻿@model List<Swiftshop.Models.Product>;
+
+@{
+    string ListId = ViewBag.ListId;
+    string SubcategoryId = ViewBag.SubcategoryId;
+
+    if (Model.Count == 0 && SubcategoryId == null)
+    {
+        <h1 class="ms-5 mb-5" style="color:white">No Products</h1>
+    }
+    else
+    {
+        <div class="container-fluid">
+            <div class="d-flex align-items-start">
+                @*Sidebar Section*@
+                <div style="background-color:#212121; width:20%; height:80vh;">
+                    @{
+                        var Categories = ViewBag.Categories as List<Category>;
+                        foreach (var category in Categories)
+                        {
+                            if (category.Subcategories != null)
+                            {
+                                <p class="d-flex align-items-start flex-column">
+                                    <a data-bs-toggle="collapse" href="#@category.Name" role="button" aria-expanded="false" aria-controls="collapseExample" style="color:white; text-decoration:none">@category.Name</a>
+                                </p>
+                                foreach (var subcategory in category.Subcategories)
+                                {
+                                    <div class="collapse" id="@category.Name" style="color:white"><a asp-action="Index" asp-route-ListId="@ListId" asp-route-SubcategoryId="@subcategory.Id">@subcategory.Name</a></div>
+                                }
+                            }
+                        }
+                    }
+                </div>
+                <div class="flex-grow-1">
+                    <div class="d-flex flex-wrap ms-5" style="height:80vh; overflow-y:scroll">
+                        @{
+                            if (Model.Count > 0)
+                            {
+                                foreach (var product in Model)
+                                {
+                                    <div class="card ms-5 mb-5" style="width: 20rem; height:24rem">
+                                        <!--Product Image will go here. 500x500-->
+                                        <img src="~/product_placeholder.png" class="card-img-bottom mx-auto" style="width:50%">
+                                        <div class="card-body" style="background-color:#212121; color:white">
+                                            <h5 class="card-title">@product.Name</h5>
+                                        </div>
+                                        <form asp-controller="ShoppingListContent" asp-action="AddProductToList" asp-route-ListId="@ListId" asp-route-ProductId="@product.Id" asp-route-SubcategoryId="@SubcategoryId">
+                                            <ul class="list-group list-group-flush">
+                                                <li class="list-group-item" style="background-color:#212121; color:white">
+                                                    <div class="input-group">
+                                                        <span class="input-group-text">Description</span>
+                                                        <textarea class="form-control" name="Description" aria-label="Description" placeholder="Description is optional."></textarea>
+                                                    </div>
+                                                </li>
+                                            </ul>
+                                            <div class="card-body" style="background-color:#212121; color:white">
+                                                <input type="hidden" name="ReturnUrlId" value="@SubcategoryId"/>
+                                                <button type="submit" class="btn btn-dark" style="color:white;">Add</button>
+                                            </div>
+                                        </form>
+                                    </div>
+                                }
+                            }
+                            else
+                            {
+                                <h1 class="ms-5 mb-5" style="color:white">No Products</h1>
+                            }
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+}

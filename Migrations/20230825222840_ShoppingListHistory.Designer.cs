@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Swiftshop.Database;
 
@@ -11,9 +12,11 @@ using Swiftshop.Database;
 namespace Swiftshop.Migrations
 {
     [DbContext(typeof(SwiftshopDbContext))]
-    partial class SwiftshopDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230825222840_ShoppingListHistory")]
+    partial class ShoppingListHistory
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -268,16 +271,16 @@ namespace Swiftshop.Migrations
                     b.Property<string>("ListId")
                         .HasColumnType("nvarchar(450)");
 
-                    b.Property<string>("ProductId")
+                    b.Property<string>("ItemId")
                         .HasColumnType("nvarchar(450)");
 
-                    b.Property<string>("Description")
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<int?>("Quantity")
+                        .HasColumnType("int");
 
-                    b.HasKey("ListId", "ProductId")
+                    b.HasKey("ListId", "ItemId")
                         .HasName("CK_ListContent");
 
-                    b.HasIndex("ProductId");
+                    b.HasIndex("ItemId");
 
                     b.ToTable("ShoppingListContents");
                 });
@@ -482,7 +485,7 @@ namespace Swiftshop.Migrations
             modelBuilder.Entity("Swiftshop.Models.Product", b =>
                 {
                     b.HasOne("Swiftshop.Models.Subcategory", "Subcategory")
-                        .WithMany("Products")
+                        .WithMany()
                         .HasForeignKey("SubcategoryId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -504,21 +507,21 @@ namespace Swiftshop.Migrations
 
             modelBuilder.Entity("Swiftshop.Models.ShoppingListContent", b =>
                 {
+                    b.HasOne("Swiftshop.Models.Product", "Item")
+                        .WithMany("ListContents")
+                        .HasForeignKey("ItemId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("Swiftshop.Models.ShoppingList", "List")
                         .WithMany("ListContents")
                         .HasForeignKey("ListId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Swiftshop.Models.Product", "Product")
-                        .WithMany("ListContents")
-                        .HasForeignKey("ProductId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                    b.Navigation("Item");
 
                     b.Navigation("List");
-
-                    b.Navigation("Product");
                 });
 
             modelBuilder.Entity("Swiftshop.Models.ShoppingListHistory", b =>
@@ -558,11 +561,6 @@ namespace Swiftshop.Migrations
             modelBuilder.Entity("Swiftshop.Models.ShoppingList", b =>
                 {
                     b.Navigation("ListContents");
-                });
-
-            modelBuilder.Entity("Swiftshop.Models.Subcategory", b =>
-                {
-                    b.Navigation("Products");
                 });
 
             modelBuilder.Entity("Swiftshop.Models.User", b =>

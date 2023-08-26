@@ -39,6 +39,6 @@ app.MapRazorPages();
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller}/{action}/{id?}",
-    new {controller = "ShoppingList", action = "Index"});
+    new {controller = "LandingPage", action = "Index"});
 
 app.Run();

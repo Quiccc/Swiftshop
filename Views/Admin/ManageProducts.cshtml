@@ -1,125 +1,136 @@
 ﻿@model List<Swiftshop.Models.Product>
-@{
-    var Categories = ViewBag.Categories as List<Category>;
-    var Subcategories = ViewBag.Subcategories as List<Subcategory>;
-}
 
-<div class="d-flex align-items-start">
-    @*Sidebar Section*@
-    <div style="background-color:#212121; width:10%; height:70vh; margin-top:16%">
-        @{
-            foreach (var category in Categories)
-            {
-                if (category.Subcategories != null)
-                {
-                    <p class="d-flex align-items-start flex-column">
-                        <a data-bs-toggle="collapse" href="#@category.Name" role="button" aria-expanded="false" aria-controls="collapseExample" style="color:white; text-decoration:none">@category.Name</a>
-                    </p>
-                    foreach (var subcategory in category.Subcategories)
+@{
+    if (Model.Count == 0)
+    {
+        <h1 style="color:white">No Subcategories</h1>
+    }
+    else
+    {
+        var Categories = ViewBag.Categories as List<Category>;
+        var Subcategories = ViewBag.Subcategories as List<Subcategory>;
+
+        <div class="d-flex align-items-start">
+            @*Sidebar Section*@
+            <div style="background-color:#212121; width:10%; height:70vh; margin-top:16%">
+                @{
+                    foreach (var category in Categories)
                     {
-                        <div class="collapse" id="@category.Name" style="color:white"><a asp-action="ManageProducts" asp-route-SubcategoryId="@subcategory.Id">@subcategory.Name</a></div>
-                    }
-                }
-            }
-        }
-    </div>
-    <div class="flex-grow-1" style="margin-left:5%; margin-right:5%">
-        @*Create Product Section*@
-        <div style="color:white; width:40%">
-            <h1>New Product.</h1>
-            <h5>Provide a name and image URL. Select an existing subcategory to create a product.</h5>
-            <form asp-controller="Product" asp-action="CreateProduct" style="margin-top:2%">
-                <div class="d-flex flex-column">
-                    <div class="input-group">
-                        <span class="input-group-text">Product Name</span>
-                        <input class="form-control" required type="text" name="ProductName" />
-                    </div>
-                    <div class="input-group">
-                        <span class="input-group-text">Product Image URL</span>
-                        <input class="form-control" required type="text" name="ProductImage" />
-                    </div>
-                    <div class="input-group">
-                        <span class="input-group-text">Product Subcategory</span>
-                        <select required class="form-select" id="SubcategoryName" name="SubcategoryName">
-                            <option selected>Choose...</option>
-                            @{
-                                foreach (Subcategory subcategory in Subcategories)
+                        if (category.Subcategories != null)
+                        {
+                            <p class="d-flex align-items-start flex-column">
+                                <a data-bs-toggle="collapse" href="#@category.Name" role="button" aria-expanded="false" aria-controls="collapseExample" style="color:white; text-decoration:none">@category.Name</a>
+                            </p>
+                            foreach (var subcategory in category.Subcategories)
+                            {
+                                if (subcategory.Products != null)
                                 {
-                                    <option value="@subcategory.Name">@subcategory.Category.Name -> @subcategory.Name</option>
+                                    <div class="collapse" id="@category.Name" style="color:white"><a asp-action="ManageProducts" asp-route-SubcategoryId="@subcategory.Id">@subcategory.Name</a></div>
                                 }
                             }
-                        </select>
-                        <div class="input-group"><input type="submit" class="btn btn-md btn-light" value="Create" /></div>
-                    </div>
-                </div>
-            </form>
-        </div>
-        @*Products Table*@
-        <div class="mb-5">
-            <table class="table align-middle table-striped-columns" style="color:white;">
-                <thead>
-                    <tr>
-                        <th></th>
-                        <th>Product Name</th>
-                        <th>Product Subcategory</th>
-                        <th>Update Product</th>
-                        <th></th>
-                    </tr>
-                </thead>
-                <tbody class="table-group-divider">
-                    @{
-                        foreach (var product in Model)
-                        {
-                            <tr>
-                                <td><img src="@Html.Raw(product.ProductImage)" /></td>
-                                <td>@Html.DisplayFor(itemModel => product.Name)</td>
-                                <td>@Html.DisplayFor(itemModel => product.Subcategory.Name)</td>
-                                <td>
-                                    <div class="d-flex flex-column justify-content-lg-start" style="margin-top:2%">
-                                        @* Update Product Name Form *@
-                                        <form asp-controller="Product" asp-action="UpdateProductName" asp-route-ProductId="@product.Id">
-                                            <div class="input-group mb-3">
-                                                <input required type="text" name="NewName" class="form-control" placeholder="Update Product Name">
-                                                <div class="d-flex justify-content-start input-group-append">
-                                                    <button type="submit" class="btn btn-light">Update</button>
-                                                </div>
-                                            </div>
-                                        </form>
-                                        @* Update Product Image URL Form *@
-                                        <form asp-controller="Product" asp-action="UpdateProductImage" asp-route-ProductId="@product.Id">
-                                            <div class="input-group mb-3">
-                                                <input required type="text" name="NewImage" class="form-control" placeholder="Update Product Image URL">
-                                                <div class="d-flex justify-content-start input-group-append">
-                                                    <button type="submit" class="btn btn-light">Update</button>
-                                                </div>
-                                            </div>
-                                        </form>
-                                        @* Update Product Subcategory Form *@
-                                        <form asp-controller="Product" asp-action="UpdateProductSubcategory" asp-route-ProductId="@product.Id">
-                                            <div class="input-group mb-3">
-                                                <select required class="form-select" id="NewSubcategoryName" name="NewSubcategoryName">
-                                                    <option selected>Choose...</option>
-                                                    @{
-                                                        foreach (Subcategory subcategory in Subcategories)
-                                                        {
-                                                            if (product.Subcategory.Name != subcategory.Name)
-                                                            {
-                                                                <option value="@subcategory.Name">@subcategory.Category.Name -> @subcategory.Name</option>
-                                                            }
-                                                        }
-                                                    }
-                                                </select>
-                                                <input type="submit" class="btn btn-md btn-light" value="Update" />
-                                            </div>
-                                        </form>
-                                    </div>
-                                </td>
-                                <td></td>
-                            </tr>
                         }
                     }
-                </tbody>
-            </table>
+                }
+            </div>
+            <div class="flex-grow-1" style="margin-left:5%; margin-right:5%">
+                @*Create Product Section*@
+                <div style="color:white; width:40%">
+                    <h1>New Product.</h1>
+                    <h5>Provide a name and image URL. Select an existing subcategory to create a product.</h5>
+                    <form asp-controller="Product" asp-action="CreateProduct" style="margin-top:2%">
+                        <div class="d-flex flex-column">
+                            <div class="input-group">
+                                <span class="input-group-text">Product Name</span>
+                                <input class="form-control" required type="text" name="ProductName" />
+                            </div>
+                            <div class="input-group">
+                                <span class="input-group-text">Product Image URL</span>
+                                <input class="form-control" required type="text" name="ProductImage" />
+                            </div>
+                            <div class="input-group">
+                                <span class="input-group-text">Product Subcategory</span>
+                                <select required class="form-select" id="SubcategoryName" name="SubcategoryName">
+                                    <option selected>Choose...</option>
+                                    @{
+                                        foreach (Subcategory subcategory in Subcategories)
+                                        {
+                                            <option value="@subcategory.Name">@subcategory.Category.Name -> @subcategory.Name</option>
+                                        }
+                                    }
+                                </select>
+                                <div class="input-group"><input type="submit" class="btn btn-md btn-light" value="Create" /></div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                @*Products Table*@
+                <div class="mb-5" style="height:50vh; overflow-y:scroll">
+                    <table class="table align-middle table-striped-columns" style="color:white;">
+                        <thead>
+                            <tr>
+                                <th></th>
+                                <th>Product Name</th>
+                                <th>Product Subcategory</th>
+                                <th>Update Product</th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody class="table-group-divider">
+                            @{
+                                foreach (var product in Model)
+                                {
+                                    <tr>
+                                        <td><img src="@Html.Raw(product.ProductImage)" /></td>
+                                        <td>@Html.DisplayFor(itemModel => product.Name)</td>
+                                        <td>@Html.DisplayFor(itemModel => product.Subcategory.Name)</td>
+                                        <td>
+                                            <div class="d-flex flex-column justify-content-lg-start" style="margin-top:2%">
+                                                @* Update Product Name Form *@
+                                                <form asp-controller="Product" asp-action="UpdateProductName" asp-route-ProductId="@product.Id">
+                                                    <div class="input-group mb-3">
+                                                        <input required type="text" name="NewName" class="form-control" placeholder="Update Product Name">
+                                                        <div class="d-flex justify-content-start input-group-append">
+                                                            <button type="submit" class="btn btn-light">Update</button>
+                                                        </div>
+                                                    </div>
+                                                </form>
+                                                @* Update Product Image URL Form *@
+                                                <form asp-controller="Product" asp-action="UpdateProductImage" asp-route-ProductId="@product.Id">
+                                                    <div class="input-group mb-3">
+                                                        <input required type="text" name="NewImage" class="form-control" placeholder="Update Product Image URL">
+                                                        <div class="d-flex justify-content-start input-group-append">
+                                                            <button type="submit" class="btn btn-light">Update</button>
+                                                        </div>
+                                                    </div>
+                                                </form>
+                                                @* Update Product Subcategory Form *@
+                                                <form asp-controller="Product" asp-action="UpdateProductSubcategory" asp-route-ProductId="@product.Id">
+                                                    <div class="input-group mb-3">
+                                                        <select required class="form-select" id="NewSubcategoryName" name="NewSubcategoryName">
+                                                            <option selected>Choose...</option>
+                                                            @{
+                                                                foreach (Subcategory subcategory in Subcategories)
+                                                                {
+                                                                    if (product.Subcategory.Name != subcategory.Name)
+                                                                    {
+                                                                        <option value="@subcategory.Name">@subcategory.Category.Name -> @subcategory.Name</option>
+                                                                    }
+                                                                }
+                                                            }
+                                                        </select>
+                                                        <input type="submit" class="btn btn-md btn-light" value="Update" />
+                                                    </div>
+                                                </form>
+                                            </div>
+                                        </td>
+                                        <td></td>
+                                    </tr>
+                                }
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
         </div>
-    </div>
-</div>
+    }
+}

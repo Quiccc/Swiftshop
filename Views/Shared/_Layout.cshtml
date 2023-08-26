@@ -12,11 +12,11 @@
 <body>
     @*Navbar*@
     <div class="navbar fixed-top" style="background-color:#212121">
-        <a asp-controller="ShoppingList" asp-action="Index" asp-route-id="1"><img class="navbar-logo" src="~/logo.png" /></a>
+        <a asp-controller="LandingPage" asp-action="Index" asp-route-id="1"><img class="navbar-logo" src="~/logo.png" /></a>
         <div class="home-page-dropdown" style="margin-right:.5%"><partial name="_LoginPartial" /></div>
     </div>
     @*Main Canvas*@
-    <div class="main" style="margin-top:7%;">
+    <div class="container-fluid" style="margin-top:7%;">
         <main role="main" class="pb-3">
             @RenderBody()
         </main>

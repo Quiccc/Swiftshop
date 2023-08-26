@@ -37,68 +37,70 @@
         //Update Subcategory Section
         if (Model.Count != 0)
         {
-            <table class="table align-middle table-striped-columns" style="color:white; margin-bottom:10%;">
-                <thead>
-                    <tr>
-                        <th scope="col">Index</th>
-                        <th scope="col">Id</th>
-                        <th scope="col">Subcategory Name</th>
-                        <th scope="col">Category Name</th>
-                        <th scope="col">Update Subcategory</th>
-                        <th scope="col"></th>
-                    </tr>
-                </thead>
-                <tbody class="table-group-divider">
-                    @{
-                        foreach (var subcategory in Model)
-                        {
-                            <tr>
-                                <td scope="row">@Model.IndexOf(subcategory)</td>
-                                <td>@Html.DisplayFor(modelItem => subcategory.Id)</td>
-                                <td>@Html.DisplayFor(modelItem => subcategory.Name)</td>
-                                <td>@Html.DisplayFor(modelItem => subcategory.Category.Name)</td>
-                                <td>
-                                    <div class="d-flex flex-column justify-content-lg-start" style="margin-top:2%">
-                                        @* Update Subcategory Name Form *@
-                                        <form asp-controller="Subcategory" asp-action="UpdateSubcategoryName" asp-route-SubcategoryId="@subcategory.Id">
-                                            <div class="input-group mb-3">
-                                                <input required type="text" name="NewName" class="form-control" placeholder="Update Subcategory Name">
-                                                <div class="d-flex justify-content-start input-group-append">
-                                                    <button type="submit" class="btn btn-light">Update</button>
+            <div style="height:46vh; overflow-y:scroll">
+                <table class="table align-middle table-striped-columns" style="color:white; margin-bottom:10%;">
+                    <thead>
+                        <tr>
+                            <th scope="col">Index</th>
+                            <th scope="col">Id</th>
+                            <th scope="col">Subcategory Name</th>
+                            <th scope="col">Category Name</th>
+                            <th scope="col">Update Subcategory</th>
+                            <th scope="col"></th>
+                        </tr>
+                    </thead>
+                    <tbody class="table-group-divider">
+                        @{
+                            foreach (var subcategory in Model)
+                            {
+                                <tr>
+                                    <td scope="row">@Model.IndexOf(subcategory)</td>
+                                    <td>@Html.DisplayFor(modelItem => subcategory.Id)</td>
+                                    <td>@Html.DisplayFor(modelItem => subcategory.Name)</td>
+                                    <td>@Html.DisplayFor(modelItem => subcategory.Category.Name)</td>
+                                    <td>
+                                        <div class="d-flex flex-column justify-content-lg-start" style="margin-top:2%">
+                                            @* Update Subcategory Name Form *@
+                                            <form asp-controller="Subcategory" asp-action="UpdateSubcategoryName" asp-route-SubcategoryId="@subcategory.Id">
+                                                <div class="input-group mb-3">
+                                                    <input required type="text" name="NewName" class="form-control" placeholder="Update Subcategory Name">
+                                                    <div class="d-flex justify-content-start input-group-append">
+                                                        <button type="submit" class="btn btn-light">Update</button>
+                                                    </div>
                                                 </div>
-                                            </div>
-                                        </form>
-                                        @* Update Subcategory Parent Category Form *@
-                                        <form asp-controller="Subcategory" asp-action="UpdateSubcategoryCategory" asp-route-SubcategoryId="@subcategory.Id">
-                                            <div class="input-group mb-3">
-                                                <select required class="form-select" id="NewCategoryName" name="NewCategoryName">
-                                                    <option selected>Choose...</option>
-                                                    @{
-                                                        foreach (string categoryName in CategoryNames)
-                                                        {
-                                                            if (subcategory.Category.Name != categoryName)
+                                            </form>
+                                            @* Update Subcategory Parent Category Form *@
+                                            <form asp-controller="Subcategory" asp-action="UpdateSubcategoryCategory" asp-route-SubcategoryId="@subcategory.Id">
+                                                <div class="input-group mb-3">
+                                                    <select required class="form-select" id="NewCategoryName" name="NewCategoryName">
+                                                        <option selected>Choose...</option>
+                                                        @{
+                                                            foreach (string categoryName in CategoryNames)
                                                             {
-                                                                <option value="@categoryName">@categoryName</option>
+                                                                if (subcategory.Category.Name != categoryName)
+                                                                {
+                                                                    <option value="@categoryName">@categoryName</option>
+                                                                }
                                                             }
                                                         }
-                                                    }
-                                                </select>
-                                                <input type="submit" class="btn btn-md btn-light" value="Update" />
-                                            </div>
-                                        </form>
-                                    </div>
-                                </td>
-                                @* Delete Subcategory *@
-                                <td><a class="btn btn-md btn-light" asp-controller="Subcategory" asp-action="DeleteSubcategory" asp-route-SubcategoryId="@subcategory.Id" style="margin-left:15%;">Delete <i class="bi bi-trash"></i></a></td>
-                            </tr>
+                                                    </select>
+                                                    <input type="submit" class="btn btn-md btn-light" value="Update" />
+                                                </div>
+                                            </form>
+                                        </div>
+                                    </td>
+                                    @* Delete Subcategory *@
+                                    <td><a class="btn btn-md btn-light" asp-controller="Subcategory" asp-action="DeleteSubcategory" asp-route-SubcategoryId="@subcategory.Id" style="margin-left:15%;">Delete <i class="bi bi-trash"></i></a></td>
+                                </tr>
+                            }
                         }
-                    }
-                </tbody>
-            </table>
+                    </tbody>
+                </table>
+                </div>
         }
         else
         {
-            <h1>No Categories.</h1>
+            <h1 style="color:white">No Categories.</h1>
         }
     }
 </div>

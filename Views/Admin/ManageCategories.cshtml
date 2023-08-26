@@ -17,40 +17,42 @@
     @{
         if (Model.Count != 0)
         {
-            <table class="table align-middle table-striped-columns" style="color:white; margin-bottom:10%">
-                <thead>
-                    <tr>
-                        <th scope="col">Index</th>
-                        <th scope="col">Id</th>
-                        <th scope="col">Category Name</th>
-                        <th scope="col">Actions</th>
-                        <th scope="col"></th>
-                    </tr>
-                </thead>
-                <tbody class="table-group-divider">
-                    @{
-                        foreach (var category in Model)
-                        {
-                            <tr>
-                                <td scope="row">@Model.IndexOf(category)</td>
-                                <td>@Html.DisplayFor(modelItem => category.Id)</td>
-                                <td>@Html.DisplayFor(modelItem => category.Name)</td>
-                                <td>
-                                    <form class="mt-4 mb-4" asp-controller="Category" asp-action="UpdateCategoryName" asp-route-CategoryId="@category.Id">
-                                        <div class="input-group">
-                                            <input required type="text" name="NewName" class="form-control" placeholder="Update Category Name">
-                                            <div class="d-flex justify-content-start input-group-append">
-                                                <button type="submit" class="btn btn-light">Update</button>
+            <div style="height:55vh; overflow-y:scroll">
+                <table class="table h align-middle table-striped-columns" style="color:white; margin-bottom:10%">
+                    <thead>
+                        <tr>
+                            <th scope="col">Index</th>
+                            <th scope="col">Id</th>
+                            <th scope="col">Category Name</th>
+                            <th scope="col">Actions</th>
+                            <th scope="col"></th>
+                        </tr>
+                    </thead>
+                    <tbody class="table-group-divider">
+                        @{
+                            foreach (var category in Model)
+                            {
+                                <tr>
+                                    <td scope="row">@Model.IndexOf(category)</td>
+                                    <td>@Html.DisplayFor(modelItem => category.Id)</td>
+                                    <td>@Html.DisplayFor(modelItem => category.Name)</td>
+                                    <td>
+                                        <form class="mt-4 mb-4" asp-controller="Category" asp-action="UpdateCategoryName" asp-route-CategoryId="@category.Id">
+                                            <div class="input-group">
+                                                <input required type="text" name="NewName" class="form-control" placeholder="Update Category Name">
+                                                <div class="d-flex justify-content-start input-group-append">
+                                                    <button type="submit" class="btn btn-light">Update</button>
+                                                </div>
                                             </div>
-                                        </div>
-                                    </form>
-                                </td>
-                                <td><a class="btn btn-md btn-light" asp-controller="Category" asp-action="DeleteCategory" asp-route-CategoryId="@category.Id" style="margin-left:15%;">Delete <i class="bi bi-trash"></i></a></td>
-                            </tr>
+                                        </form>
+                                    </td>
+                                    <td><a class="btn btn-md btn-light" asp-controller="Category" asp-action="DeleteCategory" asp-route-CategoryId="@category.Id" style="margin-left:15%;">Delete <i class="bi bi-trash"></i></a></td>
+                                </tr>
+                            }
                         }
-                    }
-                </tbody>
-            </table>
+                    </tbody>
+                </table>
+            </div>
         }
         else
         {
