@@ -7,5 +7,11 @@
         public ShoppingList? List { get; set; }
         public Product? Product { get; set; }
         public string? Description { get; set; }
+        public bool? IsAcquired { get; set; }
+
+        public ShoppingListContent()
+        {
+            IsAcquired = false;
+        }
     }
 }

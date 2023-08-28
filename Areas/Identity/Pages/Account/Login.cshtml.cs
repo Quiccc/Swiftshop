@@ -119,7 +119,7 @@ namespace Swiftshop.Areas.Identity.Pages.Account
                 if (result.Succeeded)
                 {
                     _logger.LogInformation("User logged in.");
-                    return RedirectToAction("Index", "LandingPage", new { Page = 1 });
+                    return RedirectToAction("ActiveLists", "ShoppingList", new { Page = 1 });
                 }
                 if (result.RequiresTwoFactor)
                 {

@@ -9,6 +9,7 @@ namespace Swiftshop.Models
         public string? Name { get; set; }
         public bool? IsActive { get; set; }
         public bool? IsFavorited { get; set; }
+        public bool? IsStarted { get; set; }
         public virtual ICollection<ShoppingListContent>? ListContents { get; set; }
         public string? UserId { get; set; }
         public User? User { get; set; }
@@ -19,6 +20,7 @@ namespace Swiftshop.Models
             ListContents = null;
             IsActive = true;
             IsFavorited = false;
+            IsStarted = false;
             CreatedAt = DateTime.Now;
         }
     }
