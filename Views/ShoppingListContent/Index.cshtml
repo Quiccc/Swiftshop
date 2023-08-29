@@ -3,6 +3,8 @@
 @{
     string ListId = ViewBag.ListId;
     string SubcategoryId = ViewBag.SubcategoryId;
+    string Prefix = ViewBag.Prefix;
+    var Categories = ViewBag.Categories as List<Category>;
 
     if (Model.Count == 0 && SubcategoryId == null)
     {
@@ -13,9 +15,18 @@
         <div class="container-fluid">
             <div class="d-flex align-items-start">
                 @*Sidebar Section*@
-                <div style="background-color:#212121; width:20%; height:80vh;">
+                <div class="d-flex flex-column" style="background-color:#212121; width:25vw; height:80vh;">
+                    <form asp-action="Index" asp-route-ListId="@ListId" asp-route-SubcategoryId="@SubcategoryId">
+                        <div class="input-group mb-3">
+                            <input type="text" class="form-control" name="Prefix" value="@Prefix">
+                            <button class="btn btn-outline-light" type="submit"><i class="bi bi-search"></i> Search</button>
+                        </div>
+                    </form>
                     @{
-                        var Categories = ViewBag.Categories as List<Category>;
+                        if (SubcategoryId != "0" || Prefix != "")
+                        {
+                            <div class="mb-3"><a class="btn btn-sm btn-outline-light" asp-action="Index" asp-route-ListId="@ListId" asp-route-SubcategoryId="0">Clear</a></div>
+                        }
                         foreach (var category in Categories)
                         {
                             if (category.Subcategories != null)
@@ -25,20 +36,25 @@
                                 </p>
                                 foreach (var subcategory in category.Subcategories)
                                 {
-                                    <div class="collapse" id="@category.Name" style="color:white"><a asp-action="Index" asp-route-ListId="@ListId" asp-route-SubcategoryId="@subcategory.Id">@subcategory.Name</a></div>
+                                    <div class="collapse mb-3" id="@category.Name" style="color:white">
+                                        <form asp-action="Index" asp-route-ListId="@ListId" asp-route-SubcategoryId="@subcategory.Id">
+                                            <input type="hidden" name="Prefix" value="@Prefix" />
+                                            <button class="btn btn-sm btn-outline-light" type="submit">@subcategory.Name</button>
+                                        </form>
+                                    </div>
                                 }
                             }
                         }
                     }
                 </div>
-                <div class="flex-grow-1">
+                <div class="flex-grow-1 vw-100">
                     <div class="d-flex flex-wrap ms-5" style="height:80vh; overflow-y:scroll">
                         @{
                             if (Model.Count > 0)
                             {
                                 foreach (var product in Model)
                                 {
-                                    <div class="card ms-5 mb-5" style="width: 20rem; height:24rem">
+                                    <div class="card ms-5 mb-5" style="width: 25rem; height:26rem">
                                         <!--Product Image will go here. 500x500-->
                                         <img src="~/product_placeholder.png" class="card-img-bottom mx-auto" style="width:50%">
                                         <div class="card-body" style="background-color:#212121; color:white">
@@ -54,7 +70,7 @@
                                                 </li>
                                             </ul>
                                             <div class="card-body" style="background-color:#212121; color:white">
-                                                <input type="hidden" name="ReturnUrlId" value="@SubcategoryId"/>
+                                                <input type="hidden" name="ReturnUrlId" value="@SubcategoryId" />
                                                 <button type="submit" class="btn btn-dark" style="color:white;">Add</button>
                                             </div>
                                         </form>

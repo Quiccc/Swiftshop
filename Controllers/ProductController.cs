@@ -2,7 +2,6 @@
 using Microsoft.AspNetCore.Mvc;
 using Swiftshop.Database;
 using Swiftshop.Models;
-using System.Diagnostics;
 
 namespace Swiftshop.Controllers
 {
@@ -23,7 +22,7 @@ namespace Swiftshop.Controllers
 
             if (ProductContext.Select(p => p.Name).ToList().Contains(ProductName))
             {
-                return RedirectToAction("ManageProducts", "Admin");
+                return RedirectToAction("ManageProducts", "Admin", new { SubcategoryId = 0 });
             }
 
             var ProductSubcategory = SubcategoryContext.First(sc => sc.Name == SubcategoryName);
@@ -39,7 +38,7 @@ namespace Swiftshop.Controllers
             await _context.Products.AddAsync(NewProduct);
             _context.SaveChanges();
 
-            return RedirectToAction("ManageProducts", "Admin");
+            return RedirectToAction("ManageProducts", "Admin", new { SubcategoryId = ProductSubcategory.Id });
         }
 
         public async Task<IActionResult> DeleteProduct(string ProductId)
@@ -50,7 +49,7 @@ namespace Swiftshop.Controllers
             _context.Products.Remove(DeletedProduct);
             await _context.SaveChangesAsync();
 
-            return RedirectToAction("ManageProducts", "Admin");
+            return RedirectToAction("ManageProducts", "Admin", new { DeletedProduct.SubcategoryId });
         }
 
         public async Task<IActionResult> UpdateProductName(string ProductId, string NewName)
@@ -59,7 +58,7 @@ namespace Swiftshop.Controllers
 
             if (ProductContext.Select(p => p.Name).ToList().Contains(NewName))
             {
-                return RedirectToAction("ManageProducts", "Admin");
+                return RedirectToAction("ManageProducts", "Admin", new { SubcategoryId = 0 });
             }
 
             var UpdatedProduct = ProductContext.First(p => p.Id == ProductId);
@@ -68,7 +67,7 @@ namespace Swiftshop.Controllers
             _context.Products.Update(UpdatedProduct);
             await _context.SaveChangesAsync();
 
-            return RedirectToAction("ManageProducts", "Admin");
+            return RedirectToAction("ManageProducts", "Admin", new { UpdatedProduct.SubcategoryId });
         }
 
         public async Task<IActionResult> UpdateProductImage(string ProductId, string NewImage)
@@ -81,18 +80,13 @@ namespace Swiftshop.Controllers
             _context.Products.Update(UpdatedProduct);
             await _context.SaveChangesAsync();
 
-            return RedirectToAction("ManageProducts", "Admin");
+            return RedirectToAction("ManageProducts", "Admin", new { UpdatedProduct.SubcategoryId });
         }
 
         public async Task<IActionResult> UpdateProductSubcategory(string ProductId, string NewSubcategoryName)
         {
             var ProductContext = _context.Products;
             var SubcategoryContext = _context.Subcategories;
-
-            if (!SubcategoryContext.Select(sc => sc.Name).ToList().Contains(NewSubcategoryName))
-            {
-                return RedirectToAction("ManageProducts", "Admin");
-            }
 
             var NewSubcategory = SubcategoryContext.First(sc => sc.Name == NewSubcategoryName);
             var UpdatedProduct = ProductContext.First(p => p.Id == ProductId);
@@ -103,7 +97,7 @@ namespace Swiftshop.Controllers
             _context.Products.Update(UpdatedProduct);
             await _context.SaveChangesAsync();
 
-            return RedirectToAction("ManageProducts", "Admin");
+            return RedirectToAction("ManageProducts", "Admin", new { SubcategoryId = NewSubcategory.Id });
         }
     }
 }

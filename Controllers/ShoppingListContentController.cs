@@ -19,8 +19,10 @@ namespace Swiftshop.Controllers
             _context = context;
         }
 
-        public async Task<IActionResult> Index(string ListId, string SubcategoryId)
+        public async Task<IActionResult> Index(string ListId, string SubcategoryId, string Prefix)
         {
+            if (Prefix == null) { Prefix = ""; }
+
             //Fetch all categories and subcategories for product filtering.
             var SubcategoryContext = _context.Subcategories.ToList();
             var CategoryContext = _context.Categories
@@ -30,18 +32,19 @@ namespace Swiftshop.Controllers
             ViewBag.ListId = ListId;
             ViewBag.SubcategoryId = SubcategoryId;
             ViewBag.Categories = CategoryContext;
+            ViewBag.Prefix = Prefix;
 
             //No product filtering
             if (SubcategoryId == "0")
             {
-                var ProductContext = _context.Products;
+                var ProductContext = _context.Products.Where(p => p.Name.Contains(Prefix));
                 return View(await ProductContext.ToListAsync());
             }
 
-            //Returns products depending on selected subcategory.
+            //Returns products depending on selected subcategory and prefix.
             else
             {
-                var ProductContext = _context.Products.Where(p => p.SubcategoryId == SubcategoryId);
+                var ProductContext = _context.Products.Where(p => p.SubcategoryId == SubcategoryId && p.Name.Contains(Prefix));
                 return View(await ProductContext.ToListAsync());
             }
         }

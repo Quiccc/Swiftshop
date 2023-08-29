@@ -1,10 +1,8 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.IdentityModel.Tokens;
 using Swiftshop.Database;
 using Swiftshop.Models;
-using System.Diagnostics;
 
 namespace Swiftshop.Controllers
 {
@@ -37,31 +35,34 @@ namespace Swiftshop.Controllers
             return View(await SubcategoryContext.ToListAsync());
         }
 
-        public async Task<IActionResult> ManageProducts(string SubcategoryId)
+        public async Task<IActionResult> ManageProducts(string SubcategoryId, string Prefix)
         {
-            List<Product> ProductContext;
-            if (SubcategoryId != null)
+            if (Prefix == null) { Prefix = ""; }
+
+            //Fetch all categories and subcategories for product filtering.
+            var SubcategoryContext = await _context.Subcategories.ToListAsync();
+            var CategoryContext = await _context.Categories
+                .OrderBy(c => c.Name)
+                .ToListAsync();
+
+            ViewBag.Subcategories = SubcategoryContext;
+            ViewBag.SubcategoryId = SubcategoryId;
+            ViewBag.Categories = CategoryContext;
+            ViewBag.Prefix = Prefix;
+
+            //No product filtering
+            if (SubcategoryId == "0")
             {
-                ProductContext = await _context.Products
-                .Where(p => p.SubcategoryId == SubcategoryId).ToListAsync();
+                var ProductContext = _context.Products.Where(p => p.Name.Contains(Prefix));
+                return View(await ProductContext.ToListAsync());
             }
+
+            //Returns products depending on selected subcategory and prefix.
             else
             {
-                ProductContext = await _context.Products.ToListAsync();
+                var ProductContext = _context.Products.Where(p => p.SubcategoryId == SubcategoryId && p.Name.Contains(Prefix));
+                return View(await ProductContext.ToListAsync());
             }
-
-            var SubcategoryContext = _context.Subcategories
-                .OrderBy(o => o.Name)
-                .ToList();
-
-            var CategoryContext = _context.Categories
-                .OrderBy(c => c.Name)
-                .ToList();
-
-            ViewBag.Categories = CategoryContext;
-            ViewBag.Subcategories = SubcategoryContext;
-
-            return View(ProductContext);
         }
     }
 }
