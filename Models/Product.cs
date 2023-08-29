@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
+﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Swiftshop.Models
 {
@@ -6,7 +7,9 @@ namespace Swiftshop.Models
     {
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public string? Id { get; set; }
+        [Required]
         public string? Name { get; set; }
+        [Required]
         public string? ProductImage { get; set; }
         public virtual ICollection<ShoppingListContent>? ListContents { get; set; }
         public string? SubcategoryId { get; set; }

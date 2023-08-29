@@ -1,45 +1,58 @@
-﻿@model List<Swiftshop.Models.Product>
+﻿@model Swiftshop.Models.Product
 
 @{
     string SubcategoryId = ViewBag.SubcategoryId;
     string Prefix = ViewBag.Prefix;
+
     var Categories = ViewBag.Categories as List<Category>;
     var Subcategories = ViewBag.Subcategories as List<Subcategory>;
+    var Products = ViewBag.Products as List<Product>;
+
+    var CreateErrorName = TempData["CreateErrorName"] as string;
+    var CreateErrorImage = TempData["CreateErrorImage"] as string;
+    var UpdateErrorName = TempData["UpdateErrorName"] as Dictionary<string, string>;
+    var UpdateErrorImage = TempData["UpdateErrorImage"] as Dictionary<string, string>;
 
     <div class="container-fluid">
         <div class="d-flex flex-column me-5">
             @*Create Product Section*@
-            <div class="d-inline-flex justify-content-between ms-5 mb-3" style="color:white;">
-                <div class="d-flex flex-column w-50" style="margin-left:13%">
+            <div class="d-inline-flex justify-content-start ms-5 mb-3" style="color:white;">
+                <div class="d-flex flex-column w-25" style="margin-left:13%">
                     <h1>New Product.</h1>
                     <h5>Provide a name and image URL. Select an existing subcategory to create a product.</h5>
                 </div>
-                <div>
-                    <form asp-controller="Product" asp-action="CreateProduct">
+                <div class="flex-grow-1">
+                    <form id="ProductForm" asp-controller="Product" asp-action="CreateProduct">
                         <div class="d-flex flex-column">
                             <div class="d-inline-flex">
                                 <div class="input-group">
                                     <span class="input-group-text">Product Name</span>
-                                    <input class="form-control" required type="text" name="ProductName" />
+                                    <div asp-validation-summary="ModelOnly" class="text-danger" role="alert"></div>
+                                    <input asp-for="Name" class="form-control" />
                                 </div>
                                 <div class="input-group">
                                     <span class="input-group-text">Product Subcategory</span>
                                     <select required class="form-select" id="SubcategoryName" name="SubcategoryName">
-                                        <option selected>Choose...</option>
+                                        <option selected value="@Subcategories.First().Name">@Subcategories.First().Category.Name -> @Subcategories.First().Name</option>
                                         @{
+                                            var Temp = Subcategories.First();
+                                            Subcategories.Remove(Temp);
                                             foreach (Subcategory subcategory in Subcategories)
                                             {
                                                 <option value="@subcategory.Name">@subcategory.Category.Name -> @subcategory.Name</option>
                                             }
+                                            Subcategories.Add(Temp);
                                         }
                                     </select>
                                 </div>
                             </div>
-                            <div class="input-group">
+                            <span asp-validation-for="Name" class="text-danger">@CreateErrorName</span>
+                            <div class="input-group mt-1">
                                 <span class="input-group-text">Product Image URL</span>
-                                <input class="form-control" required type="text" name="ProductImage" />
+                                <input asp-for="ProductImage" class="form-control" />
                             </div>
-                            <div class="input-group mt-1 mb-5"><input type="submit" class="btn btn-md btn-light" value="Create" /></div>
+                            <span asp-validation-for="ProductImage" class="text-danger">@CreateErrorImage</span>
+                            <div class="input-group mt-2 mb-5"><button id="ProductSubmit" type="submit" class="btn btn-md btn-light">Create</button></div>
                         </div>
                     </form>
                 </div>
@@ -80,7 +93,7 @@
                 </div>
                 <div class="flex-grow-1">
                     @{
-                        if (Model.Count == 0)
+                        if (Products.Count == 0)
                         {
                             <h1 class="ms-5" style="color:white">No Products.</h1>
                         }
@@ -100,7 +113,7 @@
                                     </thead>
                                     <tbody class="table-group-divider">
                                         @{
-                                            foreach (var product in Model)
+                                            foreach (var product in Products)
                                             {
                                                 <tr>
                                                     <td><img src="@Html.Raw(product.ProductImage)" /></td>
@@ -109,28 +122,42 @@
                                                     <td>
                                                         <div class="d-flex flex-column justify-content-lg-start">
                                                             @* Update Product Name Form *@
-                                                            <form asp-controller="Product" asp-action="UpdateProductName" asp-route-ProductId="@product.Id">
-                                                                <div class="input-group mb-3">
-                                                                    <input required type="text" name="NewName" class="form-control" placeholder="Update Product Name">
+                                                            <form class="mb-3 mt-2" asp-controller="Product" asp-action="UpdateProductName" asp-route-ProductId="@product.Id">
+                                                                <div class="input-group">
+                                                                    <div asp-validation-summary="ModelOnly" class="text-danger" role="alert"></div>
+                                                                    <input asp-for="Name" class="form-control" placeholder="Update Product Name">
                                                                     <div class="d-flex justify-content-start input-group-append">
                                                                         <button type="submit" class="btn btn-light">Update</button>
                                                                     </div>
                                                                 </div>
+                                                                @{
+                                                                    if (UpdateErrorName != null && UpdateErrorName.ContainsKey(product.Id))
+                                                                    {
+                                                                        <span asp-validation-for="Name" class="text-danger">@UpdateErrorName[product.Id]</span>
+                                                                    }
+                                                                }
                                                             </form>
                                                             @* Update Product Image URL Form *@
-                                                            <form asp-controller="Product" asp-action="UpdateProductImage" asp-route-ProductId="@product.Id">
-                                                                <div class="input-group mb-3">
-                                                                    <input required type="text" name="NewImage" class="form-control" placeholder="Update Product Image URL">
+                                                            <form class="mb-3" asp-controller="Product" asp-action="UpdateProductImage" asp-route-ProductId="@product.Id">
+                                                                <div class="input-group">
+                                                                    <div asp-validation-summary="ModelOnly" class="text-danger" role="alert"></div>
+                                                                    <input asp-for="ProductImage" class="form-control" placeholder="Update Product Image URL">
                                                                     <div class="d-flex justify-content-start input-group-append">
                                                                         <button type="submit" class="btn btn-light">Update</button>
-                                                                    </div>
                                                                 </div>
+                                                                </div>
+                                                                @{
+                                                                    if (UpdateErrorImage != null && UpdateErrorImage.ContainsKey(product.Id))
+                                                                    {
+                                                                        <span asp-validation-for="ProductImage" class="text-danger">@UpdateErrorImage[product.Id]</span>
+                                                                    }
+                                                                }
                                                             </form>
                                                             @* Update Product Subcategory Form *@
                                                             <form asp-controller="Product" asp-action="UpdateProductSubcategory" asp-route-ProductId="@product.Id">
-                                                                <div class="input-group mb-3">
+                                                                <div class="input-group mb-2">
                                                                     <select required class="form-select" id="NewSubcategoryName" name="NewSubcategoryName">
-                                                                        <option selected>Choose...</option>
+                                                                        <option selected value="@product.Subcategory.Name">@product.Subcategory.Name</option>
                                                                         @{
                                                                             foreach (Subcategory subcategory in Subcategories)
                                                                             {

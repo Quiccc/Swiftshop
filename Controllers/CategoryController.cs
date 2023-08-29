@@ -16,6 +16,33 @@ namespace Swiftshop.Controllers
             _context = context;
         }
 
+        public async Task<IActionResult> CreateCategory(string Name)
+        {
+            var context = _context.Categories;
+
+            if (!ModelState.IsValid)
+            {
+                TempData["CreateError"] = "Category name cannot be empty.";
+                return RedirectToAction("ManageCategories", "Admin");
+            }
+
+            else if (context.Select(c => c.Name).Contains(Name))
+            {
+                TempData["CreateError"] = "Category name already exists.";
+                return RedirectToAction("ManageCategories", "Admin");
+            }
+
+            Category NewCategory = new()
+            {
+                Name = Name
+            };
+
+            await _context.Categories.AddAsync(NewCategory);
+            _context.SaveChanges();
+
+            return RedirectToAction("ManageCategories", "Admin");
+        }
+
         public async Task<IActionResult> DeleteCategory(string CategoryId)
         {
             var context = _context.Categories;
@@ -27,40 +54,36 @@ namespace Swiftshop.Controllers
             return RedirectToAction("ManageCategories", "Admin");
         }
 
-        public async Task<IActionResult> UpdateCategoryName(string CategoryId, string NewName)
+        public async Task<IActionResult> UpdateCategoryName(string CategoryId, string Name)
         {
             var context = _context.Categories;
 
-            if (context.Select(c => c.Name).ToList().Contains(NewName))
+            if (!ModelState.IsValid)
             {
+                Dictionary<string, string> UpdateError = new()
+                {
+                    { CategoryId, "Category name cannot be null" }
+                };
+
+                TempData["UpdateError"] = UpdateError;
+                return RedirectToAction("ManageCategories", "Admin");
+            }
+
+            else if (context.Select(c => c.Name).Contains(Name))
+            {
+                Dictionary<string, string> UpdateError = new()
+                {
+                    { CategoryId, "Category name already exists." }
+                };
+                TempData["UpdateError"] = UpdateError;
                 return RedirectToAction("ManageCategories", "Admin");
             }
 
             var UpdatedCategory = context.First(c => c.Id == CategoryId);
-            UpdatedCategory.Name = NewName;
+            UpdatedCategory.Name = Name;
 
             _context.Categories.Update(UpdatedCategory);
             await _context.SaveChangesAsync();
-
-            return RedirectToAction("ManageCategories", "Admin");
-        }
-
-        public async Task<IActionResult> CreateCategory(string NewName)
-        {
-            var context = _context.Categories;
-
-            if (context.Select(c => c.Name).ToList().Contains(NewName))
-            {
-                return RedirectToAction("ManageCategories", "Admin");
-            }
-
-            Category NewCategory = new()
-            {
-                Name = NewName
-            };
-
-            await _context.Categories.AddAsync(NewCategory);
-            _context.SaveChanges();
 
             return RedirectToAction("ManageCategories", "Admin");
         }

@@ -1,4 +1,4 @@
-﻿@model List<Swiftshop.Models.Subcategory>;
+﻿@model Swiftshop.Models.Subcategory
 
 <div class="container">
     <div style="margin-top:5%; margin-bottom:2%; color:white; width:40%">
@@ -6,25 +6,33 @@
         <h5>Subcategories</h5>
 
         @{
+            List<Subcategory> Subcategories = ViewBag.Subcategories as List<Subcategory>;
             List<string> CategoryNames = ViewBag.CategoryNames as List<string>;
+            var CreateError = TempData["CreateError"] as string;
+            var UpdateError = TempData["UpdateError"] as Dictionary<string, string>;
         }
 
         @*Create Subcategory Section*@
         <form asp-controller="Subcategory" asp-action="CreateSubcategory" style="margin-top:2%">
             <div class="d-flex flex-column">
+                <div asp-validation-summary="ModelOnly" class="text-danger" role="alert"></div>
+                <span asp-validation-for="Name" class="text-danger mt-2 mb-2">@CreateError</span>
                 <div class="input-group">
                     <span class="input-group-text">Subcategory Name</span>
-                    <input class="form-control" required type="text" name="SubcategoryName" />
+                    <input class="form-control" asp-for="Name" />
                 </div>
                 <div class="input-group">
                     <span class="input-group-text">Parent Category</span>
                     <select required class="form-select" id="CategoryName" name="CategoryName">
-                        <option selected>Choose...</option>
+                        <option selected value="@CategoryNames.First()">@CategoryNames.First()</option>
                         @{
+                            var TempCategory = CategoryNames.First();
+                            CategoryNames.Remove(TempCategory);
                             foreach (string categoryName in CategoryNames)
                             {
                                 <option value="@categoryName">@categoryName</option>
                             }
+                            CategoryNames.Add(TempCategory);
                         }
                     </select>
                     <div class="input-group"><input type="submit" class="btn btn-md btn-light" value="Create" /></div>
@@ -35,7 +43,7 @@
 
     @{
         //Update Subcategory Section
-        if (Model.Count != 0)
+        if (Subcategories.Count != 0)
         {
             <div style="height:46vh; overflow-y:scroll">
                 <table class="table align-middle table-striped-columns" style="color:white; margin-bottom:10%;">
@@ -51,10 +59,10 @@
                     </thead>
                     <tbody class="table-group-divider">
                         @{
-                            foreach (var subcategory in Model)
+                            foreach (var subcategory in Subcategories)
                             {
                                 <tr>
-                                    <td scope="row">@Model.IndexOf(subcategory)</td>
+                                    <td scope="row">@Subcategories.IndexOf(subcategory)</td>
                                     <td>@Html.DisplayFor(modelItem => subcategory.Id)</td>
                                     <td>@Html.DisplayFor(modelItem => subcategory.Name)</td>
                                     <td>@Html.DisplayFor(modelItem => subcategory.Category.Name)</td>
@@ -62,18 +70,31 @@
                                         <div class="d-flex flex-column justify-content-lg-start" style="margin-top:2%">
                                             @* Update Subcategory Name Form *@
                                             <form asp-controller="Subcategory" asp-action="UpdateSubcategoryName" asp-route-SubcategoryId="@subcategory.Id">
-                                                <div class="input-group mb-3">
-                                                    <input required type="text" name="NewName" class="form-control" placeholder="Update Subcategory Name">
-                                                    <div class="d-flex justify-content-start input-group-append">
-                                                        <button type="submit" class="btn btn-light">Update</button>
+                                                <div class="d-flex flex-column">
+                                                    <div class="d-inline-flex">
+                                                        <div class="input-group mb-1">
+                                                            <div asp-validation-summary="ModelOnly" class="text-danger" role="alert"></div>
+                                                            <input asp-for="Name" class="form-control" placeholder="Update Subcategory Name">
+                                                            <div class="d-flex justify-content-start input-group-append">
+                                                                <button type="submit" class="btn btn-light">Update</button>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="mb-4">
+                                                        @{
+                                                            if (UpdateError != null && UpdateError.ContainsKey(subcategory.Id))
+                                                            {
+                                                                <span asp-validation-for="Name" class="text-danger">@UpdateError[subcategory.Id]</span>
+                                                            }
+                                                        }
                                                     </div>
                                                 </div>
                                             </form>
                                             @* Update Subcategory Parent Category Form *@
                                             <form asp-controller="Subcategory" asp-action="UpdateSubcategoryCategory" asp-route-SubcategoryId="@subcategory.Id">
                                                 <div class="input-group mb-3">
-                                                    <select required class="form-select" id="NewCategoryName" name="NewCategoryName">
-                                                        <option selected>Choose...</option>
+                                                    <select class="form-select" id="NewCategoryName" name="NewCategoryName">
+                                                        <option selected value="@subcategory.Category.Name">@subcategory.Category.Name</option>
                                                         @{
                                                             foreach (string categoryName in CategoryNames)
                                                             {
@@ -96,7 +117,7 @@
                         }
                     </tbody>
                 </table>
-                </div>
+            </div>
         }
         else
         {

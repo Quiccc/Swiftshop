@@ -21,18 +21,24 @@ namespace Swiftshop.Controllers
 
         public async Task<IActionResult> ManageCategories()
         {
-            var context = _context.Categories;
-            return View(await context.ToListAsync());
+            var Categories = await _context.Categories
+                .OrderBy(c => c.Name)
+                .ToListAsync();
+
+            ViewBag.Categories = Categories;
+
+            return View();
         }
 
         public async Task<IActionResult> ManageSubcategories()
         {
-            var SubcategoryContext = _context.Subcategories;
+            var Subcategories = await _context.Subcategories.ToListAsync();
             var CategoryContext = _context.Categories.ToList();
 
+            ViewBag.Subcategories = Subcategories;
             ViewBag.CategoryNames = CategoryContext.Select(c => c.Name).ToList();
 
-            return View(await SubcategoryContext.ToListAsync());
+            return View();
         }
 
         public async Task<IActionResult> ManageProducts(string SubcategoryId, string Prefix)
@@ -53,15 +59,17 @@ namespace Swiftshop.Controllers
             //No product filtering
             if (SubcategoryId == "0")
             {
-                var ProductContext = _context.Products.Where(p => p.Name.Contains(Prefix));
-                return View(await ProductContext.ToListAsync());
+                var ProductContext = await _context.Products.Where(p => p.Name.Contains(Prefix)).ToListAsync();
+                ViewBag.Products = ProductContext;
+                return View();
             }
 
             //Returns products depending on selected subcategory and prefix.
             else
             {
-                var ProductContext = _context.Products.Where(p => p.SubcategoryId == SubcategoryId && p.Name.Contains(Prefix));
-                return View(await ProductContext.ToListAsync());
+                var ProductContext = await _context.Products.Where(p => p.SubcategoryId == SubcategoryId && p.Name.Contains(Prefix)).ToListAsync();
+                ViewBag.Products = ProductContext;
+                return View();
             }
         }
     }
