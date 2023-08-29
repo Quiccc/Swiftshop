@@ -4,6 +4,7 @@
     List<Category> Categories = ViewBag.Categories as List<Category>;
     var CreateError = TempData["CreateError"] as string;
     var UpdateError = TempData["UpdateError"] as Dictionary<string, string>;
+    var Prefix = ViewBag.Prefix as string;
 }
 
 <div class="container">
@@ -14,12 +15,12 @@
         <form asp-controller="Category" asp-action="CreateCategory" style="margin-top:2%; width:40%">
             <div class="input-group mb-3">
                 <div class="d-flex flex-column flex-grow-1">
-                    <div asp-validation-summary="ModelOnly" class="text-danger" role="alert"></div>
-                    <input asp-for="Name" class="form-control" placeholder="New Category" aria-label="New Category" aria-describedby="basic-addon2">
+                    <div class="input-group">
+                        <div asp-validation-summary="ModelOnly" class="text-danger" role="alert"></div>
+                        <input asp-for="Name" class="form-control" placeholder="New Category" aria-label="New Category" aria-describedby="basic-addon2">
+                        <button type="submit" class="btn btn-light">Create</button>
+                    </div>
                     <span asp-validation-for="Name" class="text-danger mt-2">@CreateError</span>
-                </div>
-                <div class="input-group-append">
-                    <button type="submit" class="btn btn-light">Create</button>
                 </div>
             </div>
         </form>
@@ -34,7 +35,20 @@
                             <th scope="col">Index</th>
                             <th scope="col">Id</th>
                             <th scope="col">Category Name</th>
-                            <th scope="col">Actions</th>
+                            <th scope="col">
+                                <form asp-controller="Admin" asp-action="ManageCategories" asp-route-Prefix="@Prefix">
+                                    <div class="input-group mb-3">
+                                        <input type="text" class="form-control" name="Prefix" value="@Prefix">
+                                        <button class="btn btn-outline-light" type="submit"><i class="bi bi-search"></i> Search</button>
+                                        @{
+                                            if(Prefix != "")
+                                            {
+                                                <a class="btn btn-outline-light" asp-action="ManageCategories" asp-route-Prefix="">Clear</a>
+                                            }
+                                        }
+                                    </div>
+                                </form>
+                            </th>
                             <th scope="col"></th>
                         </tr>
                     </thead>
@@ -52,9 +66,7 @@
                                                 <div class="input-group">
                                                     <div asp-validation-summary="ModelOnly" class="text-danger" role="alert"></div>
                                                     <input asp-for="Name" class="form-control" placeholder="Update Category Name">
-                                                    <div class="d-flex justify-content-start input-group-append">
                                                         <button type="submit" class="btn btn-light">Update</button>
-                                                    </div>
                                                 </div>
                                                 <div>
                                                     @{

@@ -59,8 +59,8 @@
             </div>
             <div class="d-inline-flex">
                 @*Sidebar Section*@
-                <div class="me-5" style="background-color:#212121; width:10%; height:60vh">
-                    <form asp-asp-controller="Admin" asp-action="ManageProducts" asp-route-SubcategoryId="@SubcategoryId">
+                <div class="me-5" style="background-color:#212121; width:10%">
+                    <form asp-controller="Admin" asp-action="ManageProducts" asp-route-SubcategoryId="@SubcategoryId">
                         <div class="input-group mb-3">
                             <input type="text" class="form-control" name="Prefix" value="@Prefix">
                             <button class="btn btn-outline-light" type="submit"><i class="bi bi-search"></i> Search</button>
@@ -126,9 +126,7 @@
                                                                 <div class="input-group">
                                                                     <div asp-validation-summary="ModelOnly" class="text-danger" role="alert"></div>
                                                                     <input asp-for="Name" class="form-control" placeholder="Update Product Name">
-                                                                    <div class="d-flex justify-content-start input-group-append">
-                                                                        <button type="submit" class="btn btn-light">Update</button>
-                                                                    </div>
+                                                                    <button type="submit" class="btn btn-light">Update</button>
                                                                 </div>
                                                                 @{
                                                                     if (UpdateErrorName != null && UpdateErrorName.ContainsKey(product.Id))
@@ -142,9 +140,7 @@
                                                                 <div class="input-group">
                                                                     <div asp-validation-summary="ModelOnly" class="text-danger" role="alert"></div>
                                                                     <input asp-for="ProductImage" class="form-control" placeholder="Update Product Image URL">
-                                                                    <div class="d-flex justify-content-start input-group-append">
-                                                                        <button type="submit" class="btn btn-light">Update</button>
-                                                                </div>
+                                                                    <button type="submit" class="btn btn-light">Update</button>
                                                                 </div>
                                                                 @{
                                                                     if (UpdateErrorImage != null && UpdateErrorImage.ContainsKey(product.Id))
