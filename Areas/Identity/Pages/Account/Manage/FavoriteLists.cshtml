@@ -1,0 +1,79 @@
+﻿@page
+@model FavoriteListsModel
+@{
+    if (Model.FavoriteLists.Count > 0)
+    {
+        <table class="table align-middle" style="color:white">
+            <thead>
+                <tr>
+                    <th scope="col">List Image</th>
+                    <th scope="col">List Name</th>
+                    <th scope="col">List Contents</th>
+                    <th scope="col">
+                        <form method="post">
+                            <input type="hidden" name="ListId" value="0" />
+                            <button type="submit" class="btn btn-lg btn-outline-dark">Clear all favorites</button>
+                        </form>
+                    </th>
+                </tr>
+            </thead>
+            <tbody class="table-group-divider">
+                @{
+                    foreach (var list in Model.FavoriteLists)
+                    {
+                        if (Model.FavoriteListContents[list.Id].Count == 0)
+                        {
+                            <tr>
+                                <th scope="row">Empty Image</th>
+                                <td>@list.Name</td>
+                                <td>No Products</td>
+                                <td>
+                                    <div class="d-inline-flex">
+                                        <form asp-page-handler="Add" method="post">
+                                            <button type="submit" name="ListId" value="@list.Id" class="btn btn-lg btn-light"><i class="bi bi-plus"></i></button>
+                                        </form>
+                                        <form asp-page-handler="Delete" method="post">
+                                            <button type="submit" name="ListId" value="@list.Id" class="btn btn-lg btn-light"><i class="bi bi-trash-fill"></i></button>
+                                        </form>
+                                    </div>
+                                </td>
+                            </tr>
+                        }
+                        else
+                        {
+                            <tr>
+                                <th scope="row">@Model.FavoriteListContents[list.Id].First().ProductImage</th>
+                                <td>@list.Name</td>
+                                <td>
+                                    <div class="d-flex flex-column">
+                                        @{
+                                            foreach (var content in Model.FavoriteListContents[list.Id])
+                                            {
+                                                <h5>@content.ProductName</h5>
+                                            }
+                                        }
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="d-inline-flex">
+                                        <form asp-page-handler="Add" method="post">
+                                            <button type="submit" name="ListId" value="@list.Id" class="btn btn-lg btn-light"><i class="bi bi-plus"></i></button>
+                                        </form>
+                                        <form asp-page-handler="Delete" method="post">
+                                            <button type="submit" name="ListId" value="@list.Id" class="btn btn-lg btn-light"><i class="bi bi-trash-fill"></i></button>
+                                        </form>
+                                    </div>
+                                </td>
+                            </tr>
+                        }
+                    }
+                }
+            </tbody>
+        </table>
+    }
+
+    else
+    {
+        <h1 style="color:white">No Favorite Lists.</h1>
+    }
+}

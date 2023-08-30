@@ -1,0 +1,48 @@
+﻿@page
+@model ListHistoriesModel
+
+@{
+    if (Model.UserListHistories.Count > 0)
+    {
+        <table class="table align-middle" style="color:white">
+            <thead>
+                <tr>
+                    <th scope="col">List Name</th>
+                    <th scope="col">List Items</th>
+                    <th scope="col">
+                        <form method="post">
+                            <button class="btn btn-sm btn-outline-light" name="HistoryId" value="0" type="submit">Clear all</button>
+                        </form>
+                    </th>
+                </tr>
+            </thead>
+            <tbody class="table-group-divider">
+                @{
+                    foreach (var history in Model.UserListHistories)
+                    {
+                        <tr>
+                            <th scope="row">@history.Name</th>
+                            <td>
+                                @{
+                                    foreach (var product in history.ProductNames)
+                                    {
+                                        <p>@product</p>
+                                    }
+                                }
+                            </td>
+                            <td>
+                                <form method="post">
+                                    <button class="btn btn-lg btn-light" name="HistoryId" value="@history.Id" type="submit"><i class="bi bi-trash-fill"></i></button>
+                                </form>
+                            </td>
+                        </tr>
+                    }
+                }
+            </tbody>
+        </table>
+    }
+    else
+    {
+        <h1 style="color:white">No History</h1>
+    }
+}

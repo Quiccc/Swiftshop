@@ -54,7 +54,7 @@ namespace Swiftshop.Controllers
             await _context.Products.AddAsync(NewProduct);
             _context.SaveChanges();
 
-            return RedirectToAction("ManageProducts", "Admin", new { SubcategoryId = ProductSubcategory.Id });
+            return RedirectToAction("ManageProducts", "Admin", new { SubcategoryId = 0, Prefix = NewProduct.Name });
         }
 
         public async Task<IActionResult> DeleteProduct(string ProductId)
@@ -65,7 +65,7 @@ namespace Swiftshop.Controllers
             _context.Products.Remove(DeletedProduct);
             await _context.SaveChangesAsync();
 
-            return RedirectToAction("ManageProducts", "Admin", new { DeletedProduct.SubcategoryId });
+            return RedirectToAction("ManageProducts", "Admin", new {SubcategoryId =0, Prefix = DeletedProduct.Name });
         }
 
         public async Task<IActionResult> UpdateProductName(string ProductId, string Name)

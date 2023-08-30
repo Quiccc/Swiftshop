@@ -9,6 +9,8 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 
+builder.Services.AddRazorPages();
+
 builder.Services.AddHttpContextAccessor();
 
 builder.Services.AddDbContext<SwiftshopDbContext>(opts => opts.UseSqlServer("DbConnection"));

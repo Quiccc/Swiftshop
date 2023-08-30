@@ -23,13 +23,13 @@ namespace Swiftshop.Controllers
             if (!ModelState.IsValid)
             {
                 TempData["CreateError"] = "Subcategory name cannot be null";
-                return RedirectToAction("ManageSubcategories", "Admin");
+                return RedirectToAction("ManageSubcategories", "Admin", new { CategoryId = 0 });
             }
 
             else if (SubcategoryContext.Select(sc => sc.Name).ToList().Contains(Name))
             {
                 TempData["CreateError"] = "Subcategory name already exists.";
-                return RedirectToAction("ManageSubcategories", "Admin");
+                return RedirectToAction("ManageSubcategories", "Admin", new { CategoryId = 0 });
             }
 
             var NewCategory = CategoryContext.First(c => c.Name == CategoryName);
@@ -44,7 +44,7 @@ namespace Swiftshop.Controllers
             await _context.AddAsync(NewSubcategory);
             _context.SaveChanges();
 
-            return RedirectToAction("ManageSubcategories", "Admin");
+            return RedirectToAction("ManageSubcategories", "Admin", new { CategoryId = 0, Prefix = NewSubcategory.Name });
         }
 
         public async Task<IActionResult> DeleteSubcategory(string SubcategoryId)
@@ -55,7 +55,7 @@ namespace Swiftshop.Controllers
             _context.Subcategories.Remove(DeletedSubcategory);
             await _context.SaveChangesAsync();
 
-            return RedirectToAction("ManageSubcategories", "Admin");
+            return RedirectToAction("ManageSubcategories", "Admin", new { DeletedSubcategory.CategoryId });
         }
 
         public async Task<IActionResult> UpdateSubcategoryName(string SubcategoryId, string Name)
@@ -69,7 +69,7 @@ namespace Swiftshop.Controllers
                     {SubcategoryId, "Subcategory name cannot be null."}
                 };
                 TempData["UpdateError"] = UpdateError;
-                return RedirectToAction("ManageSubcategories", "Admin");
+                return RedirectToAction("ManageSubcategories", "Admin", new {CategoryId = 0});
             }
 
             else if (context.Select(c => c.Name).ToList().Contains(Name))
@@ -79,7 +79,7 @@ namespace Swiftshop.Controllers
                     {SubcategoryId, "Subcategory name already exists."}
                 };
                 TempData["UpdateError"] = UpdateError;
-                return RedirectToAction("ManageSubcategories", "Admin");
+                return RedirectToAction("ManageSubcategories", "Admin", new {CategoryId = 0});
             }
 
             var UpdatedSubcategory = context.First(sc => sc.Id == SubcategoryId);
@@ -88,7 +88,7 @@ namespace Swiftshop.Controllers
             _context.Subcategories.Update(UpdatedSubcategory);
             await _context.SaveChangesAsync();
 
-            return RedirectToAction("ManageSubcategories", "Admin");
+            return RedirectToAction("ManageSubcategories", "Admin", new {CategoryId = 0, Prefix = UpdatedSubcategory.Name});
         }
 
         public async Task<IActionResult> UpdateSubcategoryCategory(string SubcategoryId, string NewCategoryName)
@@ -98,7 +98,7 @@ namespace Swiftshop.Controllers
 
             if (!CategoryContext.Select(c => c.Name).ToList().Contains(NewCategoryName))
             {
-                return RedirectToAction("ManageSubcategories", "Admin");
+                return RedirectToAction("ManageSubcategories", "Admin", new { CategoryId = 0});
             }
 
             var NewCategory = CategoryContext.First(c => c.Name == NewCategoryName);
@@ -110,7 +110,7 @@ namespace Swiftshop.Controllers
             _context.Subcategories.Update(UpdatedSubcategory);
             await _context.SaveChangesAsync();
 
-            return RedirectToAction("ManageSubcategories", "Admin");
+            return RedirectToAction("ManageSubcategories", "Admin", new {UpdatedSubcategory.CategoryId});
         }
     }
 }

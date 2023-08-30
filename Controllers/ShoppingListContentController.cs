@@ -158,25 +158,30 @@ namespace Swiftshop.Controllers
 
         public async Task<IActionResult> CompleteShopping(string ListId)
         {
-            //Get Acquired Products as list
-            var AcquiredListContents = _context.ShoppingListContents.Where(slc => slc.ListId == ListId && slc.IsAcquired == true).ToList();
-
             //Change flag to finish shopping process.
             var CurrentList = _context.ShoppingLists.Where(sl => sl.Id == ListId).First();
             CurrentList.IsStarted = false;
 
-            //Create a history of the completed list.
-            ShoppingListHistory ListHistory = new()
+            //Get Acquired Products as list
+            var AcquiredListContents = _context.ShoppingListContents.Where(slc => slc.ListId == ListId && slc.IsAcquired == true)
+                .Join(_context.Products, alc => alc.ProductId, p => p.Id, (alc, p) => new ShoppingListContent { ListId = alc.ListId, IsAcquired = alc.IsAcquired, ProductId = p.Id, Product = p})
+                .ToList();
+
+            if (AcquiredListContents.Count > 0)
             {
-                Name = CurrentList.Name,
-                ListContents = JsonConvert.SerializeObject(AcquiredListContents, Formatting.Indented, new JsonSerializerSettings
+                //Create a history of the completed list.
+                ShoppingListHistory ListHistory = new()
                 {
-                    ReferenceLoopHandling = ReferenceLoopHandling.Ignore
-                }),
-                UserId = CurrentList.UserId,
-                User = CurrentList.User
-            };
-            _context.ShoppingListHistories.Add(ListHistory);
+                    Name = CurrentList.Name,
+                    ListContents = JsonConvert.SerializeObject(AcquiredListContents.Select(alc => alc.Product.Name), Formatting.Indented, new JsonSerializerSettings
+                    {
+                        ReferenceLoopHandling = ReferenceLoopHandling.Ignore
+                    }),
+                    UserId = CurrentList.UserId,
+                    User = CurrentList.User
+                };
+                _context.ShoppingListHistories.Add(ListHistory);
+            }
 
             //Section for favorited lists. Acquired list products does not get removed.
             if (CurrentList.IsFavorited == true)
