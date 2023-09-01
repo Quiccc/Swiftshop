@@ -8,6 +8,12 @@ body {
     background-position: center;
 }
 
+.admin-route-card {
+    border-radius: 20px 20px 0px 0px;
+    -webkit-border-radius: 20px 20px 0px 0px;
+    -moz-border-radius: 20px 20px 0px 0px;
+}
+
 .list-page-navbar {
     background: #212121;
     box-shadow: rgba(0, 0, 0, 0.1) 0px 1px 3px 0px, rgba(0, 0, 0, 0.06) 0px 1px 2px 0px;
@@ -30,10 +36,15 @@ body {
     border: 2px solid #ffffff;
 }
 
-.list-page-paginator{
-    background-color:none;
-    color:#efefef;
-    text-decoration:none;
+.list-page-paginator {
+    background-color: none;
+    color: #efefef;
+    text-decoration: none;
+}
+
+.site-head-text {
+    font-family: 'Bukhari Script', sans-serif;
+    color: #efefef;
 }
 
 .site-text {
@@ -44,7 +55,7 @@ body {
 .site-text-lg {
     font-family: 'Comic Sans MS','Comic Sans',cursive;
     color: #efefef;
-    font-size:large;
+    font-size: large;
 }
 
 .site-text-sm {
@@ -55,7 +66,7 @@ body {
 
 .site-text-inv {
     font-family: 'Comic Sans MS','Comic Sans',cursive;
-    color: #0c0c0c; 
+    color: #0c0c0c;
 }
 
 .site-text-inv-lg {
@@ -69,8 +80,8 @@ body {
 }
 
 .site-button {
-    background:#212121;
-    border-width:0;
+    background: #212121;
+    border-width: 0;
     font-family: 'Comic Sans MS','Comic Sans',cursive;
     color: #efefef;
 }

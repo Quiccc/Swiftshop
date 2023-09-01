@@ -30,7 +30,7 @@
                                     <div class="mb-5 mt-5"><img src="~/product_placeholder.png" class="card-img-top mx-auto" style="width:100%"></div>
                                     <div class="card-body" style="background-color:#212121">
                                         <div class="d-flex flex-column">
-                                            <h5 class="card-title" style="color:white">@Html.DisplayFor(modelItem => item.Name)</h5>
+                                            <h5 class="card-title site-text">@item.Name</h5>
                                             <div class="d-flex">
                                                 <a asp-controller="ShoppingListContent" asp-action="CompletedListSummary" asp-route-ListId="@item.Id" class="btn btn-light btn-lg"><i class="bi bi-list-ul"></i></a>
                                             </div>
@@ -67,7 +67,9 @@
             }
             else
             {
-                <h1 style="color:white">No Completed Lists.</h1>
+                <div class="mx-auto my-auto">
+                    <img class="w-100" src="/complete-list-not-found.png" />
+                </div>
             }
         }
     </div>

@@ -1,27 +1,28 @@
-﻿<div class="d-flex justify-content-around" style="margin-top: 10%;">
-    <div class="card" style="width: 18rem;">
-        <img src="~/shopping_cart.png" class="card-img-top" alt="...">
-        <div class="card-body">
-            <h5 class="card-title">Categories</h5>
-            <p class="card-text">Add new categories or remove and make changes on existing categories.</p>
-            <a asp-action="ManageCategories" class="btn btn-primary">Manage</a>
+﻿<div class="d-flex justify-content-center mt-5">
+    <div class="d-inline-flex mt-4 mb-5">
+        <div class="card admin-route-card me-5" style="width: 25rem;">
+            <img src="~/admin-category.png" class="card-img-top mt-5 mx-auto my-auto" style="width:90%">
+            <div class="card-body" style="background-color:#212121">
+                <h3 class="card-title site-head-text mb-3">Categories</h3>
+                <p class="card-text site-text">Add new categories or remove and make changes on existing categories.</p>
+                <a asp-action="ManageCategories" class="btn btn-light site-text-inv">Manage</a>
+            </div>
+        </div>
+        <div class="card admin-route-card me-5 ms-5" style="width: 25rem;">
+            <img src="~/admin-subcategory.png" class="card-img-top mt-5 mx-auto my-auto" style="width:90%">
+            <div class="card-body" style="background-color:#212121">
+                <h3 class="card-title site-head-text mb-3">Subcategories</h3>
+                <p class="card-text site-text">Add new subcategories or remove and make changes on existing subcategories.</p>
+                <a asp-action="ManageSubcategories" asp-route-CategoryId="0" class="btn btn-light site-text-inv">Manage</a>
+            </div>
+        </div>
+        <div class="card admin-route-card ms-5" style="width: 25rem;">
+            <img src="~/admin-product.png" class="card-img-top mt-5 mx-auto my-auto" style="width:90%">
+            <div class="card-body" style="background-color:#212121">
+                <h3 class="card-title site-head-text mb-3">Products</h3>
+                <p class="card-text site-text">Add new products to be listed or remove and make changes on existing products.</p>
+                <a asp-action="ManageProducts" asp-route-SubcategoryId="0" class="btn btn-light site-text-inv">Manage</a>
+            </div>
         </div>
     </div>
-    <div class="card" style="width: 18rem;">
-        <img src="~/shopping_cart.png" class="card-img-top" alt="...">
-        <div class="card-body">
-            <h5 class="card-title">Subcategories</h5>
-            <p class="card-text">Add new subcategories or remove and make changes on existing subcategories.</p>
-            <a asp-action="ManageSubcategories" asp-route-CategoryId="0" class="btn btn-primary">Manage</a>
-        </div>
-    </div>
-    <div class="card" style="width: 18rem;">
-        <img src="~/shopping_cart.png" class="card-img-top" alt="...">
-        <div class="card-body">
-            <h5 class="card-title">Products</h5>
-            <p class="card-text">Add new products to be listed or remove and make changes on existing products.</p>
-            <a asp-action="ManageProducts" asp-route-SubcategoryId="0" class="btn btn-primary">Manage</a>
-        </div>
-    </div>
-
 </div>
