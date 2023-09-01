@@ -1,38 +1,42 @@
 ﻿@page
 @model LoginModel
 
-<div class="d-flex justify-content-center">
-        <form id="account" method="post" class="login-form">
-            <img class="login-page-logo" src="/logo.png" />
-            <h2 class="login-page-text">Log in to start shopping.</h2>
-            <hr />
+<div class="h-100 d-flex align-items-center justify-content-center">
+    <div class="d-flex flex-column justify-content-center" style="width:31rem;">
+        <div><img class="login-page-logo" src="/logo.png" /></div>
+        <form id="account" method="post">
+            <h2 class="site-text mb-4 mt-4">Log in to start shopping.</h2>
             <div asp-validation-summary="ModelOnly" class="text-danger" role="alert"></div>
             <div class="form-floating mb-3">
                 <input asp-for="Input.Email" class="form-control" autocomplete="username" aria-required="true" placeholder="name@example.com" />
-                <label asp-for="Input.Email" class="form-label"><p class="login-page-text-inv">Email</p></label>
+                <label asp-for="Input.Email" class="form-label"><p class="site-text-inv">E-mail</p></label>
                 <span asp-validation-for="Input.Email" class="text-danger"></span>
             </div>
             <div class="form-floating mb-3">
-            <input asp-for="Input.Password" class="form-control" autocomplete="current-password" aria-required="true" placeholder="password" />
-            <label asp-for="Input.Password" class="form-label"><p class="login-page-text-inv">Password</p></label>
+                <input asp-for="Input.Password" class="form-control" autocomplete="current-password" aria-required="true" placeholder="password" />
+                <label asp-for="Input.Password" class="form-label"><p class="site-text-inv">Password</p></label>
                 <span asp-validation-for="Input.Password" class="text-danger"></span>
             </div>
-            <div class="checkbox mb-3">
+            <div class="checkbox">
                 <label style="color:#efefef;" font-family:font-family:font-family:'Comic Sans MS" asp-for="Input.RememberMe" class="form-label">
-                    <input class="form-check-input" asp-for="Input.RememberMe" />
-                    @Html.DisplayNameFor(m => m.Input.RememberMe)
+                    <div class="d-inline-flex">
+                        <input class="form-check-input" asp-for="Input.RememberMe" />
+                        <p class="site-text mt-1 ms-1">Remember Me.</p>
+                    </div>
                 </label>
             </div>
             <div>
-            <button id="login-submit" type="submit" class="btn" style="background-color:#7a47b8; font-family: 'Comic Sans MS','Comic Sans',cursive; color:#efefef">Log in</button>
+                <button id="login-submit" type="submit" class="btn site-button">Log in</button>
             </div>
-            <div style="padding-top:5%">
-                <p>
-                    <a asp-page="./Register" asp-route-returnUrl="@Model.ReturnUrl"><p class="login-page-text">Create a new account.</p></a>
+            <div>
+                <p class="site-text mt-3">
+                    Dont have an account? <a asp-page="./Register" asp-route-returnUrl="@Model.ReturnUrl" style="text-decoration:none">Click here to register.</a>
                 </p>
             </div>
         </form>
     </div>
+</div>
+
 
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />

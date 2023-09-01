@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
@@ -9,6 +10,7 @@ using System.Collections.Generic;
 
 namespace Swiftshop.Areas.Identity.Pages.Account.Manage
 {
+    [Authorize(Roles = "Admin, User")]
     public class FavoriteListsModel : PageModel
     {
         private readonly SwiftshopDbContext _context;

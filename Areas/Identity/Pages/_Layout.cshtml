@@ -1,8 +1,10 @@
 ﻿<body>
     @*Navbar*@
-    <div class="navbar fixed-top" style="background-color:#212121">
-        <a asp-controller="ShoppingList" asp-action="ActiveLists" asp-route-Page="1"><img class="navbar-logo" src="~/logo.png" /></a>
-        <div class="home-page-dropdown" style="margin-right:.5%"><partial name="_LoginPartial" /></div>
+    <div class="navbar fixed-top">
+        <div class="w-100 d-flex align-items-center justify-content-between">
+            <div class="mt-1 ms-3 mb-2" style="width:30%"><a asp-controller="ShoppingList" asp-action="ActiveLists" asp-route-Page="1"><img style="width:30%" src="~/logo.png" /></a></div>
+            <div class="me-4"><partial name="_LoginPartial" /></div>
+        </div>
     </div>
     @*Main Canvas*@
     <div class="container" style="margin-top:7%;">
@@ -11,7 +13,7 @@
         </main>
     </div>
     @*Footer*@
-    <footer class="navbar fixed-bottom justify-content-center" style="background-color:#212121; color:white">Swiftshop</footer>
+    <footer class="navbar fixed-bottom justify-content-center" style="color:white">Swiftshop</footer>
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>

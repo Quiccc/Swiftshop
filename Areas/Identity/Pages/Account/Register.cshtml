@@ -1,45 +1,41 @@
 ﻿@page
 @model RegisterModel
 
-<div class="d-flex justify-content-center">
+<div class="h-100 d-flex flex-column align-items-center justify-content-center">
+    <img class="mt-5" src="/logo.png" />
+    <div class="d-flex justify-content-center" style="width:31rem;">
         <form id="registerForm" asp-route-returnUrl="@Model.ReturnUrl" method="post">
-        <img class="login-page-logo" src="/logo.png" />
-            <h2 class="login-page-text">Create a new account.</h2>
-            <hr />
+            <h2 class="site-text mb-4 mt-3 text-wrap">Create your account to start shopping.</h2>
             <div asp-validation-summary="ModelOnly" class="text-danger" role="alert"></div>
             <div class="form-floating mb-3">
                 <input asp-for="Input.Name" class="form-control" aria-required="true" placeholder="name" />
-                <label asp-for=Input.Name><p class="login-page-text-inv">First Name</p></label>
+                <label asp-for=Input.Name><p class="site-text-inv">First Name</p></label>
                 <span asp-validation-for="Input.Name" class="text-danger"></span>
             </div>
             <div class="form-floating mb-3">
                 <input asp-for="Input.Surname" class="form-control" aria-required="true" placeholder="surname" />
-            <label asp-for=Input.Surname><p class="login-page-text-inv">Surname</p></label>
+                <label asp-for=Input.Surname><p class="site-text-inv">Surname</p></label>
                 <span asp-validation-for="Input.Surname" class="text-danger"></span>
             </div>
             <div class="form-floating mb-3">
-                <input asp-for="Input.PhoneNumber" class="form-control" aria-required="true" placeholder="phone" />
-            <label asp-for=Input.PhoneNumber><p class="login-page-text-inv">Phone Number</p></label>
-                <span asp-validation-for="Input.PhoneNumber" class="text-danger"></span>
-            </div>
-            <div class="form-floating mb-3">
                 <input asp-for="Input.Email" class="form-control" autocomplete="username" aria-required="true" placeholder="name@example.com" />
-            <label asp-for="Input.Email"><p class="login-page-text-inv">Email Address</p></label>
+                <label asp-for="Input.Email"><p class="site-text-inv">Email Address</p></label>
                 <span asp-validation-for="Input.Email" class="text-danger"></span>
             </div>
             <div class="form-floating mb-3">
                 <input asp-for="Input.Password" class="form-control" autocomplete="new-password" aria-required="true" placeholder="password" />
-            <label asp-for="Input.Password"><p class="login-page-text-inv">Password</p></label>
+                <label asp-for="Input.Password"><p class="site-text-inv">Password</p></label>
                 <span asp-validation-for="Input.Password" class="text-danger"></span>
             </div>
             <div class="form-floating mb-3">
                 <input asp-for="Input.ConfirmPassword" class="form-control" autocomplete="new-password" aria-required="true" placeholder="password" />
-            <label asp-for="Input.ConfirmPassword"><p class="login-page-text-inv">Confirm Password</p></label>
+                <label asp-for="Input.ConfirmPassword"><p class="site-text-inv">Confirm Password</p></label>
                 <span asp-validation-for="Input.ConfirmPassword" class="text-danger"></span>
             </div>
-        <button id="registerSubmit" type="submit" class="w-100 btn btn-lg" style="background-color:#7a47b8; font-family: 'Comic Sans MS','Comic Sans',cursive; color:#efefef">Register</button>
+            <button id="registerSubmit" type="submit" class="btn btn-lg site-button w-50">Register</button>
         </form>
     </div>
+</div>
 
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />

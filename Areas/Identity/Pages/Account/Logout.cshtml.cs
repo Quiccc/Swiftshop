@@ -13,6 +13,7 @@ using Swiftshop.Models;
 
 namespace Swiftshop.Areas.Identity.Pages.Account
 {
+    [Authorize(Roles = "Admin, User")]
     public class LogoutModel : PageModel
     {
         private readonly SignInManager<User> _signInManager;

@@ -2,54 +2,75 @@ body {
     margin: 0;
     padding: 0;
     line-height: 1;
-    color: black;
-    background: #0c0c0c;
-}
-/*
-    CSS Starts Here.
-*/
-
-.navbar-logo {
-    width: 30%;
-    margin-top: 1%;
-    margin-left: 2%;
+    background-image: url(/main_background.jpg);
+    background-repeat: no-repeat;
+    background-size: 100% 100vh;
+    background-position: center;
 }
 
-.login-page-logo {
-    padding-top: 25%;
-    padding-bottom: 5%;
+.list-page-navbar {
+    background: #212121;
+    box-shadow: rgba(0, 0, 0, 0.1) 0px 1px 3px 0px, rgba(0, 0, 0, 0.06) 0px 1px 2px 0px;
+    border-radius: 25px 25px 25px 25px;
+    -webkit-border-radius: 25px 25px 25px 25px;
+    -moz-border-radius: 25px 25px 25px 25px;
+    border: 2px solid #ffffff;
 }
 
-.login-page-text {
+.list-page-card {
+    border-radius: 20px 20px 0px 0px;
+    -webkit-border-radius: 20px 20px 0px 0px;
+    -moz-border-radius: 20px 20px 0px 0px;
+}
+
+.list-page-modal {
+    border-radius: 25px 25px 25px 25px;
+    -webkit-border-radius: 25px 25px 25px 25px;
+    -moz-border-radius: 25px 25px 25px 25px;
+    border: 2px solid #ffffff;
+}
+
+.list-page-paginator{
+    background-color:none;
+    color:#efefef;
+    text-decoration:none;
+}
+
+.site-text {
     font-family: 'Comic Sans MS','Comic Sans',cursive;
     color: #efefef;
 }
 
-.login-page-text-inv {
+.site-text-lg {
+    font-family: 'Comic Sans MS','Comic Sans',cursive;
+    color: #efefef;
+    font-size:large;
+}
+
+.site-text-sm {
+    font-family: 'Comic Sans MS','Comic Sans',cursive;
+    color: #efefef;
+    font-size: small;
+}
+
+.site-text-inv {
+    font-family: 'Comic Sans MS','Comic Sans',cursive;
+    color: #0c0c0c; 
+}
+
+.site-text-inv-lg {
     font-family: 'Comic Sans MS','Comic Sans',cursive;
     color: #0c0c0c;
+    font-size: large;
 }
 
-.home-page-dropdown {
-    padding: 1%
+.site-text-nocolor {
+    font-family: 'Comic Sans MS','Comic Sans',cursive;
 }
 
-.home-page-paginator {
-    padding-top: 3%;
-    padding-bottom: 2%;
-}
-
-.home-page-container {
-    margin-top: 5%;
-    padding-left: 5%;
-    padding-right: 5%;
-    background-color: #808080;
-}
-
-.manage-product-sidebar {
-    margin-left: 30px;
-    margin-bottom: 50%;
-    width: 10%;
-    height: 100vh;
-    background-color: #212121;
+.site-button {
+    background:#212121;
+    border-width:0;
+    font-family: 'Comic Sans MS','Comic Sans',cursive;
+    color: #efefef;
 }
