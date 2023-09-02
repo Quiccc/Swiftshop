@@ -1,0 +1,63 @@
+﻿@page
+@model ListHistoriesModel
+
+@{
+    if (Model.UserListHistories.Count > 0)
+    {
+        <div style="height:40vh; overflow-y:auto;">
+            <table class="table align-middle table-borderless">
+
+                <tbody class="table-group-divider site-text">
+                    @{
+                        foreach (var history in Model.UserListHistories)
+                        {
+                            <tr>
+                                <td><h5>@history.Name</h5></td>
+                                <td>
+                                        <!-- Button trigger modal -->
+                                        <button type="button" class="btn btn-dark my-auto" data-bs-toggle="modal" data-bs-target="#@Html.Raw("Modal")@Model.UserListHistories.IndexOf(history)">
+                                            View Contents
+                                        </button>
+                                    <!-- Modal -->
+                                    <div class="modal fade site-text" id="@Html.Raw("Modal")@Model.UserListHistories.IndexOf(history)" tabindex="-1" aria-labelledby="ContentModalLabel" aria-hidden="true">
+                                        <div class="modal-dialog modal-dialog-centered">
+                                            <div class="modal-content list-page-modal" style="background:#212121">
+                                                <div class="modal-header">
+                                                    <h1 class="modal-title fs-5 site-text" id="ContentModalLabel">List Contents</h1>
+                                                    <button type="button" class="btn btn-dark" data-bs-dismiss="modal" aria-label="Close"><i class="bi bi-x-lg"></i></button>
+                                                </div>
+                                                <div class="modal-body">
+                                                    @{
+                                                        foreach (var product in history.ProductNames)
+                                                        {
+                                                            <p>@product</p>
+                                                        }
+                                                    }
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td>
+                                    <form class="my-auto" method="post">
+                                        <button type="submit" name="HistoryId" value="@history.Id" class="btn btn-lg btn-light"><i class="bi bi-trash-fill"></i></button>
+                                    </form>
+                                </td>
+                            </tr>
+                        }
+                    }
+                </tbody>
+            </table>
+        </div>
+    }
+    else
+    {
+        <div class="d-flex flex-column">
+            <h1 class="site-head-text mx-auto mb-5">Your shopping list history is empty.</h1>
+            <img class="mx-auto" style="width:35%" src="/no-histories.png" />
+        </div>
+    }
+}

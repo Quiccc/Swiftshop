@@ -1,0 +1,10 @@
+﻿@inject SignInManager<User> SignInManager
+@{
+    var hasExternalLogins = (await SignInManager.GetExternalAuthenticationSchemesAsync()).Any();
+}
+<ul class="nav flex-column">
+    <li><a class="btn btn-lg site-text @ManageNavPages.IndexNavClass(ViewContext)" id="profile" asp-page="./Index">Profile</a></li>
+    <li><a class="btn btn-lg site-text @ManageNavPages.ChangePasswordNavClass(ViewContext)" id="change-password" asp-page="./ChangePassword">Password</a></li>
+    <li><a class="btn btn-lg site-text @ManageNavPages.FavoriteListsNavClass(ViewContext)" id="favorite-lists" asp-page="./FavoriteLists">Favorite Lists</a></li>
+    <li><a class="btn btn-lg site-text @ManageNavPages.ListHistoriesNavClass(ViewContext)" id="list-histories" asp-page="./ListHistories">List Histories</a></li>
+</ul>

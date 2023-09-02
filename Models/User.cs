@@ -1,12 +1,12 @@
-﻿namespace Swiftshop.Models
+﻿using Microsoft.AspNetCore.Identity;
+
+namespace Swiftshop.Models
 {
-    public partial class User
+    public class User : IdentityUser
     {
-        public int Id { get; set; }
-        public string Name { get; set; }
-        public string Surname { get; set; }
-        public string Email { get; set; }
-        public string Password { get; set; }
-        public virtual ICollection<ShoppingList> ShoppingLists { get; set;}
+        public string? Name { get; set; }
+        public string? Surname { get; set; }
+        public virtual ICollection<ShoppingList>? ShoppingLists { get; set;}
+        public virtual ICollection<ShoppingListHistory>? ShoppingListHistories { get; set; }
     }
 }

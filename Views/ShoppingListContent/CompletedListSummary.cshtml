@@ -1,0 +1,61 @@
+﻿@model List<Swiftshop.Models.DTO.CompletedListContentDto>;
+<div class="container">
+    <div class="d-flex flex-column">
+        <div class="list-page-navbar site-text mb-4">
+            <div class="d-flex justify-content-between mt-4 mb-4 ms-4 me-4">
+                <div><h1>List Summary.</h1></div>
+                <div>
+                    <a class="btn btn-lg btn-light" asp-action="CompleteShopping" asp-route-ListId="@Model.First().ListId">Complete Shopping <i class="bi bi-cart-check-fill"></i></a>
+                </div>
+            </div>
+        </div>
+        <div>
+            @{
+                if (Model.Count != 0)
+                {
+                    <div style="height:60vh; overflow-y:auto">
+                        <table class="table align-middle table-borderless table-responsive site-text">
+                            <tbody>
+                                @{
+                                    foreach (var content in Model)
+                                    {
+                                        <tr>
+                                            <td>
+                                                <div class="d-flex">
+                                                    <img src="@content.ProductImage" class="image-fluid me-5" style="width:15%" />
+                                                    <h5 class="my-auto ms-5">@content.ProductName</h5>
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <a class="btn btn-light" data-bs-toggle="collapse" href="@Html.Raw("#collapse"+content.ProductId)" role="button" aria-expanded="false" aria-controls="@Html.Raw("collapse"+content.ProductId)">
+                                                    Notes
+                                                </a>
+                                                <div class="collapse" id="@Html.Raw("collapse"+content.ProductId)">
+                                                    <textarea class="form-control" disabled>@content.Description</textarea>
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <div class="d-inline-flex">
+                                                    @{
+                                                        if (content.IsAcquired == false)
+                                                        {
+                                                            <div><a class="btn btn-lg btn-light" asp-action="SwitchIsAcquired" asp-route-ListId="@content.ListId" asp-route-ProductId="@content.ProductId"><i class="bi bi-cart-plus-fill"></i></a></div>
+                                                        }
+                                                        else
+                                                        {
+                                                            <a class="btn btn-lg btn-success" disabled><i class="bi bi-cart-check-fill"></i></a>
+                                                        }
+                                                    }
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    }
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                }
+            }
+        </div>
+    </div>
+</div>

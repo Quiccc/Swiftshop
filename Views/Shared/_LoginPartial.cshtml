@@ -1,0 +1,37 @@
+﻿﻿@using Microsoft.AspNetCore.Identity
+
+@inject SignInManager<User> SignInManager
+@inject UserManager<User> UserManager
+
+@if (SignInManager.IsSignedIn(User))
+{
+    var currentUser = UserManager.GetUserAsync(User).Result;
+    <div class="btn-group dropstart">
+        <button class="btn btn-lg btn-light site-button site-text-lg dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+            @currentUser?.Name
+        </button>
+        <ul class="dropdown-menu dropdown-menu-dark" style="background:#212121">
+            <li><a id="manage" class="dropdown-item site-text-lg" asp-area="Identity" asp-page="/Account/Manage/Index">My Profile</a></li>
+            @{
+                if (await UserManager.IsInRoleAsync(currentUser, "Admin"))
+                {
+                    <li><a class="dropdown-item site-text-lg" asp-controller="Admin" asp-action="Index">Admin</a></li>
+                }
+            }
+            <li>
+                <form id="logoutForm" class="form-inline" style="color:#efefef; font-family:'Comic Sans MS','Comic Sans',cursive;" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("ActiveLists", "ShoppingList")">
+                    <button id="logout" type="submit" class="dropdown-item site-text-lg">Logout</button>
+                </form>
+            </li>
+        </ul>
+    </div>
+}
+else
+{
+    <li class="nav-item">
+        <a class="nav-link text-dark" id="register" asp-area="Identity" asp-page="/Account/Register">Register</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link text-dark" id="login" asp-area="Identity" asp-page="/Account/Login">Login</a>
+    </li>
+}

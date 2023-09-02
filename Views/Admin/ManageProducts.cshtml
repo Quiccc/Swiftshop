@@ -1,0 +1,189 @@
+﻿@model Swiftshop.Models.Product
+
+@{
+    string SubcategoryId = ViewBag.SubcategoryId;
+    string Prefix = ViewBag.Prefix;
+
+    var Categories = ViewBag.Categories as List<Category>;
+    var Subcategories = ViewBag.Subcategories as List<Subcategory>;
+    var Products = ViewBag.Products as List<Product>;
+
+    var CreateErrorName = TempData["CreateErrorName"] as string;
+    var CreateErrorImage = TempData["CreateErrorImage"] as string;
+    var UpdateErrorName = TempData["UpdateErrorName"] as Dictionary<string, string>;
+    var UpdateErrorImage = TempData["UpdateErrorImage"] as Dictionary<string, string>;
+
+    <div class="container-fluid">
+        @{
+            if (Subcategories.Count > 0)
+            {
+                <div class="d-flex flex-column mx-auto" style="width:85%">
+                    @*Create Product Section*@
+                    <div class="d-flex list-page-navbar site-text mb-5">
+                        <div class="d-flex flex-column mb-3 mt-3 ms-4 me-5 w-25">
+                            <h1>New Product</h1>
+                            <h5>Provide a name and image URL. Select an existing subcategory to create a product.</h5>
+                        </div>
+                        <div class="flex-grow-1 mt-3 mb-3 me-4">
+                            <form id="ProductForm" asp-controller="Product" asp-action="CreateProduct">
+                                <div class="d-flex flex-column">
+                                    <div class="input-group">
+                                        <span class="input-group-text">Product Name</span>
+                                        <div asp-validation-summary="ModelOnly" class="text-danger" role="alert"></div>
+                                        <input asp-for="Name" class="form-control" />
+                                        <span class="input-group-text">Product Subcategory</span>
+                                        <select required class="form-select" id="SubcategoryName" name="SubcategoryName">
+                                            <option selected value="@Subcategories.First().Name">@Subcategories.First().Category.Name -> @Subcategories.First().Name</option>
+                                            @{
+                                                var Temp = Subcategories.First();
+                                                Subcategories.Remove(Temp);
+                                                foreach (Subcategory subcategory in Subcategories)
+                                                {
+                                                    <option value="@subcategory.Name">@subcategory.Category.Name -> @subcategory.Name</option>
+                                                }
+                                                Subcategories.Add(Temp);
+                                            }
+                                        </select>
+                                    </div>
+                                    <span asp-validation-for="Name" class="text-danger">@CreateErrorName</span>
+                                    <div class="input-group mt-1">
+                                        <span class="input-group-text">Product Image URL</span>
+                                        <input asp-for="ProductImage" class="form-control" />
+                                    </div>
+                                    <span asp-validation-for="ProductImage" class="text-danger">@CreateErrorImage</span>
+                                    <div class="input-group mt-2"><button id="ProductSubmit" type="submit" class="btn btn-md btn-light">Create</button></div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                    <div class="d-inline-flex">
+                        @*Sidebar Section*@
+                        <div class="d-flex flex-column site-text me-1">
+                            <form class="mb-1" asp-controller="Admin" asp-action="ManageProducts" asp-route-SubcategoryId="@SubcategoryId">
+                                <div class="input-group">
+                                    <input type="text" class="form-control" name="Prefix" value="@Prefix">
+                                    <button class="btn btn-dark site-button" type="submit"><i class="bi bi-search"></i> Search</button>
+                                </div>
+                                @{
+                                    if (SubcategoryId != "0" || Prefix != "")
+                                    {
+                                        <div><a class="btn btn-dark site-button mt-2" asp-controller="Admin" asp-action="ManageProducts" asp-route-SubcategoryId="0">Clear Search</a></div>
+                                    }
+                                }
+                            </form>
+                            <div style="height:50vh; overflow-y:auto">
+                                @{
+                                    foreach (var category in Categories)
+                                    {
+                                        <p class="d-flex align-items-start flex-column">
+                                            <a class="site-text" data-bs-toggle="collapse" href="#@Html.Raw("Category")@Categories.IndexOf(category)" role="button" aria-expanded="false" aria-controls="collapseExample" style="text-decoration:none"><h5>@category.Name</h5></a>
+                                        </p>
+                                        foreach (var subcategory in category.Subcategories)
+                                        {
+                                            <div class="collapse ms-3" id="@Html.Raw("Category")@Categories.IndexOf(category)">
+                                                <form asp-controller="Admin" asp-action="ManageProducts" asp-route-SubcategoryId="@subcategory.Id">
+                                                    <input type="hidden" name="Prefix" value="@Prefix" />
+                                                    <button class="btn site-text" type="submit">• @subcategory.Name</button>
+                                                </form>
+                                            </div>
+                                        }
+                                    }
+                                }
+                            </div>
+                        </div>
+                        <div class="flex-grow-1">
+                            @{
+                                if (Products.Count == 0)
+                                {
+                                    <div class="d-flex justify-content-center">
+                                        <img src="/no-content.png" />
+                                    </div>
+                                }
+                                else
+                                {
+                                    @*Products Table*@
+                                    <div class="mb-5 ms-5" style="height:55vh; overflow-y:auto">
+                                        <table class="table align-middle table-borderless site-text">
+                                            <tbody>
+                                                @{
+                                                    foreach (var product in Products)
+                                                    {
+                                                        <tr>
+                                                            <td>
+                                                                <img style="width:200px; height:200px;" src="@product.ProductImage" />
+                                                            </td>
+                                                            <td><h5>@product.Name</h5></td>
+                                                            <td><h5>@product.Subcategory.Name</h5></td>
+                                                            <td>
+                                                                <div class="d-flex flex-column">
+                                                                    @* Update Product Name Form *@
+                                                                    <form class="mb-3 mt-2" asp-controller="Product" asp-action="UpdateProductName" asp-route-ProductId="@product.Id">
+                                                                        <div class="input-group">
+                                                                            <div asp-validation-summary="ModelOnly" class="text-danger" role="alert"></div>
+                                                                            <input asp-for="Name" class="form-control" placeholder="Update Product Name">
+                                                                            <button type="submit" class="btn btn-light">Update</button>
+                                                                        </div>
+                                                                        @{
+                                                                            if (UpdateErrorName != null && UpdateErrorName.ContainsKey(product.Id))
+                                                                            {
+                                                                                <span asp-validation-for="Name" class="text-danger">@UpdateErrorName[product.Id]</span>
+                                                                            }
+                                                                        }
+                                                                    </form>
+                                                                    @* Update Product Image URL Form *@
+                                                                    <form class="mb-3" asp-controller="Product" asp-action="UpdateProductImage" asp-route-ProductId="@product.Id">
+                                                                        <div class="input-group">
+                                                                            <div asp-validation-summary="ModelOnly" class="text-danger" role="alert"></div>
+                                                                            <input asp-for="ProductImage" class="form-control" placeholder="Update Product Image URL">
+                                                                            <button type="submit" class="btn btn-light">Update</button>
+                                                                        </div>
+                                                                        @{
+                                                                            if (UpdateErrorImage != null && UpdateErrorImage.ContainsKey(product.Id))
+                                                                            {
+                                                                                <span asp-validation-for="ProductImage" class="text-danger">@UpdateErrorImage[product.Id]</span>
+                                                                            }
+                                                                        }
+                                                                    </form>
+                                                                    @* Update Product Subcategory Form *@
+                                                                    <form asp-controller="Product" asp-action="UpdateProductSubcategory" asp-route-ProductId="@product.Id">
+                                                                        <div class="input-group mb-2">
+                                                                            <select required class="form-select" id="NewSubcategoryName" name="NewSubcategoryName">
+                                                                                <option selected value="@product.Subcategory.Name">@product.Subcategory.Name</option>
+                                                                                @{
+                                                                                    foreach (Subcategory subcategory in Subcategories)
+                                                                                    {
+                                                                                        if (product.Subcategory.Name != subcategory.Name)
+                                                                                        {
+                                                                                            <option value="@subcategory.Name">@subcategory.Category.Name -> @subcategory.Name</option>
+                                                                                        }
+                                                                                    }
+                                                                                }
+                                                                            </select>
+                                                                            <input type="submit" class="btn btn-md btn-light" value="Update" />
+                                                                        </div>
+                                                                    </form>
+                                                                </div>
+                                                            </td>
+                                                            <td><a class="btn btn-lg btn-light me-2" asp-controller="Product" asp-action="DeleteProduct" asp-route-ProductId="@product.Id"><i class="bi bi-trash3-fill"></i></a></td>
+                                                        </tr>
+                                                    }
+                                                }
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                }
+                            }
+                        </div>
+                    </div>
+                </div>
+            }
+            else
+            {
+                <div class="d-flex flex-column">
+                    <h1 class="site-head-text mt-5 mx-auto">No subcategories are found. Please add new subcategories to proceed.</h1>
+                    <img class="w-50 mt-5 mx-auto" src="/404.png" />
+                </div>
+            }
+        }
+    </div>
+}

@@ -1,0 +1,97 @@
+﻿@page
+@model FavoriteListsModel
+@{
+
+    if (Model.FavoriteLists.Count > 0)
+    {
+        <form class="d-flex justify-content-end me-5 site-text" asp-page-handler="DeleteAll" method="post">
+            <input type="hidden" name="ListId" value="0" />
+            <button type="submit" class="btn btn-sm btn-dark">Clear all favorites</button>
+        </form>
+        <div style="height:35.7vh; overflow-y:auto">
+            <table class="table align-middle table-borderless site-text">
+                <tbody>
+                    @{
+                        foreach (var list in Model.FavoriteLists)
+                        {
+                            if (Model.FavoriteListContents[list.Id].Count == 0)
+                            {
+                                <tr>
+                                    <td><img style="width:120px; height:120px;" src="/empty-list.png" /></td>
+                                    <td><h5>@list.Name</td>
+                                    <td><h5>No Products.</h5></td>
+                                    <td>
+                                        <div class="d-inline-flex">
+                                            <form class="my-auto me-2" asp-page-handler="Add" method="post">
+                                                <button type="submit" name="ListId" value="@list.Id" class="btn btn-lg btn-light"><i class="bi bi-plus"></i></button>
+                                            </form>
+                                            <form class="my-auto" asp-page-handler="Delete" method="post">
+                                                <button type="submit" name="ListId" value="@list.Id" class="btn btn-lg btn-light"><i class="bi bi-trash-fill"></i></button>
+                                            </form>
+                                        </div>
+                                    </td>
+                                </tr>
+                            }
+                            else
+                            {
+                                <tr>
+                                    <td><img style="width:150px; height:150px;" src="@Model.FavoriteListContents[list.Id].First().ProductImage" /></td>
+                                    <td><h5>@list.Name</h5></td>
+                                    <td>
+                                        <!-- Button trigger modal -->
+                                        <button type="button" class="btn btn-dark" data-bs-toggle="modal" data-bs-target="#@Html.Raw("Modal")@Model.FavoriteLists.IndexOf(list)">
+                                            View Contents
+                                        </button>
+
+                                        <!-- Modal -->
+                                        <div class="modal fade site-text" id="@Html.Raw("Modal")@Model.FavoriteLists.IndexOf(list)" tabindex="-1" aria-labelledby="ContentModalLabel" aria-hidden="true">
+                                            <div class="modal-dialog modal-dialog-centered">
+                                                <div class="modal-content list-page-modal" style="background:#212121">
+                                                    <div class="modal-header">
+                                                        <h1 class="modal-title fs-5 site-text" id="ContentModalLabel">List Contents</h1>
+                                                        <button type="button" class="btn btn-dark" data-bs-dismiss="modal" aria-label="Close"><i class="bi bi-x-lg"></i></button>
+                                                    </div>
+                                                    <div class="modal-body">
+                                                        <div class="d-flex flex-column">
+                                                            @{
+                                                                foreach (var content in Model.FavoriteListContents[list.Id])
+                                                                {
+                                                                    <h5>@content.ProductName</h5>
+                                                                }
+                                                            }
+                                                        </div>
+                                                    </div>
+                                                    <div class="modal-footer">
+                                                        <button type="button" class="btn btn-light" data-bs-dismiss="modal">Close</button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="d-inline-flex">
+                                            <form class="my-auto me-2" asp-page-handler="Add" method="post">
+                                                <button type="submit" name="ListId" value="@list.Id" class="btn btn-lg btn-light"><i class="bi bi-plus"></i></button>
+                                            </form>
+                                            <form class="my-auto" asp-page-handler="Delete" method="post">
+                                                <button type="submit" name="ListId" value="@list.Id" class="btn btn-lg btn-light"><i class="bi bi-trash-fill"></i></button>
+                                            </form>
+                                        </div>
+                                    </td>
+                                </tr>
+                            }
+                        }
+                    }
+                </tbody>
+            </table>
+        </div>
+    }
+
+    else
+    {
+        <div class="d-flex flex-column">
+        <h1 class="site-head-text mx-auto mb-5">You have no favorite lists.</h1>
+            <img class="mx-auto" style="width:35%" src="/no-favorites.png" />
+        </div>
+    }
+}

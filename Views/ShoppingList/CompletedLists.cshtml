@@ -1,0 +1,89 @@
+﻿@model List<Swiftshop.Models.ShoppingList>
+@{
+    ViewData["Title"] = "Home Page";
+    Dictionary<string, string> ListImages = ViewBag.ListImages;
+}
+
+<div class="container">
+    <div class="d-flex flex-column">
+        <div class="d-inline-flex justify-content-between mb-5 list-page-navbar">
+            <div class="ms-4 mt-4 mb-4"><h2 class="site-text">Completed Shopping Lists</h2></div>
+            <!--List Type Navigation Bar-->
+            <ul class="nav my-auto">
+                <li class="nav-item">
+                    <a class="nav-link active site-text-lg" asp-controller="ShoppingList" asp-action="ActiveLists" asp-route-Page="1">Active Lists</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link disabled site-text-lg" aria-disabled="true">Completed Lists</a>
+                </li>
+            </ul>
+        </div>
+        @{
+            if (Model.Count > 0)
+            {
+                @*Shopping List Card*@
+                <div>
+                    <div class="d-flex justify-content-center">
+                        <div class="d-flex">
+                            @foreach (var item in Model)
+                            {
+                                <div class="card list-page-card mt-2 ms-5 me-5" style="width:23rem;">
+                                        @{
+                                            if(ListImages[item.Id] != null)
+                                            {
+                                                <div class="ms-1 me-1 mt-5 mb-5" style="background:none"><img src="@ListImages[item.Id]" class="card-img-top mx-auto" style="width:100%"></div>
+                                            }
+
+                                            else
+                                            {
+                                                <div class="ms-1 me-1 mt-5 mb-5"><img src="/empty-list.png" class="card-img-top mx-auto" style="width:100%"></div>
+                                            }
+                                        }
+                                    <div class="card-body" style="background-color:#212121">
+                                        <div class="d-flex flex-column">
+                                            <h5 class="card-title site-text">@item.Name</h5>
+                                            <div class="d-flex">
+                                                <a asp-controller="ShoppingListContent" asp-action="CompletedListSummary" asp-route-ListId="@item.Id" class="btn btn-light btn-lg"><i class="bi bi-list-ul"></i></a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            }
+                        </div>
+                    </div>
+                </div>
+                @*Shopping List Paginator*@
+                <div>
+                    <nav class="home-page-paginator mt-4">
+                        <ul class="pagination justify-content-center">
+                            <li class="page-item">
+                                <a class="list-page-paginator site-text-lg me-4" href="#" aria-label="Previous">
+                                    <span aria-hidden="true">&laquo;</span>
+                                </a>
+                            </li>
+                            @{
+                                for (int i = 1; i <= ViewBag.PaginatorSize; i++)
+                                {
+                                    <li class="page-item"><a class="list-page-paginator site-text-lg ms-3 me-3" href=@Html.Raw("CompletedLists/?Page="+i)>@i</a></li>
+                                }
+                            }
+                            <li class="page-item">
+                                <a class="list-page-paginator site-text-lg ms-4" href="#" aria-label="Next">
+                                    <span aria-hidden="true">&raquo;</span>
+                                </a>
+                            </li>
+                        </ul>
+                    </nav>
+                </div>
+            }
+            else
+            {
+                <div class="mx-auto my-auto">
+                    <img src="/complete-list-not-found.png" />
+                </div>
+            }
+        }
+    </div>
+</div>
+
+
