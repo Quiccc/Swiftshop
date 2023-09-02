@@ -12,6 +12,8 @@ body {
     border-radius: 20px 20px 0px 0px;
     -webkit-border-radius: 20px 20px 0px 0px;
     -moz-border-radius: 20px 20px 0px 0px;
+    background: rgb(164,164,164);
+    background: linear-gradient(0deg, rgba(164,164,164,1) 0%, rgba(255,255,255,1) 100%);
 }
 
 .list-page-navbar {
@@ -27,6 +29,8 @@ body {
     border-radius: 20px 20px 0px 0px;
     -webkit-border-radius: 20px 20px 0px 0px;
     -moz-border-radius: 20px 20px 0px 0px;
+    background: rgb(164,164,164);
+    background: linear-gradient(0deg, rgba(164,164,164,1) 0%, rgba(255,255,255,1) 100%);
 }
 
 .list-page-modal {

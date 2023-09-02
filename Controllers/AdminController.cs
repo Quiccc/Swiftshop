@@ -77,9 +77,15 @@ namespace Swiftshop.Controllers
             var SubcategoryContext = await _context.Subcategories
                 .OrderBy(sc => sc.Name)
                 .ToListAsync();
+
             var CategoryContext = await _context.Categories
                 .OrderBy(c => c.Name)
                 .ToListAsync();
+
+            foreach(var category in CategoryContext)
+            {
+                category.Subcategories = SubcategoryContext.Where(sc => sc.CategoryId == category.Id).ToList();
+            }
 
             ViewBag.Subcategories = SubcategoryContext;
             ViewBag.SubcategoryId = SubcategoryId;

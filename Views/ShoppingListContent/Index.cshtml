@@ -6,85 +6,79 @@
     string Prefix = ViewBag.Prefix;
     var Categories = ViewBag.Categories as List<Category>;
 
-    if (Model.Count == 0 && SubcategoryId == null)
-    {
-        <h1 class="ms-5 mb-5" style="color:white">No Products</h1>
-    }
-    else
-    {
-        <div class="container-fluid">
-            <div class="d-flex align-items-start">
-                @*Sidebar Section*@
-                <div class="d-flex flex-column" style="background-color:#212121; width:25vw; height:80vh;">
-                    <form asp-action="Index" asp-route-ListId="@ListId" asp-route-SubcategoryId="@SubcategoryId">
-                        <div class="input-group mb-3">
-                            <input type="text" class="form-control" name="Prefix" value="@Prefix">
-                            <button class="btn btn-outline-light" type="submit"><i class="bi bi-search"></i> Search</button>
-                        </div>
-                    </form>
-                    @{
-                        if (SubcategoryId != "0" || Prefix != "")
+
+    <div class="container-fluid">
+        <div class="d-flex align-items-start mt-4">
+            @*Sidebar Section*@
+            <div class="d-flex flex-column" style="width:25vw; height:80vh; overflow-y:auto;">
+                <form asp-action="Index" asp-route-ListId="@ListId" asp-route-SubcategoryId="@SubcategoryId">
+                    <div class="input-group mb-3">
+                        <input type="text" class="form-control" name="Prefix" value="@Prefix">
+                        <button class="btn btn-dark" type="submit"><i class="bi bi-search"></i> Search</button>
+                    </div>
+                </form>
+                @{
+                    if (SubcategoryId != "0" || Prefix != "")
+                    {
+                        <div class="mb-3"><a class="btn btn-dark site-button" asp-action="Index" asp-route-ListId="@ListId" asp-route-SubcategoryId="0">Clear Search</a></div>
+                    }
+                    foreach (var category in Categories)
+                    {
+                        if (category.Subcategories != null)
                         {
-                            <div class="mb-3"><a class="btn btn-sm btn-outline-light" asp-action="Index" asp-route-ListId="@ListId" asp-route-SubcategoryId="0">Clear</a></div>
-                        }
-                        foreach (var category in Categories)
-                        {
-                            if (category.Subcategories != null)
+                            <p class="d-flex align-items-start flex-column">
+                                <a class="site-text mt-2" data-bs-toggle="collapse" href="#@category.Name" role="button" aria-expanded="false" aria-controls="collapseExample" style="color:white; text-decoration:none">@category.Name</a>
+                            </p>
+                            foreach (var subcategory in category.Subcategories)
                             {
-                                <p class="d-flex align-items-start flex-column">
-                                    <a data-bs-toggle="collapse" href="#@category.Name" role="button" aria-expanded="false" aria-controls="collapseExample" style="color:white; text-decoration:none">@category.Name</a>
-                                </p>
-                                foreach (var subcategory in category.Subcategories)
-                                {
-                                    <div class="collapse mb-3" id="@category.Name" style="color:white">
-                                        <form asp-action="Index" asp-route-ListId="@ListId" asp-route-SubcategoryId="@subcategory.Id">
-                                            <input type="hidden" name="Prefix" value="@Prefix" />
-                                            <button class="btn btn-sm btn-outline-light" type="submit">@subcategory.Name</button>
-                                        </form>
-                                    </div>
-                                }
+                                <div class="collapse" id="@category.Name">
+                                    <form asp-action="Index" asp-route-ListId="@ListId" asp-route-SubcategoryId="@subcategory.Id">
+                                        <input type="hidden" name="Prefix" value="@Prefix" />
+                                        <button class="btn site-text mt-2 mb-2 ms-2" type="submit">• @subcategory.Name</button>
+                                    </form>
+                                </div>
                             }
                         }
                     }
-                </div>
-                <div class="flex-grow-1 vw-100">
-                    <div class="d-flex flex-wrap ms-5" style="height:80vh; overflow-y:scroll">
-                        @{
-                            if (Model.Count > 0)
+                }
+            </div>
+            <div class="flex-grow-1 vw-100">
+                <div class="d-flex flex-wrap ms-5" style="height:80vh; overflow-y:auto">
+                    @{
+                        if (Model.Count > 0)
+                        {
+                            foreach (var product in Model)
                             {
-                                foreach (var product in Model)
-                                {
-                                    <div class="card ms-5 mb-5" style="width: 25rem; height:26rem">
-                                        <!--Product Image will go here. 500x500-->
-                                        <img src="~/product_placeholder.png" class="card-img-bottom mx-auto" style="width:50%">
-                                        <div class="card-body" style="background-color:#212121; color:white">
-                                            <h5 class="card-title">@product.Name</h5>
-                                        </div>
-                                        <form asp-controller="ShoppingListContent" asp-action="AddProductToList" asp-route-ListId="@ListId" asp-route-ProductId="@product.Id" asp-route-SubcategoryId="@SubcategoryId">
-                                            <ul class="list-group list-group-flush">
-                                                <li class="list-group-item" style="background-color:#212121; color:white">
-                                                    <div class="input-group">
-                                                        <span class="input-group-text">Description</span>
-                                                        <textarea class="form-control" name="Description" aria-label="Description" placeholder="Description is optional."></textarea>
-                                                    </div>
-                                                </li>
-                                            </ul>
-                                            <div class="card-body" style="background-color:#212121; color:white">
-                                                <input type="hidden" name="ReturnUrlId" value="@SubcategoryId" />
-                                                <button type="submit" class="btn btn-dark" style="color:white;">Add</button>
-                                            </div>
-                                        </form>
+                                <div class="card ms-5 mb-5 site-text list-page-card" style="width: 25rem; height:26rem">
+                                    <!--Product Image will go here. 500x500-->
+                                    <img src="@product.ProductImage" class="card-img-top mx-auto w-50">
+                                    <div class="card-body" style="background-color:#212121;">
+                                        <h5 class="card-title">@product.Name</h5>
                                     </div>
-                                }
-                            }
-                            else
-                            {
-                                <h1 class="ms-5 mb-5" style="color:white">No Products</h1>
+                                    <form asp-controller="ShoppingListContent" asp-action="AddProductToList" asp-route-ListId="@ListId" asp-route-ProductId="@product.Id" asp-route-SubcategoryId="@SubcategoryId">
+                                        <ul class="list-group list-group-flush">
+                                            <li class="list-group-item" style="background-color:#212121">
+                                                <div class="input-group">
+                                                    <span class="input-group-text">Description</span>
+                                                    <textarea class="form-control" name="Description" aria-label="Description" placeholder="Description is optional."></textarea>
+                                                </div>
+                                            </li>
+                                        </ul>
+                                        <div class="card-body" style="background-color:#212121">
+                                            <input type="hidden" name="ReturnUrlId" value="@SubcategoryId" />
+                                            <button type="submit" class="btn btn-light">Add</button>
+                                        </div>
+                                    </form>
+                                </div>
                             }
                         }
-                    </div>
+                        else
+                        {
+                            <img class="ms-5" src="~/no-content.png" style="width:55%; height:80%"/>
+                        }
+                    }
                 </div>
             </div>
         </div>
-    }
+    </div>
 }

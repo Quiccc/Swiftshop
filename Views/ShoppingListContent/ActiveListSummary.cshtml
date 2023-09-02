@@ -1,46 +1,51 @@
 ﻿@model List<Swiftshop.Models.DTO.ActiveListContentDto>;
 <div class="container">
     <div class="d-flex flex-column">
-        <div class="d-inline-flex">
-            <div class="mb-4"><h1 style="color:white">List Summary.</h1></div>
-            @{
-                if(Model.Count > 0)
-                {
-                    <div><a class="btn btn-lg btn-light" asp-action="StartShopping" asp-route-ListId="@Model.First().ListId"><i class="bi bi-cart-check-fill"></i></a></div>
-                }
-            }
+        <div class="list-page-navbar site-text mb-4">
+            <div class="d-flex justify-content-between mt-4 mb-4 ms-4 me-4">
+                <div><h1>List Summary.</h1></div>
+                <div class="ms-5 my-auto">
+                    @{
+                        if (Model.Count > 0)
+                        {
+                            <a class="btn btn-lg btn-light" asp-action="StartShopping" asp-route-ListId="@Model.First().ListId">Start Shopping <i class="bi bi-cart-fill"></i></a>
+                        }
+                    }
+                </div>
             </div>
+        </div>
         <div>
             @{
                 if (Model.Count != 0)
                 {
-                    <div style="height:65vh; overflow-y:scroll">
-                        <table class="table align-middle" style="color:white;">
-                            <thead>
-                                <tr>
-                                    <th scope="col">Product Image</th>
-                                    <th scope="col">Product Name</th>
-                                    <th></th>
-                                </tr>
-                            </thead>
-                            <tbody class="table-group-divider">
+                    <div style="height:60vh; overflow-y:auto">
+                        <table class="table align-middle table-borderless table-responsive site-text">
+                            <tbody>
                                 @{
                                     foreach (var content in Model)
                                     {
                                         <tr>
-                                            <td><img src="/product_placeholder.png" style="width:15%" /></td>
-                                            <td>@content.ProductName</td>
                                             <td>
-                                                <a class="btn btn-light" data-bs-toggle="collapse" href="@Html.Raw("#collapse"+content.ProductId)" role="button" aria-expanded="false" aria-controls="@Html.Raw("collapse"+content.ProductId)">
-                                                    Notes
-                                                </a>
-                                                <div class="collapse" id="@Html.Raw("collapse"+content.ProductId)">
-                                                    <form asp-action="UpdateDescription" asp-route-ListId="@content.ListId" asp-route-ProductId="@content.ProductId">
-                                                        <textarea class="form-control" name="Description" style="height:10vh;">@content.Description</textarea>
-                                                        <button class="btn btn-sm btn-light" type="submit">Update</button>
-                                                    </form>
+                                                <div class="d-flex">
+                                                    <img src="@content.ProductImage" class="image-fluid me-5" style="width:15%" />
+                                                    <h5 class="my-auto ms-5">@content.ProductName</h5>
                                                 </div>
-                                                <a class="btn btn-lg btn-light" asp-action="DeleteListProduct" asp-route-ListId="@content.ListId" asp-route-ProductId="@content.ProductId"><i class="bi bi-trash-fill"></i></a>
+                                            </td>
+                                            <td>
+                                                <div class="d-flex">
+                                                    <div class="me-5">
+                                                        <a class="btn btn-light" data-bs-toggle="collapse" href="@Html.Raw("#collapse"+content.ProductId)" role="button" aria-expanded="false" aria-controls="@Html.Raw("collapse"+content.ProductId)">
+                                                            Notes
+                                                        </a>
+                                                        <div class="collapse" id="@Html.Raw("collapse"+content.ProductId)">
+                                                            <form asp-action="UpdateDescription" asp-route-ListId="@content.ListId" asp-route-ProductId="@content.ProductId">
+                                                                <textarea class="form-control" name="Description" style="height:10vh;">@content.Description</textarea>
+                                                                <button class="btn btn-sm btn-light mt-1" type="submit">Update</button>
+                                                            </form>
+                                                        </div>
+                                                    </div>
+                                                    <a class="btn btn-light my-auto" asp-action="DeleteListProduct" asp-route-ListId="@content.ListId" asp-route-ProductId="@content.ProductId"><i class="bi bi-trash-fill"></i></a>
+                                                </div>
                                             </td>
                                         </tr>
                                     }
@@ -51,7 +56,10 @@
                 }
                 else
                 {
-                    <h1 style="color:white">No Products in the list.</h1>
+                    <div class="d-flex flex-column">
+                    <h1 class="site-head-text mx-auto mb-5">Your Shopping List is Empty.</h1>
+                    <img class="mx-auto" src="/empty-list.png" />
+                    </div>
                 }
             }
         </div>

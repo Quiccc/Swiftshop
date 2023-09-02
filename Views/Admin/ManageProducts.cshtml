@@ -58,7 +58,7 @@
                     </div>
                     <div class="d-inline-flex">
                         @*Sidebar Section*@
-                        <div class="d-flex flex-column site-text me-5" style="height:50vh; overflow-y:auto">
+                        <div class="d-flex flex-column site-text me-1">
                             <form class="mb-1" asp-controller="Admin" asp-action="ManageProducts" asp-route-SubcategoryId="@SubcategoryId">
                                 <div class="input-group">
                                     <input type="text" class="form-control" name="Prefix" value="@Prefix">
@@ -71,45 +71,49 @@
                                     }
                                 }
                             </form>
-                            @{
-                                foreach (var category in Categories)
-                                {
-                                    <p class="d-flex align-items-start flex-column">
-                                        <a class="site-text" data-bs-toggle="collapse" href="#@category.Name" role="button" aria-expanded="false" aria-controls="collapseExample" style="text-decoration:none"><h5>@category.Name</h5></a>
-                                    </p>
-                                    foreach (var subcategory in category.Subcategories)
+                            <div style="height:50vh; overflow-y:auto">
+                                @{
+                                    foreach (var category in Categories)
                                     {
-                                        <div class="collapse ms-3" id="@category.Name">
-                                            <form asp-controller="Admin" asp-action="ManageProducts" asp-route-SubcategoryId="@subcategory.Id">
-                                                <input type="hidden" name="Prefix" value="@Prefix" />
-                                                <button class="btn site-text" type="submit">• @subcategory.Name</button>
-                                            </form>
-                                        </div>
+                                        <p class="d-flex align-items-start flex-column">
+                                            <a class="site-text" data-bs-toggle="collapse" href="#@category.Name" role="button" aria-expanded="false" aria-controls="collapseExample" style="text-decoration:none"><h5>@category.Name</h5></a>
+                                        </p>
+                                        foreach (var subcategory in category.Subcategories)
+                                        {
+                                            <div class="collapse ms-3" id="@category.Name">
+                                                <form asp-controller="Admin" asp-action="ManageProducts" asp-route-SubcategoryId="@subcategory.Id">
+                                                    <input type="hidden" name="Prefix" value="@Prefix" />
+                                                    <button class="btn site-text" type="submit">• @subcategory.Name</button>
+                                                </form>
+                                            </div>
+                                        }
                                     }
                                 }
-                            }
+                            </div>
                         </div>
                         <div class="flex-grow-1">
                             @{
                                 if (Products.Count == 0)
                                 {
-                                    <div class="w-100 d-flex ms-5"><img class="ms-5" src="/no-product.png" /></div>
+                                    <div class="d-flex justify-content-center">
+                                        <img src="/no-content.png" />
+                                    </div>
                                 }
                                 else
                                 {
                                     @*Products Table*@
                                     <div class="mb-5 ms-5" style="height:55vh; overflow-y:auto">
-                                        <table class="table align-middle table-borderless site-text" style="width:aut">
+                                        <table class="table align-middle table-borderless site-text">
                                             <tbody>
                                                 @{
                                                     foreach (var product in Products)
                                                     {
                                                         <tr>
                                                             <td>
-                                                                <img style="width:80%" src="@product.ProductImage" />
+                                                                <img style="width:200px; height:200px;" src="@product.ProductImage" />
                                                             </td>
-                                                            <td><h4>@product.Name</h4></td>
-                                                            <td><h4>@product.Subcategory.Name</h4></td>
+                                                            <td><h5>@product.Name</h5></td>
+                                                            <td><h5>@product.Subcategory.Name</h5></td>
                                                             <td>
                                                                 <div class="d-flex flex-column">
                                                                     @* Update Product Name Form *@
