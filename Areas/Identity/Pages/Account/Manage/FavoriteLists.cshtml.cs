@@ -7,6 +7,7 @@ using Swiftshop.Database;
 using Swiftshop.Models;
 using Swiftshop.Models.DTO;
 using System.Collections.Generic;
+using System.Diagnostics;
 
 namespace Swiftshop.Areas.Identity.Pages.Account.Manage
 {
@@ -98,6 +99,33 @@ namespace Swiftshop.Areas.Identity.Pages.Account.Manage
 
                 await _context.SaveChangesAsync();
             }
+
+            return RedirectToPage("FavoriteLists");
+        }
+
+        public async Task<IActionResult> OnPostDeleteAllAsync()
+        {
+            var CurrentUser = await _userManager.FindByEmailAsync(_httpAccessor.HttpContext.User.Identity.Name);
+
+            var UserFavoriteLists = await _context.ShoppingLists
+                .Where(sl => sl.UserId == CurrentUser.Id && sl.IsFavorited == true)
+                .ToListAsync();
+
+            foreach(var list in UserFavoriteLists)
+            {
+                Debug.WriteLine("TESTTEST");
+                if(list.IsActive == true)
+                {
+                    list.IsFavorited = false;
+                    _context.ShoppingLists.Update(list);
+                }
+                else
+                {
+                    _context.ShoppingLists.Remove(list);
+                }
+            }
+
+            await _context.SaveChangesAsync();
 
             return RedirectToPage("FavoriteLists");
         }

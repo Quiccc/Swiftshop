@@ -34,6 +34,12 @@ if (!app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 app.UseStaticFiles();
 
+using (var serviceScope = app.Services.CreateScope())
+{
+    var dbContext = serviceScope.ServiceProvider.GetRequiredService<SwiftshopDbContext>();
+    dbContext.Database.Migrate();
+}
+
 app.UseAuthentication();
 app.UseRouting();
 app.UseAuthorization();

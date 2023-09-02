@@ -164,7 +164,7 @@ namespace Swiftshop.Controllers
 
             //Get Acquired Products as list
             var AcquiredListContents = _context.ShoppingListContents.Where(slc => slc.ListId == ListId && slc.IsAcquired == true)
-                .Join(_context.Products, alc => alc.ProductId, p => p.Id, (alc, p) => new ShoppingListContent { ListId = alc.ListId, IsAcquired = alc.IsAcquired, ProductId = p.Id, Product = p})
+                .Join(_context.Products, alc => alc.ProductId, p => p.Id, (alc, p) => new ShoppingListContent { ListId = alc.ListId, Description = alc.Description, IsAcquired = alc.IsAcquired, ProductId = p.Id, Product = p })
                 .ToList();
 
             if (AcquiredListContents.Count > 0)

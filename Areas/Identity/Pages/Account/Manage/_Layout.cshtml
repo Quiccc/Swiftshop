@@ -1,4 +1,7 @@
-﻿@{
+﻿@inject IHttpContextAccessor HttpAccessor;
+@inject UserManager<User> UserManager;
+
+@{
     if (ViewData.TryGetValue("ParentLayout", out var parentLayout) && parentLayout !=  null)
     {
         Layout = parentLayout.ToString();
@@ -7,13 +10,18 @@
     {
         Layout = "/Areas/Identity/Pages/_Layout.cshtml";
     }
+
+    var CurrentUser = UserManager.FindByEmailAsync(HttpAccessor.HttpContext.User.Identity.Name).Result;
 }
 
-<div>
-    <h1 style="color:white">Manage your account</h1>
-    <h2 style="color:white">Change your account settings</h2>
-    <hr style="color:white" />
-    <div class="row">
+<div class="site-text">
+    <div class="list-page-navbar">
+        <div class="mt-4 mb-4 me-4 ms-4">
+            <h1 class="site-head-text">Welcome back @CurrentUser.Name @CurrentUser.Surname.</h1>
+            <h2 class="mt-3">You can manage your personal information here. Also your favorite lists and list histories are available.</h2>
+        </div>
+    </div>
+    <div class="mt-5 row">
         <div class="col-md-3">
             <partial name="_ManageNav" />
         </div>

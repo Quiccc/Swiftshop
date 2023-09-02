@@ -41,7 +41,7 @@ namespace Swiftshop.Controllers
             await _context.Categories.AddAsync(NewCategory);
             _context.SaveChanges();
 
-            return RedirectToAction("ManageCategories", "Admin", new {Prefix = Name});
+            return RedirectToAction("ManageCategories", "Admin", new { Prefix = Name });
         }
 
         public async Task<IActionResult> DeleteCategory(string CategoryId)
@@ -58,6 +58,7 @@ namespace Swiftshop.Controllers
         public async Task<IActionResult> UpdateCategoryName(string CategoryId, string Name)
         {
             var context = _context.Categories;
+            var UpdatedCategory = context.First(c => c.Id == CategoryId);
 
             if (!ModelState.IsValid)
             {
@@ -67,7 +68,7 @@ namespace Swiftshop.Controllers
                 };
 
                 TempData["UpdateError"] = UpdateError;
-                return RedirectToAction("ManageCategories", "Admin");
+                return RedirectToAction("ManageCategories", "Admin", new { Prefix = UpdatedCategory.Name });
             }
 
             else if (context.Select(c => c.Name).Contains(Name))
@@ -77,17 +78,17 @@ namespace Swiftshop.Controllers
                     { CategoryId, "Category name already exists." }
                 };
                 TempData["UpdateError"] = UpdateError;
-                return RedirectToAction("ManageCategories", "Admin");
+                return RedirectToAction("ManageCategories", "Admin", new { Prefix = UpdatedCategory.Name });
             }
 
-            var UpdatedCategory = context.First(c => c.Id == CategoryId);
+
             UpdatedCategory.Name = Name;
 
             ViewBag.Prefix = Name;
             _context.Categories.Update(UpdatedCategory);
             await _context.SaveChangesAsync();
 
-            return RedirectToAction("ManageCategories", "Admin", new {Prefix = Name});
+            return RedirectToAction("ManageCategories", "Admin", new { Prefix = Name });
         }
     }
 }

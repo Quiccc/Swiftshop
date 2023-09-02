@@ -65,12 +65,13 @@ namespace Swiftshop.Controllers
             _context.Products.Remove(DeletedProduct);
             await _context.SaveChangesAsync();
 
-            return RedirectToAction("ManageProducts", "Admin", new {SubcategoryId =0, Prefix = DeletedProduct.Name });
+            return RedirectToAction("ManageProducts", "Admin", new { SubcategoryId = 0, Prefix = DeletedProduct.Name });
         }
 
         public async Task<IActionResult> UpdateProductName(string ProductId, string Name)
         {
             var ProductContext = _context.Products;
+            var UpdatedProduct = ProductContext.First(p => p.Id == ProductId);
 
             if (!ModelState.IsValid)
             {
@@ -79,7 +80,7 @@ namespace Swiftshop.Controllers
                     {ProductId, "Product name cannot be empty." }
                 };
                 TempData["UpdateErrorName"] = UpdateErrorName;
-                return RedirectToAction("ManageProducts", "Admin", new { SubcategoryId = 0 });
+                return RedirectToAction("ManageProducts", "Admin", new { SubcategoryId = 0, Prefix = UpdatedProduct.Name });
             }
 
             else if (ProductContext.Select(p => p.Name).ToList().Contains(Name))
@@ -89,21 +90,21 @@ namespace Swiftshop.Controllers
                     {ProductId, "Product name already exists." }
                 };
                 TempData["UpdateErrorName"] = UpdateErrorName;
-                return RedirectToAction("ManageProducts", "Admin", new { SubcategoryId = 0 });
+                return RedirectToAction("ManageProducts", "Admin", new { SubcategoryId = 0, Prefix = UpdatedProduct.Name });
             }
 
-            var UpdatedProduct = ProductContext.First(p => p.Id == ProductId);
             UpdatedProduct.Name = Name;
 
             _context.Products.Update(UpdatedProduct);
             await _context.SaveChangesAsync();
 
-            return RedirectToAction("ManageProducts", "Admin", new { UpdatedProduct.SubcategoryId });
+            return RedirectToAction("ManageProducts", "Admin", new { UpdatedProduct.SubcategoryId, Prefix = UpdatedProduct.Name });
         }
 
         public async Task<IActionResult> UpdateProductImage(string ProductId, string ProductImage)
         {
             var ProductContext = _context.Products;
+            var UpdatedProduct = ProductContext.First(p => p.Id == ProductId);
 
             if (!ModelState.IsValid)
             {
@@ -112,17 +113,15 @@ namespace Swiftshop.Controllers
                     {ProductId, "Product Image URL cannot be empty." }
                 };
                 TempData["UpdateErrorImage"] = UpdateErrorName;
-                return RedirectToAction("ManageProducts", "Admin", new { SubcategoryId = 0 });
-            }
-
-            var UpdatedProduct = ProductContext.First(p => p.Id == ProductId);
+                return RedirectToAction("ManageProducts", "Admin", new { SubcategoryId = 0, Prefix = UpdatedProduct.Name });
+            }    
 
             UpdatedProduct.ProductImage = ProductImage;
 
             _context.Products.Update(UpdatedProduct);
             await _context.SaveChangesAsync();
 
-            return RedirectToAction("ManageProducts", "Admin", new { UpdatedProduct.SubcategoryId });
+            return RedirectToAction("ManageProducts", "Admin", new { UpdatedProduct.SubcategoryId, Prefix = UpdatedProduct.Name });
         }
 
         public async Task<IActionResult> UpdateProductSubcategory(string ProductId, string NewSubcategoryName)

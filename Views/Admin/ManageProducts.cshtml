@@ -76,11 +76,11 @@
                                     foreach (var category in Categories)
                                     {
                                         <p class="d-flex align-items-start flex-column">
-                                            <a class="site-text" data-bs-toggle="collapse" href="#@category.Name" role="button" aria-expanded="false" aria-controls="collapseExample" style="text-decoration:none"><h5>@category.Name</h5></a>
+                                            <a class="site-text" data-bs-toggle="collapse" href="#@Html.Raw("Category")@Categories.IndexOf(category)" role="button" aria-expanded="false" aria-controls="collapseExample" style="text-decoration:none"><h5>@category.Name</h5></a>
                                         </p>
                                         foreach (var subcategory in category.Subcategories)
                                         {
-                                            <div class="collapse ms-3" id="@category.Name">
+                                            <div class="collapse ms-3" id="@Html.Raw("Category")@Categories.IndexOf(category)">
                                                 <form asp-controller="Admin" asp-action="ManageProducts" asp-route-SubcategoryId="@subcategory.Id">
                                                     <input type="hidden" name="Prefix" value="@Prefix" />
                                                     <button class="btn site-text" type="submit">• @subcategory.Name</button>

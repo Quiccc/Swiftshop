@@ -202,6 +202,23 @@ namespace Swiftshop.Migrations
                         .IsUnique();
 
                     b.ToTable("Categories");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = "50003d2c-30a0-4d82-a71b-ee20e912c177",
+                            Name = "Groceries"
+                        },
+                        new
+                        {
+                            Id = "beaa721b-96cc-430e-8659-cd0c3540b4c9",
+                            Name = "Home Care"
+                        },
+                        new
+                        {
+                            Id = "7995d582-7075-4301-8be0-662c8de8a659",
+                            Name = "Personal Care"
+                        });
                 });
 
             modelBuilder.Entity("Swiftshop.Models.Product", b =>
@@ -215,6 +232,7 @@ namespace Swiftshop.Migrations
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("ProductImage")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("SubcategoryId")
@@ -230,6 +248,155 @@ namespace Swiftshop.Migrations
                     b.HasIndex("SubcategoryId");
 
                     b.ToTable("Products");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = "533e723f-8e80-40f9-853d-45cc80d25c97",
+                            Name = "Water",
+                            ProductImage = "https://img.imgyukle.com/2023/09/02/rZFJNp.png",
+                            SubcategoryId = "8026e3a3-273e-4263-92e4-c16de21d1635"
+                        },
+                        new
+                        {
+                            Id = "8d8e18ca-0e7c-4140-ac6b-e1302dd9a923",
+                            Name = "Soda",
+                            ProductImage = "https://img.imgyukle.com/2023/09/02/rZFEhv.png",
+                            SubcategoryId = "8026e3a3-273e-4263-92e4-c16de21d1635"
+                        },
+                        new
+                        {
+                            Id = "86dbc3d9-9df9-4d83-be5a-130fde3361bd",
+                            Name = "Coffee",
+                            ProductImage = "https://img.imgyukle.com/2023/09/02/rZtZrs.png",
+                            SubcategoryId = "8026e3a3-273e-4263-92e4-c16de21d1635"
+                        },
+                        new
+                        {
+                            Id = "adb8d9eb-a0df-4de2-9b24-3dc6b9161294",
+                            Name = "Tea",
+                            ProductImage = "https://img.imgyukle.com/2023/09/02/rZFRlx.png",
+                            SubcategoryId = "8026e3a3-273e-4263-92e4-c16de21d1635"
+                        },
+                        new
+                        {
+                            Id = "34e37c7f-3cec-4e3e-a2de-568317275ba9",
+                            Name = "Milk",
+                            ProductImage = "https://img.imgyukle.com/2023/09/02/rZtwqe.png",
+                            SubcategoryId = "cc531554-fccf-4190-a8ef-a80dcda4d8fb"
+                        },
+                        new
+                        {
+                            Id = "7796e5a0-38f8-4fdd-9353-6b882b499a55",
+                            Name = "Yoghurt",
+                            ProductImage = "https://img.imgyukle.com/2023/09/02/rZFQ2y.png",
+                            SubcategoryId = "cc531554-fccf-4190-a8ef-a80dcda4d8fb"
+                        },
+                        new
+                        {
+                            Id = "1b2afd4e-9ac5-4631-bc81-a4ed1b174ebc",
+                            Name = "Cheese",
+                            ProductImage = "https://img.imgyukle.com/2023/09/02/rZtFbb.png",
+                            SubcategoryId = "cc531554-fccf-4190-a8ef-a80dcda4d8fb"
+                        },
+                        new
+                        {
+                            Id = "766cce83-a4d6-4f72-8ab7-61371021e855",
+                            Name = "Bread",
+                            ProductImage = "https://img.imgyukle.com/2023/09/02/rZt30f.png",
+                            SubcategoryId = "3ebec2ef-f3dc-484b-8f6f-034f2f06e472"
+                        },
+                        new
+                        {
+                            Id = "5c45bfd3-8431-487d-9cde-439811343c66",
+                            Name = "Bagel",
+                            ProductImage = "https://img.imgyukle.com/2023/09/02/rZtfNR.png",
+                            SubcategoryId = "3ebec2ef-f3dc-484b-8f6f-034f2f06e472"
+                        },
+                        new
+                        {
+                            Id = "5398b4c3-5c91-4be2-9428-56767c5fa40f",
+                            Name = "Chocolate",
+                            ProductImage = "https://img.imgyukle.com/2023/09/02/rZtbhQ.png",
+                            SubcategoryId = "67c0d1eb-8fb2-412c-b0c5-09b6cd74ba90"
+                        },
+                        new
+                        {
+                            Id = "ec40c2b1-81e0-473d-9547-b318f3e6b6c8",
+                            Name = "Chips",
+                            ProductImage = "https://img.imgyukle.com/2023/09/02/rZteqI.png",
+                            SubcategoryId = "67c0d1eb-8fb2-412c-b0c5-09b6cd74ba90"
+                        },
+                        new
+                        {
+                            Id = "0c9d9382-3d13-4dd2-bfa1-a97a2af7205b",
+                            Name = "Biscuits",
+                            ProductImage = "https://img.imgyukle.com/2023/09/02/rZttGS.png",
+                            SubcategoryId = "67c0d1eb-8fb2-412c-b0c5-09b6cd74ba90"
+                        },
+                        new
+                        {
+                            Id = "572af803-23d6-4922-af59-624b6ec0c479",
+                            Name = "Pasta",
+                            ProductImage = "https://img.imgyukle.com/2023/09/02/rZtAIP.png",
+                            SubcategoryId = "39082040-e1ca-4bbd-90cf-d5ea4b2a7b99"
+                        },
+                        new
+                        {
+                            Id = "69e37674-3f71-419e-afad-b66d8c7f879c",
+                            Name = "Oil",
+                            ProductImage = "https://img.imgyukle.com/2023/09/02/rZt07N.png",
+                            SubcategoryId = "39082040-e1ca-4bbd-90cf-d5ea4b2a7b99"
+                        },
+                        new
+                        {
+                            Id = "995b7927-c31a-45a5-8306-2b1d067a6e43",
+                            Name = "Soap",
+                            ProductImage = "https://img.imgyukle.com/2023/09/02/rZFor0.png",
+                            SubcategoryId = "8167f531-03e3-41cf-9cad-4f75f841f8d1"
+                        },
+                        new
+                        {
+                            Id = "fa8729b1-9eb5-4f4b-b367-18badbcc8ba8",
+                            Name = "Bleach",
+                            ProductImage = "https://img.imgyukle.com/2023/09/02/rZtl5G.png",
+                            SubcategoryId = "8167f531-03e3-41cf-9cad-4f75f841f8d1"
+                        },
+                        new
+                        {
+                            Id = "3d604895-b68e-4f71-8f3b-50056deaffcb",
+                            Name = "Trash Bag",
+                            ProductImage = "https://img.imgyukle.com/2023/09/02/rZFnE6.png",
+                            SubcategoryId = "f993ef29-8021-4244-8ea2-65f09a8278b0"
+                        },
+                        new
+                        {
+                            Id = "4b4943cd-3bb6-4690-a3c2-521976f74e37",
+                            Name = "Dish Soap",
+                            ProductImage = "https://img.imgyukle.com/2023/09/02/rZt9Ec.png",
+                            SubcategoryId = "f993ef29-8021-4244-8ea2-65f09a8278b0"
+                        },
+                        new
+                        {
+                            Id = "ed1d14b2-b92a-4dea-b64b-660c6de2af6a",
+                            Name = "Deodorant",
+                            ProductImage = "https://img.imgyukle.com/2023/09/02/rZt48t.png",
+                            SubcategoryId = "cf9528c4-618d-4203-a3c8-84f1be4531fa"
+                        },
+                        new
+                        {
+                            Id = "ffded598-fd2d-49a9-b1ac-cc6c0301818e",
+                            Name = "Shampoo",
+                            ProductImage = "https://img.imgyukle.com/2023/09/02/rZtdGq.png",
+                            SubcategoryId = "cf9528c4-618d-4203-a3c8-84f1be4531fa"
+                        },
+                        new
+                        {
+                            Id = "06d35432-2a3b-4ecd-8c8d-204c9c53dc0b",
+                            Name = "Shaving Cream",
+                            ProductImage = "https://img.imgyukle.com/2023/09/02/rZFP4Y.png",
+                            SubcategoryId = "cf9528c4-618d-4203-a3c8-84f1be4531fa"
+                        });
                 });
 
             modelBuilder.Entity("Swiftshop.Models.ShoppingList", b =>
@@ -340,6 +507,56 @@ namespace Swiftshop.Migrations
                         .IsUnique();
 
                     b.ToTable("Subcategories");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = "8026e3a3-273e-4263-92e4-c16de21d1635",
+                            CategoryId = "50003d2c-30a0-4d82-a71b-ee20e912c177",
+                            Name = "Beverages"
+                        },
+                        new
+                        {
+                            Id = "cc531554-fccf-4190-a8ef-a80dcda4d8fb",
+                            CategoryId = "50003d2c-30a0-4d82-a71b-ee20e912c177",
+                            Name = "Dairy"
+                        },
+                        new
+                        {
+                            Id = "3ebec2ef-f3dc-484b-8f6f-034f2f06e472",
+                            CategoryId = "50003d2c-30a0-4d82-a71b-ee20e912c177",
+                            Name = "Baked Goods"
+                        },
+                        new
+                        {
+                            Id = "67c0d1eb-8fb2-412c-b0c5-09b6cd74ba90",
+                            CategoryId = "50003d2c-30a0-4d82-a71b-ee20e912c177",
+                            Name = "Snacks"
+                        },
+                        new
+                        {
+                            Id = "39082040-e1ca-4bbd-90cf-d5ea4b2a7b99",
+                            CategoryId = "50003d2c-30a0-4d82-a71b-ee20e912c177",
+                            Name = "Foods"
+                        },
+                        new
+                        {
+                            Id = "8167f531-03e3-41cf-9cad-4f75f841f8d1",
+                            CategoryId = "beaa721b-96cc-430e-8659-cd0c3540b4c9",
+                            Name = "Cleaning & Laundry"
+                        },
+                        new
+                        {
+                            Id = "f993ef29-8021-4244-8ea2-65f09a8278b0",
+                            CategoryId = "beaa721b-96cc-430e-8659-cd0c3540b4c9",
+                            Name = "Kitchen Supplies"
+                        },
+                        new
+                        {
+                            Id = "cf9528c4-618d-4203-a3c8-84f1be4531fa",
+                            CategoryId = "7995d582-7075-4301-8be0-662c8de8a659",
+                            Name = "Cosmetics"
+                        });
                 });
 
             modelBuilder.Entity("Swiftshop.Models.User", b =>
@@ -418,19 +635,19 @@ namespace Swiftshop.Migrations
                             Id = "SeededAdminUser",
                             AccessFailedCount = 1,
                             ConcurrencyStamp = "f2099005-344e-4df6-bab6-63ead94562de",
-                            Email = "kaganaslan56@gmail.com",
+                            Email = "admin@swiftshop.com",
                             EmailConfirmed = false,
                             LockoutEnabled = true,
-                            Name = "Kağan",
-                            NormalizedEmail = "KAGANASLAN56@GMAIL.COM",
-                            NormalizedUserName = "KAGANASLAN56@GMAIL.COM",
-                            PasswordHash = "AQAAAAIAAYagAAAAEGn4vXbD7k9PMobT7cou5IVGEZfN8UXtaSxmmpX+yvTAiwDUibY+WX2YIUviYaHzzw==",
+                            Name = "Swiftshop",
+                            NormalizedEmail = "ADMIN@SWIFTSHOP.COM",
+                            NormalizedUserName = "ADMIN@SWIFTSHOP.COM",
+                            PasswordHash = "AQAAAAIAAYagAAAAEKNcKIhrUy9MZKicHTVSsAjphHgHC2DzMJYKoUD0XTEtE4vbfG5c1SNAlJSsmoP7Hw==",
                             PhoneNumber = "123",
                             PhoneNumberConfirmed = false,
                             SecurityStamp = "II4GL3KQ55AN7XN5OTVETQLLSX7AF3H7",
-                            Surname = "ASLAN",
+                            Surname = "ADMIN",
                             TwoFactorEnabled = false,
-                            UserName = "kaganaslan56@gmail.com"
+                            UserName = "admin@swiftshop.com"
                         });
                 });
 
