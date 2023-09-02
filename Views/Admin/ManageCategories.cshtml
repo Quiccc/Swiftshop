@@ -7,66 +7,57 @@
     var Prefix = ViewBag.Prefix as string;
 }
 
-<div class="container">
-    <div style="margin-top:5%; margin-bottom:2%; color:white;">
-        <h1>Create new category</h1>
-        <h5>Categories contain subcategories to enhance product searching.</h5>
-
-        <form asp-controller="Category" asp-action="CreateCategory" style="margin-top:2%; width:40%">
-            <div class="input-group mb-3">
-                <div class="d-flex flex-column flex-grow-1">
-                    <div class="input-group">
-                        <div asp-validation-summary="ModelOnly" class="text-danger" role="alert"></div>
+<div class="container-fluid">
+    <div class="list-page-navbar site-text mx-auto" style="width:85%">
+        <div class="d-flex flex-column mt-2 mb-2 ms-4 me-4">
+            <h1>Create New Category</h1>
+            <h5>Categories contain subcategories to enhance product searching.</h5>
+            <div class="d-inline-flex justify-content-between">
+                <!--Create Category Section-->
+                <form class="mt-2" asp-controller="Category" asp-action="CreateCategory">
+                    <div asp-validation-summary="ModelOnly" class="text-danger" role="alert"></div>
+                    <div class="input-group mb-2">
                         <input asp-for="Name" class="form-control" placeholder="New Category" aria-label="New Category" aria-describedby="basic-addon2">
                         <button type="submit" class="btn btn-light">Create</button>
                     </div>
-                    <span asp-validation-for="Name" class="text-danger mt-2">@CreateError</span>
-                </div>
+                    <span asp-validation-for="Name" class="text-danger">@CreateError</span>
+                </form>
+                <!--Category Prefix Search-->
+                <form class="mt-2" asp-controller="Admin" asp-action="ManageCategories" asp-route-Prefix="@Prefix">
+                    <div class="input-group">
+                        <input type="text" class="form-control" name="Prefix" value="@Prefix">
+                        <button class="btn btn-light" type="submit"><i class="bi bi-search"></i> Search</button>
+                        @{
+                            if (Prefix != "")
+                            {
+                                <a class="btn btn-light" asp-action="ManageCategories" asp-route-Prefix="">Clear</a>
+                            }
+                        }
+                    </div>
+                </form>
             </div>
-        </form>
+        </div>
     </div>
     @{
         if (Categories.Count != 0)
         {
-            <div style="height:55vh; overflow-y:scroll">
-                <table class="table align-middle table-striped-columns" style="color:white; margin-bottom:10%">
-                    <thead>
-                        <tr>
-                            <th scope="col">Index</th>
-                            <th scope="col">Id</th>
-                            <th scope="col">Category Name</th>
-                            <th scope="col">
-                                <form asp-controller="Admin" asp-action="ManageCategories" asp-route-Prefix="@Prefix">
-                                    <div class="input-group mb-3">
-                                        <input type="text" class="form-control" name="Prefix" value="@Prefix">
-                                        <button class="btn btn-outline-light" type="submit"><i class="bi bi-search"></i> Search</button>
-                                        @{
-                                            if(Prefix != "")
-                                            {
-                                                <a class="btn btn-outline-light" asp-action="ManageCategories" asp-route-Prefix="">Clear</a>
-                                            }
-                                        }
-                                    </div>
-                                </form>
-                            </th>
-                            <th scope="col"></th>
-                        </tr>
-                    </thead>
-                    <tbody class="table-group-divider">
+            <div class="mx-auto mt-4" style="height:55vh; width:84%; overflow-y:auto; overflow-x:hidden">
+                <table class="table align-middle table-borderless me-5">
+                    <tbody>
                         @{
                             foreach (var category in Categories)
                             {
                                 <tr>
-                                    <td scope="row">@Categories.IndexOf(category)</td>
-                                    <td>@Html.DisplayFor(modelItem => category.Id)</td>
-                                    <td>@Html.DisplayFor(modelItem => category.Name)</td>
+                                    <td class="site-text"><h5>@category.Name</h5></td>
+                                    <td class="site-text"><h5>@category.Id</h5></td>
                                     <td>
                                         <form class="mt-4 mb-4" asp-controller="Category" asp-action="UpdateCategoryName" asp-route-CategoryId="@category.Id">
-                                            <div class="d-flex flex-column">
+                                            <div class="d-flex flex-column site-text">
                                                 <div class="input-group">
                                                     <div asp-validation-summary="ModelOnly" class="text-danger" role="alert"></div>
                                                     <input asp-for="Name" class="form-control" placeholder="Update Category Name">
-                                                        <button type="submit" class="btn btn-light">Update</button>
+                                                    <button type="submit" class="btn btn-dark site-button">Update</button>
+                                                    <a class="btn btn-md btn-dark site-button ms-5" asp-controller="Category" asp-action="DeleteCategory" asp-route-CategoryId="@category.Id">Delete <i class="bi bi-trash"></i></a>
                                                 </div>
                                                 <div>
                                                     @{
@@ -79,7 +70,6 @@
                                             </div>
                                         </form>
                                     </td>
-                                    <td><a class="btn btn-md btn-light" asp-controller="Category" asp-action="DeleteCategory" asp-route-CategoryId="@category.Id" style="margin-left:15%;">Delete <i class="bi bi-trash"></i></a></td>
                                 </tr>
                             }
                         }
@@ -89,7 +79,9 @@
         }
         else
         {
-            <h1 style="color:white">No Categories.</h1>
+            <div class="d-flex justify-content-center">
+                <img class="mt-5" src="/no-category.png" style="width:30%" />
+            </div>
         }
     }
 </div>

@@ -1,6 +1,7 @@
 ﻿@model List<Swiftshop.Models.ShoppingList>
 @{
     ViewData["Title"] = "Home Page";
+    Dictionary<string, string> ListImages = ViewBag.ListImages;
 }
 
 <div class="container">
@@ -26,8 +27,18 @@
                         <div class="d-flex">
                             @foreach (var item in Model)
                             {
-                                <div class="card list-page-card mt-2 ms-5 me-5" style="width:20rem">
-                                    <div class="mb-5 mt-5"><img src="~/product_placeholder.png" class="card-img-top mx-auto" style="width:100%"></div>
+                                <div class="card list-page-card mt-2 ms-5 me-5" style="width:23rem;">
+                                        @{
+                                            if(ListImages[item.Id] != null)
+                                            {
+                                                <div class="ms-1 me-1 mt-5 mb-5" style="background:none"><img src="@ListImages[item.Id]" class="card-img-top mx-auto" style="width:100%"></div>
+                                            }
+
+                                            else
+                                            {
+                                                <div class="ms-1 me-1 mt-5 mb-5"><img src="/product_placeholder.png" class="card-img-top mx-auto" style="width:100%"></div>
+                                            }
+                                        }
                                     <div class="card-body" style="background-color:#212121">
                                         <div class="d-flex flex-column">
                                             <h5 class="card-title site-text">@item.Name</h5>
@@ -43,7 +54,7 @@
                 </div>
                 @*Shopping List Paginator*@
                 <div>
-                    <nav class="home-page-paginator mt-3">
+                    <nav class="home-page-paginator mt-4">
                         <ul class="pagination justify-content-center">
                             <li class="page-item">
                                 <a class="list-page-paginator site-text-lg me-4" href="#" aria-label="Previous">
@@ -68,7 +79,7 @@
             else
             {
                 <div class="mx-auto my-auto">
-                    <img class="w-100" src="/complete-list-not-found.png" />
+                    <img src="/complete-list-not-found.png" />
                 </div>
             }
         }

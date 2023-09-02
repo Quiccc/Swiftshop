@@ -49,10 +49,10 @@ namespace Swiftshop.Controllers
 
         public async Task<IActionResult> ActiveLists(int Page)
         {
-            if (Page == 0) 
+            if (Page == 0)
             {
                 ViewBag.Page = 1;
-                return RedirectToAction("ActiveLists", new { Page = 1 }); 
+                return RedirectToAction("ActiveLists", new { Page = 1 });
             }
 
             int PaginatorSize;
@@ -63,7 +63,7 @@ namespace Swiftshop.Controllers
             //Fetch all user list newest to oldest.
             var UserLists = await _context.ShoppingLists
                 .Where(sl => sl.UserId == CurrentUser.Id && sl.IsActive == true && sl.IsStarted == false)
-                .OrderBy(sl => sl.CreatedAt)
+                .OrderByDescending(sl => sl.CreatedAt)
                 .ToListAsync();
 
             //Calculating the paginator length for paginator component.
@@ -80,6 +80,31 @@ namespace Swiftshop.Controllers
                 PageLists.Add(UserLists.ElementAt(i));
             }
 
+            //First ListContent Image for List View
+            Dictionary<string, string> ListImages = new();
+
+            foreach (var list in UserLists)
+            {
+                if (_context.ShoppingListContents.Where(slc => slc.ListId == list.Id).ToList().Count > 0)
+                {
+                    var ListImage = _context.ShoppingListContents
+                    .Where(slc => slc.ListId == list.Id)
+                    .Join(_context.Products,
+                    slc => slc.ProductId,
+                    p => p.Id,
+                    (slc, p) => p.ProductImage)
+                    .First();
+
+                    ListImages.Add(list.Id, ListImage);
+                }
+
+                else
+                {
+                    ListImages.Add(list.Id, null);
+                }
+            }
+
+            ViewBag.ListImages = ListImages;
             ViewBag.Page = Page;
             return View(PageLists);
         }
@@ -112,6 +137,32 @@ namespace Swiftshop.Controllers
                 PageLists.Add(UserLists.ElementAt(i));
             }
 
+            //First ListContent Image for List View
+            Dictionary<string, string> ListImages = new();
+
+            foreach (var list in UserLists)
+            {
+                if (_context.ShoppingListContents.Where(slc => slc.ListId == list.Id).ToList().Count > 0)
+                {
+                    var ListImage = _context.ShoppingListContents
+                    .Where(slc => slc.ListId == list.Id)
+                    .Join(_context.Products,
+                    slc => slc.ProductId,
+                    p => p.Id,
+                    (slc, p) => p.ProductImage)
+                    .First();
+
+                    ListImages.Add(list.Id, ListImage);
+                }
+
+                else
+                {
+                    ListImages.Add(list.Id, null);
+                }
+            }
+
+            ViewBag.ListImages = ListImages;
+
             return View(PageLists);
 
         }
@@ -128,7 +179,7 @@ namespace Swiftshop.Controllers
                 CurrentShoppingList.IsActive = false;
                 _context.ShoppingLists.Update(CurrentShoppingList);
                 await _context.SaveChangesAsync();
-                return RedirectToAction(ReturnAction, new {Page = 1});
+                return RedirectToAction(ReturnAction, new { Page = 1 });
             }
 
             _context.ShoppingLists.Remove(CurrentShoppingList);

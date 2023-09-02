@@ -12,142 +12,142 @@
 }
 
 <div class="container-fluid">
-    <div class="d-flex flex-column">
-        <div style="color:white; width:40%">
-            <h1>Create new Subcategory</h1>
-            <h5>Subcategories</h5>
-            @*Create Subcategory Section*@
-            <form asp-controller="Subcategory" asp-action="CreateSubcategory" style="margin-top:2%">
-                <div class="d-flex flex-column">
-                    <div class="input-group">
-                        <div asp-validation-summary="ModelOnly" class="text-danger" role="alert"></div>
-                        <div class="d-flex flex-column flex-grow-1">
-                            <div class="input-group">
+    @{
+        if (Categories.Count > 0)
+        {
+            <div class="d-flex flex-column mx-auto" style="width:85%">
+                <div class="list-page-navbar site-text">
+                    @*Create Subcategory Section*@
+                    <form class="mt-2 mb-3 ms-4 me-4 " asp-controller="Subcategory" asp-action="CreateSubcategory">
+                        <div>
+                            <h1>Create New Subcategory</h1>
+                            <h5>Subcategories contain products and has a main category to enhance product searching.</h5>
+                        </div>
+                        <div class="d-flex mb-2 w-75">
+                            <div class="input-group me-2">
+                                <div asp-validation-summary="ModelOnly" class="text-danger" role="alert"></div>
                                 <span class="input-group-text">Subcategory Name</span>
                                 <input class="form-control" asp-for="Name" />
                             </div>
-                            <span asp-validation-for="Name" class="text-danger mt-1 mb-3">@CreateError</span>
+                            <div class="input-group">
+                                <span class="input-group-text">Parent Category</span>
+                                <select required class="form-select" id="CategoryName" name="CategoryName">
+                                    <option selected value="@Categories.First().Name">@Categories.First().Name</option>
+                                    @{
+                                        var TempCategory = Categories.First();
+                                        Categories.Remove(Categories.First());
+                                        foreach (var category in Categories)
+                                        {
+                                            <option value="@category.Name">@category.Name</option>
+                                        }
+                                        Categories.Insert(0, TempCategory);
+                                    }
+                                </select>
+                            </div>
                         </div>
-                    </div>
-                    <div class="input-group">
-                        <span class="input-group-text">Parent Category</span>
-                        <select required class="form-select" id="CategoryName" name="CategoryName">
-                            <option selected value="@Categories.First().Name">@Categories.First().Name</option>
-                            @{
-                                var TempCategories = Categories;
-                                foreach (var category in Categories)
-                                {
-                                    <option value="@category.Name">@category.Name</option>
-                                }
-                                Categories = TempCategories;
-                            }
-                        </select>
+                        <span asp-validation-for="Name" class="text-danger mt-1 mb-3">@CreateError</span>
                         <div class="input-group mt-3"><input type="submit" class="btn btn-md btn-light" value="Create" /></div>
+                    </form>
+                </div>
+                <div class="d-inline-flex mt-5">
+                    @*Sidebar Section*@
+                    <div class="d-flex flex-column site-text me-5" style="height:50vh; overflow-y:auto">
+                        <form class="mb-4" asp-controller="Admin" asp-action="ManageSubcategories" asp-route-CategoryId="@CategoryId">
+                            <div class="input-group">
+                                <input type="text" class="form-control" name="Prefix" value="@Prefix">
+                                <button class="btn btn-dark site-button" type="submit"><i class="bi bi-search"></i> Search</button>
+                            </div>
+                            @{
+                                if (CategoryId != "0" || Prefix != "")
+                                {
+                                    <a class="btn btn-dark site-button mt-2" asp-controller="Admin" asp-action="ManageSubcategories" asp-route-CategoryId="0">Clear Search</a>
+                                }
+                            }
+                        </form>
+                        @{
+                            foreach (var category in Categories)
+                            {
+                                <a class="mb-2 site-text" asp-controller="Admin" asp-action="ManageSubcategories" asp-route-CategoryId="@category.Id" style="text-decoration:none"><h5>@category.Name</h5></a>
+                            }
+                        }
+                    </div>
+                    <div class="flex-grow-1">
+                        @{
+                            //Update Subcategory Section
+                            if (Subcategories.Count > 0)
+                            {
+                                <div style="height:50vh; overflow-y:auto">
+                                    <table class="table align-middle table-borderless site-text">
+                                        <tbody class="table-group-divider">
+                                            @{
+                                                foreach (var subcategory in Subcategories)
+                                                {
+                                                    <tr>
+                                                        <td><h3>@subcategory.Category.Name => @subcategory.Name</h3></td>
+                                                        <td>
+                                                            <div class="d-flex justify-content-between mt-4 mb-4">
+                                                                <div class="d-flex flex-column flex-grow-1">
+                                                                    @* Update Subcategory Name Form *@
+                                                                    <form asp-controller="Subcategory" asp-action="UpdateSubcategoryName" asp-route-SubcategoryId="@subcategory.Id">
+                                                                        <div class="d-flex flex-column">
+                                                                            <div class="input-group mb-1">
+                                                                                <div asp-validation-summary="ModelOnly" class="text-danger" role="alert"></div>
+                                                                                <input asp-for="Name" class="form-control" placeholder="Update Subcategory Name">
+                                                                                <button type="submit" class="btn btn-dark site-button">Update</button>
+                                                                            </div>
+                                                                            @{
+                                                                                if (UpdateError != null && UpdateError.ContainsKey(subcategory.Id))
+                                                                                {
+                                                                                    <span asp-validation-for="Name" class="text-danger mb-2">@UpdateError[subcategory.Id]</span>
+                                                                                }
+                                                                            }
+                                                                        </div>
+                                                                    </form>
+                                                                    @* Update Subcategory Parent Category Form *@
+                                                                    <form asp-controller="Subcategory" asp-action="UpdateSubcategoryCategory" asp-route-SubcategoryId="@subcategory.Id">
+                                                                        <div class="input-group">
+                                                                            <select class="form-select" id="NewCategoryName" name="NewCategoryName">
+                                                                                <option selected value="@subcategory.Category.Name">@subcategory.Category.Name</option>
+                                                                                @{
+                                                                                    foreach (var category in Categories)
+                                                                                    {
+                                                                                        if (subcategory.Category.Name != category.Name)
+                                                                                        {
+                                                                                            <option value="@category.Name">@category.Name</option>
+                                                                                        }
+                                                                                    }
+                                                                                }
+                                                                            </select>
+                                                                            <input type="submit" class="btn btn-md btn-dark site-button" value="Update" />
+                                                                        </div>
+                                                                    </form>
+                                                                    @* Delete Subcategory *@
+                                                                </div>
+                                                                <a class="btn btn-md btn-dark site-button ms-5 me-5 my-auto" asp-controller="Subcategory" asp-action="DeleteSubcategory" asp-route-SubcategoryId="@subcategory.Id">Delete <i class="bi bi-trash"></i></a>
+                                                            </div>
+                                                        </td>
+                                                    </tr>
+                                                }
+                                            }
+                                        </tbody>
+                                    </table>
+                                </div>
+                            }
+                            else
+                            {
+                                <div class="w-100 d-flex ms-5"><img class="ms-5" src="/no-subcategory.png" /></div>
+                            }
+                        }
                     </div>
                 </div>
-            </form>
-        </div>
-        <div class="d-inline-flex mt-5">
-            @*Sidebar Section*@
-            <div class="me-5" style="background-color:#212121; width:10%">
-                <form asp-controller="Admin" asp-action="ManageSubcategories" asp-route-CategoryId="@CategoryId">
-                    <div class="input-group mb-3">
-                        <input type="text" class="form-control" name="Prefix" value="@Prefix">
-                        <button class="btn btn-outline-light" type="submit"><i class="bi bi-search"></i> Search</button>
-                    </div>
-                </form>
-                @{
-                    if (CategoryId != "0" || Prefix != "")
-                    {
-                        <div class="mb-3"><a class="btn btn-sm btn-outline-light" asp-controller="Admin" asp-action="ManageSubcategories" asp-route-CategoryId="0">Clear</a></div>
-                    }
-                    foreach (var category in Categories)
-                    {
-                        <a asp-controller="Admin" asp-action="ManageSubcategories" asp-route-CategoryId="@category.Id" style="text-decoration:none; color:white">@category.Name</a>
-                    }
-                }
             </div>
-            <div class="flex-grow-1">
-                @{
-                    //Update Subcategory Section
-                    if (Subcategories.Count != 0)
-                    {
-                        <div style="height:46vh; overflow-y:scroll">
-                            <table class="table align-middle table-striped-columns" style="color:white; margin-bottom:10%;">
-                                <thead>
-                                    <tr>
-                                        <th scope="col">Index</th>
-                                        <th scope="col">Subcategory Name</th>
-                                        <th scope="col">Category Name</th>
-                                        <th scope="col">Update Subcategory</th>
-                                        <th scope="col"></th>
-                                    </tr>
-                                </thead>
-                                <tbody class="table-group-divider">
-                                    @{
-                                        foreach (var subcategory in Subcategories)
-                                        {
-                                            <tr>
-                                                <td scope="row">@Subcategories.IndexOf(subcategory)</td>
-                                                <td>@Html.DisplayFor(modelItem => subcategory.Name)</td>
-                                                <td>@Html.DisplayFor(modelItem => subcategory.Category.Name)</td>
-                                                <td>
-                                                    <div class="d-flex flex-column justify-content-lg-start" style="margin-top:2%">
-                                                        @* Update Subcategory Name Form *@
-                                                        <form asp-controller="Subcategory" asp-action="UpdateSubcategoryName" asp-route-SubcategoryId="@subcategory.Id">
-                                                            <div class="d-flex flex-column">
-                                                                <div class="d-inline-flex">
-                                                                    <div class="input-group mb-1">
-                                                                        <div asp-validation-summary="ModelOnly" class="text-danger" role="alert"></div>
-                                                                        <input asp-for="Name" class="form-control" placeholder="Update Subcategory Name">
-                                                                        <button type="submit" class="btn btn-light">Update</button>
-                                                                    </div>
-                                                                </div>
-                                                                <div class="mb-4">
-                                                                    @{
-                                                                        if (UpdateError != null && UpdateError.ContainsKey(subcategory.Id))
-                                                                        {
-                                                                            <span asp-validation-for="Name" class="text-danger">@UpdateError[subcategory.Id]</span>
-                                                                        }
-                                                                    }
-                                                                </div>
-                                                            </div>
-                                                        </form>
-                                                        @* Update Subcategory Parent Category Form *@
-                                                        <form asp-controller="Subcategory" asp-action="UpdateSubcategoryCategory" asp-route-SubcategoryId="@subcategory.Id">
-                                                            <div class="input-group mb-3">
-                                                                <select class="form-select" id="NewCategoryName" name="NewCategoryName">
-                                                                    <option selected value="@subcategory.Category.Name">@subcategory.Category.Name</option>
-                                                                    @{
-                                                                        foreach (var category in Categories)
-                                                                        {
-                                                                            if (subcategory.Category.Name != category.Name)
-                                                                            {
-                                                                                <option value="@category.Name">@category.Name</option>
-                                                                            }
-                                                                        }
-                                                                    }
-                                                                </select>
-                                                                <input type="submit" class="btn btn-md btn-light" value="Update" />
-                                                            </div>
-                                                        </form>
-                                                    </div>
-                                                </td>
-                                                @* Delete Subcategory *@
-                                                <td><a class="btn btn-md btn-light" asp-controller="Subcategory" asp-action="DeleteSubcategory" asp-route-SubcategoryId="@subcategory.Id" style="margin-left:15%;">Delete <i class="bi bi-trash"></i></a></td>
-                                            </tr>
-                                        }
-                                    }
-                                </tbody>
-                            </table>
-                        </div>
-                    }
-                    else
-                    {
-                        <h1 style="color:white">No Categories.</h1>
-                    }
-                }
+        }
+        else
+        {
+            <div class="d-flex flex-column">
+                <h1 class="site-head-text mt-5 mx-auto">No categories are found. Please add new categories to proceed.</h1>
+                <img class="w-50 mt-5 mx-auto" src="/404.png" />
             </div>
-        </div>
-    </div>
+        }
+    }
 </div>

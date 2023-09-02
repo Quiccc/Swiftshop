@@ -37,10 +37,11 @@ namespace Swiftshop.Controllers
                 Name = Name
             };
 
+            ViewBag.Prefix = Name;
             await _context.Categories.AddAsync(NewCategory);
             _context.SaveChanges();
 
-            return RedirectToAction("ManageCategories", "Admin");
+            return RedirectToAction("ManageCategories", "Admin", new {Prefix = Name});
         }
 
         public async Task<IActionResult> DeleteCategory(string CategoryId)
@@ -82,10 +83,11 @@ namespace Swiftshop.Controllers
             var UpdatedCategory = context.First(c => c.Id == CategoryId);
             UpdatedCategory.Name = Name;
 
+            ViewBag.Prefix = Name;
             _context.Categories.Update(UpdatedCategory);
             await _context.SaveChangesAsync();
 
-            return RedirectToAction("ManageCategories", "Admin");
+            return RedirectToAction("ManageCategories", "Admin", new {Prefix = Name});
         }
     }
 }
